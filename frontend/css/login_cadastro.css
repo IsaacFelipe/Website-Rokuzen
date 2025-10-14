@@ -1,0 +1,93 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #F8F7F4; /* Cor de fundo geral */
+}
+
+/* ESTILOS DO NOVO CABEÇALHO */
+header {
+    background-color: #fff; /* Mesma cor de fundo do formulário */
+    border-bottom: 1px solid #eee; /* Adiciona uma linha sutil para separar */
+}
+
+header .logo {
+    height: 45px;
+    width: auto;
+}
+
+header .nav-link {
+    font-weight: 500;
+    color: #333;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+header .nav-link:hover {
+    color: #8E9775;
+}
+
+/* RESTANTE DO CSS (PERMANECE O MESMO) */
+.coluna-imagem {
+    background-color: #8E9775; /* Cor verde da imagem */
+    background-size: cover;
+    background-position: center;
+}
+
+.form-container {
+    max-width: 400px;
+    width: 100%;
+}
+
+/* Estilo para o grupo de input com ícone */
+.input-group-text {
+    background-color: #fff;
+    border-right: 0;
+    color: #aaa;
+}
+
+.form-control {
+    border-left: 0;
+    padding-left: 0;
+}
+.form-control:focus {
+    box-shadow: none;
+    border-color: #dee2e6;
+}
+
+.toggle-password {
+    cursor: pointer;
+}
+
+/* Botão principal */
+.btn-rokuzen {
+    background-color: #8E9775;
+    color: #fff;
+    font-weight: 500;
+    padding: 0.75rem;
+    border: none;
+    transition: background-color 0.2s;
+}
+
+.btn-rokuzen:hover {
+    background-color: #7c8564;
+    color: #fff;
+}
+
+/* Links personalizados */
+.link-rokuzen {
+    color: #8E9775;
+    font-weight: 500;
+    text-decoration: none;
+}
+.link-rokuzen:hover {
+    text-decoration: underline;
+    color: #7c8564;
+}
+
+.form-check-input:checked {
+    background-color: #8E9775;
+    border-color: #8E9775;
+}
+
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.25rem rgba(142, 151, 117, 0.25);
+}
