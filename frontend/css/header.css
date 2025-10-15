@@ -1,0 +1,117 @@
+header{
+    width: 100%;
+}
+
+#navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    position: relative;
+    background-color: #fff; /* Ajuste a cor de fundo conforme necessário */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Opcional: sombra para o header */
+}
+
+.nav-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    max-width: calc(100% - 100px); /* Ajuste para dar espaço aos botões à direita */
+} 
+
+.logo {
+    position: absolute;
+    left: 2rem; /* Posiciona a logo mais à esquerda */
+    flex-shrink: 0;
+}
+
+.logo img {
+    height: 40px; /* Ajuste o tamanho da logo conforme necessário */
+    width: auto;
+}
+
+.nav-list {
+    display: flex;
+    list-style: none;
+    gap: 3rem; /* Espaçamento entre os itens do menu */
+    margin: 0;
+    padding: 0;
+}
+
+.nav-item a {
+    text-decoration: none;
+    color: #333; /* Cor dos links, ajuste conforme necessário */
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.nav-item a:hover {
+    color: #a4d49d; /* Cor no hover, ajuste conforme necessário */
+}
+
+.btn-default {
+    background-color: #a4d49d; /* Cor do botão Login */
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 1rem; /* Espaço antes do botão */
+    margin-right: 2rem;
+    flex-shrink: 0;
+}
+
+.btn-default:hover {
+    background-color: #65af5a;
+}
+
+#mobile-btn {
+    display: none; /* Escondido no desktop; mostre no mobile com media query */
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.mobile-menu {
+    display: none; /* Escondido por padrão; ative com JS para mobile */
+}
+
+
+
+/* Media query para mobile (exemplo básico) */
+@media (max-width: 1170px) {
+    .nav-list {
+        display: none;
+    }
+
+    #mobile-btn {
+        display: block;
+        border: none;
+        background-color: transparent;
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+
+    .btn-default {
+        margin-left: 0;
+    }
+
+    .logo {
+        left: 1rem;
+    }
+
+    * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background-color: #fff;
+        font-family: Arial, sans-serif; /* Adicione uma fonte padrão se necessário */
+    }
+}
