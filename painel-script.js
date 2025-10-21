@@ -1533,7 +1533,102 @@ class Dashboard {
 
     loadSchedule() {
         console.log('Carregando dados de escala...');
-        // Implementar carregamento de dados de escala
+        // Inicializa controles e renderiza o calendário compartilhado
+        this.setupSharedCalendarControls();
+        this.renderSharedCalendar();
+    }
+
+    // Calendário Compartilhado (Google Calendar embed)
+    setupSharedCalendarControls() {
+        const input = document.getElementById('calendar-url-input');
+        const saveBtn = document.getElementById('calendar-url-save');
+        const resetBtn = document.getElementById('calendar-url-reset');
+
+        if (!input || !saveBtn || !resetBtn) return;
+
+        // Carrega URL salva
+        const savedUrl = localStorage.getItem('rokuzen-shared-calendar-url') || '';
+        input.value = savedUrl;
+
+        // Salvar
+        saveBtn.onclick = () => {
+            const url = input.value.trim();
+            if (!url) {
+                this.showNotification('Informe a URL de incorporação do Google Calendar.', 'warning');
+                return;
+            }
+            if (!this.isValidGoogleCalendarEmbed(url)) {
+                this.showNotification('URL inválida. Use a URL de incorporação do Google Calendar.', 'error');
+                return;
+            }
+            localStorage.setItem('rokuzen-shared-calendar-url', url);
+            this.showNotification('URL do calendário salva com sucesso!', 'success');
+            this.renderSharedCalendar();
+        };
+
+        // Limpar
+        resetBtn.onclick = () => {
+            input.value = '';
+            localStorage.removeItem('rokuzen-shared-calendar-url');
+            this.renderSharedCalendar();
+            this.showNotification('URL do calendário removida.', 'info');
+        };
+    }
+
+    renderSharedCalendar() {
+        const container = document.getElementById('shared-calendar-container');
+        if (!container) return;
+
+        container.innerHTML = '';
+        const url = localStorage.getItem('rokuzen-shared-calendar-url');
+
+        if (!url) {
+            const emptyState = document.createElement('div');
+            emptyState.className = 'calendar-empty-state';
+            emptyState.innerHTML = `
+                <div class="empty-icon"><i class="fas fa-calendar-plus"></i></div>
+                <h4>Adicione um calendário compartilhado</h4>
+                <p>Cole a URL de incorporação do Google Calendar e clique em "Salvar URL".</p>
+            `;
+            container.appendChild(emptyState);
+            return;
+        }
+
+        // Sanitização básica: permitir apenas URLs https do Google Calendar embed
+        if (!this.isValidGoogleCalendarEmbed(url)) {
+            const error = document.createElement('div');
+            error.className = 'calendar-error-state';
+            error.innerHTML = `
+                <div class="empty-icon error"><i class="fas fa-exclamation-triangle"></i></div>
+                <h4>Não foi possível carregar o calendário</h4>
+                <p>Verifique a URL informada e tente novamente.</p>
+            `;
+            container.appendChild(error);
+            return;
+        }
+
+        const iframe = document.createElement('iframe');
+        iframe.className = 'shared-calendar-iframe';
+        iframe.src = url;
+        iframe.width = '100%';
+        iframe.height = '700';
+        iframe.frameBorder = '0';
+        iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+        iframe.loading = 'lazy';
+        iframe.setAttribute('aria-label', 'Calendário compartilhado');
+
+        container.appendChild(iframe);
+    }
+
+    isValidGoogleCalendarEmbed(url) {
+        try {
+            const u = new URL(url);
+            const isGoogle = /(^|\.)google\.com$/.test(u.hostname);
+            const isCalendar = u.pathname.includes('/calendar/embed');
+            return u.protocol === 'https:' && isGoogle && isCalendar;
+        } catch (e) {
+            return false;
+        }
     }
 
     loadProcedures() {

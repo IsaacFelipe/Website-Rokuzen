@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -394,6 +395,34 @@
                 <div class="section-header">
                     <h2>Escala Compartilhada</h2>
                     <p>Gestão de escalas e horários da equipe</p>
+                </div>
+                <div class="card full-width">
+                    <div class="card-header">
+                        <i class="fas fa-calendar-alt"></i>
+                        <h3>Calendário Compartilhado</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="attendance-controls" id="shared-calendar-controls">
+                            <div class="date-filter">
+                                <label for="calendar-url-input">URL do Google Calendar (embed):</label>
+                                <input type="text" id="calendar-url-input" class="date-input" placeholder="Cole aqui a URL de incorporação do Google Calendar">
+                            </div>
+                            <div class="filter-buttons">
+                                <button class="btn btn-secondary" id="calendar-url-reset">
+                                    <i class="fas fa-undo"></i>
+                                    Limpar
+                                </button>
+                                <button class="btn btn-primary" id="calendar-url-save">
+                                    <i class="fas fa-save"></i>
+                                    Salvar URL
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="shared-calendar-container" class="shared-calendar-container">
+                            <!-- Calendário será renderizado aqui via JavaScript -->
+                        </div>
+                    </div>
                 </div>
             </section>
 
