@@ -1,3 +1,15 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body{
+    font-family: Cin;
+    line-height: 1.6;
+}
+
+
 header{
     width: 100%;
 }
@@ -48,23 +60,24 @@ header{
 }
 
 .nav-item a:hover {
-    color: #a4d49d; /* Cor no hover, ajuste conforme necessário */
+    color: #9AB946; /* Cor no hover, ajuste conforme necessário */
 }
 
 .btn-default {
-    background-color: #a4d49d; /* Cor do botão Login */
+    background-color: #9AB946; /* Cor do botão Login */
     color: white;
     border: none;
-    padding: 0.5rem 1rem;
+    padding: 0.2rem 1rem;
     border-radius: 5px;
     cursor: pointer;
     margin-left: 1rem; /* Espaço antes do botão */
     margin-right: 2rem;
     flex-shrink: 0;
+    text-decoration: none;
 }
 
 .btn-default:hover {
-    background-color: #65af5a;
+    background-color: #9AB946;
 }
 
 #mobile-btn {

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&display=swap');
+
 *{
     padding: 0;
     margin: 0;
@@ -5,65 +7,12 @@
 }
 
 body{
-    background-color: #f3fff3;
+    background-color: #9AB946;
 }
-.home{
-    display: flex;
-    align-items: center;
-    min-height: 100vh;
-    background: url(../img/massagem1.png) no-repeat;
-    background-size: cover;
-    background-position: center;
-}
-
-
-.home .content {
-      display: flex;
-      flex-direction: column;
-      max-width: 50rem;
-  }
-
-
-.home .content span{
-    font-size: 2.5rem;
-    color: #6e5a72;
-    padding: 1rem 0;
-    line-height: 1.5;
-    margin-left: 2rem;
-}
-
-.home .content p{
-    font-size: 1rem;
-    color: #504f4f;
-    padding: 1rem 0;
-    line-height: 1.5;
-    margin: 2rem;
-}
-  
-.btn{
-    display: inline-block;
-    text-decoration: none;
-    margin-top: 1rem;
-    border-radius: 5rem;
-    background: #333;
-    color:#fff;
-    padding: .9rem 3.5rem;
-    cursor: pointer;
-    font-size: .7rem;
-    margin-left: 2rem;
-}
-
-
-.btn:hover{
-    background: var(--pink);
-}
-
-
-
 
 .hero-banner {
     /* Substitua 'your-image.jpg' pelo caminho da sua imagem */
-    background: url('../img/massagem.png') center center/cover no-repeat;
+    background: url('../img/painel.jpg') center center/cover no-repeat;
     height: 100vh; /* Ocupa 100% da altura da tela */
     position: relative;
     display: flex;
@@ -104,11 +53,11 @@ body{
 
 .cta-button {
     display: inline-block;
-    padding: 15px 30px;
-    background-color: #8BC34A; /* Cor verde/musgo do botão */
+    padding: 15px 25px;
+    background-color: #9AB946; /* Cor verde/musgo do botão */
     color: #fff;
     text-decoration: none;
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: bold;
     border-radius: 5px; /* Bordas levemente arredondadas */
     transition: background-color 0.3s;
@@ -119,17 +68,17 @@ body{
 }
 
 /* --- Highlights Section (Cards) --- */
-.highlights-section {
+.text-section {
     display: flex;
     justify-content: center;
-    padding: 80px 50px;
-    background-color: #fff;
+    padding: 100px 50px;
+    background-image: url('../img/imgtext.png');
     position: relative;
 }
 
-.highlights-container {
+.text-container {
     display: flex;
-    gap: 30px;
+    gap: 80px;
     max-width: 1200px;
     margin: 0 auto;
 }
@@ -137,16 +86,17 @@ body{
 .card {
     background-color: #fff;
     border: 1px solid #ddd;
-    border-radius: 10px;
+    border-radius: 20px;
     padding: 40px;
     flex: 1; /* Distribuição igual do espaço */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.534);
     text-align: center;
 }
 
-.card-icon {
-    font-size: 2.5rem;
-    color: #BDBDBD; /* Cor do ícone (cinza claro no exemplo) */
+.card img{
+    width: 100px; /* Largura fixa */
+    height: 100px; /* Altura fixa */
+    object-fit: cover; /* Garante que a imagem preencha o espaço sem distorcer (cortando se necessário) */
     margin-bottom: 20px;
 }
 
@@ -156,43 +106,122 @@ body{
     text-align: left;
 }
 
-/* Sidebar Vertical (Texto ROKUZEN e Ícones) */
-.sidebar-text {
+.depoimentos-banner {
+    /* Dou uma altura legal para preencher bem a tela */
+    height: 60vh; 
+    min-height: 400px;
+    
+    /* Configuro a imagem de fundo: AJUSTE O CAMINHO DA IMAGEM! */
+    background: url('./img/massagem2.png') no-repeat center center/cover;
+    height: 100vh; /* Ocupa 100% da altura da tela */
+    position: relative;
+    display: flex;
+    align-items: center; 
+    color: #fff; /* A cor do texto principal será branca */
+}
+
+/* O FILTRO DE COR (OVERLAY) */
+.banner-overlay {
     position: absolute;
-    right: 0;
     top: 0;
+    left: 0;
+    width: 100%;
     height: 100%;
-    width: 80px; /* Largura da barra lateral */
-    background-color: #F5F5F5; /* Cor de fundo clara */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-around;
-    padding: 20px 0;
+    /* Cor que eu "chutei" que seria a da imagem (verde-oliva transparente). */
+    background-color: rgba(188, 203, 114, 0.85); 
 }
 
-.vertical-text {
-    transform: rotate(90deg) translate(0%, 0%);
-    white-space: nowrap;
+/* O CONTEÚDO DENTRO DO BANNER */
+.banner-content {
+    position: relative; 
+    z-index: 10; /* Precisa estar acima do overlay (z-index) */
+    width: 100%;
+    max-width: 1200px; /* Limito a largura para não esticar demais em telas grandes */
+    margin: 0 auto;
+    padding: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end; /* Alinho o conteúdo à parte de baixo */
+}
+
+/* ÁREA ESQUERDA: CHAMADA PARA AÇÃO (CTA) */
+.cta-area {
+    /* Dou um peso maior para essa área, mas limitando */
+    flex: 1;
+    max-width: 45%; 
+    padding-bottom: 20px; /* Um pequeno respiro da borda */
+}
+
+.cta-title {
+    font-size: 2.8rem;
+    font-weight: 500;
+    line-height: 1.2;
+    color: #fff; 
+    margin-bottom: 30px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* Para destacar no fundo */
+    
+}
+
+/* O BOTÃO DE AGENDAMENTO */
+.button {
+    display: inline-block;
+    padding: 15px 40px;
+    background-color: #fff; 
+    color: #9AB946; /* Cor da fonte, combinando com o ícone */
+    text-decoration: none;
     font-size: 1.2rem;
-    color: #BDBDBD;
+    font-weight: bold;
+    /* A borda roxa é a chave para o visual! */
+    border-radius: 5px; 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background-color: #f0f0f0;
+}
+
+
+/* ÁREA DIREITA: DEPOIMENTO */
+.depoimento-area {
+    /* Dou um peso maior para essa área, pois o texto é longo */
+    flex: 1;
+    max-width: 55%;
+    text-align: right; /* Alinhamento à direita como na imagem */
+}
+
+.depoimentos-title {
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: #fff;
+    margin-bottom: 10px;
     letter-spacing: 5px;
-    font-family: 'serif'; /* Para um estilo mais oriental/caligráfico */
 }
 
-.icon-group {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    color: #BDBDBD;
-    font-size: 1.2rem;
+.depoimento-text {
+    font-size: 1rem;
+    color: #fff;
+    font-weight: 300;
+    margin-bottom: 15px;
+    /* Linha de texto estreita para ficar elegante. */
+    max-width: 600px;
+    margin-left: auto; /* Garante o alinhamento à direita quando limitado por max-width */
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
+
+.depoimento-author {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #fff;
+    margin-top: 20px;
+}
+
 
 /* --- Responsividade (Media Queries) --- */
 
 /* Para telas menores que 900px (Ex: tablets) */
 @media (max-width: 900px) {
-    .highlights-container {
+    .text-container {
         flex-direction: column; /* Cards empilham */
     }
 
@@ -247,7 +276,7 @@ body{
         display: none; /* Oculta a barra lateral vertical em telas pequenas para economizar espaço */
     }
 
-    .highlights-section {
+    .text-section {
         padding: 40px 20px;
         padding-right: 20px; /* Remove o padding extra */
     }
