@@ -27,7 +27,8 @@ header .nav-link:hover {
 
 /* RESTANTE DO CSS (PERMANECE O MESMO) */
 .coluna-imagem {
-    background-color: #8E9775; /* Cor verde da imagem */
+    background: linear-gradient(rgba(173, 232, 13, 0.3), rgba(204, 204, 204, 0.7)),
+    url('../img/fotologin.jpg') center/cover no-repeat;
     background-size: cover;
     background-position: center;
 }
@@ -59,7 +60,7 @@ header .nav-link:hover {
 
 /* Botão principal */
 .btn-rokuzen {
-    background-color: #8E9775;
+    background-color: #9AB946;
     color: #fff;
     font-weight: 500;
     padding: 0.75rem;
@@ -80,7 +81,7 @@ header .nav-link:hover {
 }
 .link-rokuzen:hover {
     text-decoration: underline;
-    color: #7c8564;
+    color: #9AB946;
 }
 
 .form-check-input:checked {
