@@ -80,7 +80,8 @@
                                 </div>
                                 <div class="input-group mb-3">
                                     <span class="input-group-text"><i class="bi bi-file-person"></i></span>
-                                    <input type="text" class="form-control" id="cadastroCPF" placeholder="CPF" required>
+                                    <input type="text" class="form-control" id="cadastroCPF" placeholder="CPF">
+                                    <!-- REMOVIDO: required -->
                                 </div>
                                 <div class="input-group mb-3">
                                     <span class="input-group-text"><i class="bi bi-telephone"></i></span>
@@ -121,6 +122,8 @@
         </div>
     </div>
 
+    <!-- CDN pra jwt-decode (pra redirecionar por tipo no login) -->
+    <script src="https://unpkg.com/jwt-decode@3.1.2/build/jwt-decode.js"></script>
     <script src="../script/login.js"></script>
 
     <div vw class="enabled">
