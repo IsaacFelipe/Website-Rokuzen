@@ -5,122 +5,153 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/header.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLMDJd/r0dch/cQ2h9C/C2nS7M6H2N7r7Xw1Fw5T1NnE9n7O6B/w7Q8wN5G+I/w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Rokuzen</title>
-
-    <script src="https://cdn.userway.org/widget.js" data-account="td5B3BWoK8"></script> 
-    
 </head>
 <body>
     <header>
-        <nav id="navbar">
-
-            <div class="nav-container">
-                
+        <nav id="barra-navegacao" class="navegacao-principal"> 
+            <div class="container-nav">
                 <div class="logo">
-                    <img src="../img/logo.png">
+                    <img src="../img/logo.png" alt="Logo Rokuzen">
                 </div>
 
-                <ul class="nav-list">
-                    <li class="nav-item active"><a href="../html/index.html" class="navbar">Home</a></li>
-                    <li class="nav-item active"><a href="#" class="navbar">Sobre nós</a></li>
-                    <li class="nav-item active"><a href="#" class="navbar">Unidades</a></li>
-                    <li class="nav-item active"><a href="#" class="navbar">Serviços</a></li> 
-                    <li class="nav-item active"><a href="#" class="navbar">Fale conosco</a></li>
+                <ul class="lista-nav">
+                    <li class="item-nav pagina-atual"><a href="../html/index.html">Home</a></li> 
+                    <li class="item-nav"><a href="#">Sobre nós</a></li>
+                    <li class="item-nav"><a href="#">Unidades</a></li>
+                    <li class="item-nav"><a href="#">Serviços</a></li> 
+                    <li class="item-nav"><a href="#">Fale conosco</a></li>
                 </ul>
             </div>
-            <a href="../html/login.html" class="btn-default">Login</a>
+            
+            <a href="../html/login.html" class="btn-primario">Login</a> 
 
-            <button id="mobile-btn"><i class="fa-solid fa-bars"></i></button>
+            <button id="btn-mobile" aria-label="Abrir menu de navegação"><i class="fa-solid fa-bars"></i></button>
         </nav>
 
-        <div class="mobile-menu">
-            <ul class="mbile-nav-list">
-                <li class="nav-item"><a href="../html/index.html" class="navbar">Home</a></li>
-                <li class="nav-item"><a href="#" class="navbar">Sobre nós</a></li>
-                <li class="nav-item"><a href="#" class="navbar">Onde estamos</a></li>
-                <li class="nav-item"><a href="#" class="navbar">Serviços</a></li> 
-                <li class="nav-item"><a href="#" class="navbar">Fale conosco</a></li>
+        <div class="menu-mobile">
+            <ul class="lista-nav-mobile"> 
+                <li class="item-nav"><a href="../html/index.html">Home</a></li>
+                <li class="item-nav"><a href="#">Sobre nós</a></li>
+                <li class="item-nav"><a href="#">Unidades</a></li>
+                <li class="item-nav"><a href="#">Serviços</a></li> 
+                <li class="item-nav"><a href="#">Fale conosco</a></li>
             </ul>
 
-            <button class="btn-default">Login</button>
+            <a href="../html/login.html" class="btn-primario">Login</a> 
         </div>
     </header>
 
-    
-    <section class="hero-banner">
-        <div class="hero-overlay">
-            <div class="hero-content">
-                <h1 class="main-title">
-                    <br>RELAXE.
-                    <br>EQUILIBRE.
-                    <br>REVITALIZE.
+    <section class="banner-hero">
+        <div class="overlay-hero">
+            <div class="conteudo-hero">
+                <h1 class="titulo-principal">
+                    Relaxe<br>Equilibre<br>Revitalize
                 </h1>
-                <p class="subtitle">Sua paz nossa missão</p>
-                <a href="#" class="cta-button">Agende sua sessão</a>
+                <p class="subtitulo">Sua paz, nossa missão</p>
+                <a href="#" class="btn-cta">Agende sua sessão</a> 
             </div>
         </div>
     </section>
 
-    <section class="text-section">
-        <div class="text-container">
+    <section class="secao-destaques"> 
+        <div class="container-destaques"> 
             
-            <div class="card">
-                <img src="../img/massagem.png" alt="">
-                <p class="card-text">
-                    Nossos terapeutas são certificados pelo ITIO (Instituto de Terapia Integrada e Oriental), 
-                    garantindo técnicas autênticas e atendimento de excelência. Cada sessão é conduzida por 
-                    profissionais capacitados que dominam a arte da massagem terapêutica japonesa, proporcionando 
-                    cuidado especializado e seguro.
+            <div class="card-destaque"> 
+                <img src="../img/massagem.png" alt="Ícone de massagem terapêutica">
+                <p class="texto-card">
+                    Nossos terapeutas são certificados pelo ITIO (Instituto de Terapia Integrada e Oriental), garantindo técnicas autênticas e atendimento de excelência...
+                </p>
+            </div>
+            
+            <div class="card-destaque">
+                <img src="../img/massagem3.png" alt="Ícone de bem-estar">
+                <p class="texto-card">
+                    Nosso objetivo é simples: fazer você encontrar sua melhor versão de paz e suavidade. A cada toque, buscamos aliviar tensões, renovar energias... 
                 </p>
             </div>
 
-            <div class="card">
-                <img src="../img/massagem3.png" alt="">
-                <p class="card-text">
-                    Nosso objetivo é simples: fazer você encontrar sua melhor versão de paz e suavidade. A cada toque, 
-                    buscamos aliviar tensões, renovar energias e despertar a sensação de bem-estar pleno. Aqui, você não 
-                    apenas relaxa — você se reconecta consigo mesmo.                
-                </p>
-            </div>
-
-            <div class="card">
-                <img src="../img/massagem2.png" alt="">
-                <p class="card-text">
-                    Acreditamos que harmonia é essencial para uma vida equilibrada. Por isso, nosso foco está em trazer 
-                    equilíbrio entre corpo e mente, transformando cada visita em um momento de restauração. Na ROKUZEN, 
-                    cuidar de você é nossa missão diária.
+            <div class="card-destaque">
+                <img src="../img/massagem2.png" alt="Ícone de equilíbrio entre corpo e mente">
+                <p class="texto-card">
+                    Acreditamos que harmonia é essencial para uma vida equilibrada. Por isso, nosso foco está em trazer equilíbrio entre corpo e mente, transformando cada visita em um momento de restauração...
                 </p>
             </div>
         </div>
     </section>
 
-    <section class="depoimentos-banner">
-        <div class="banner-overlay">
-            <div class="banner-content">
+    <section class="banner-depoimentos-cta"> 
+        <div class="overlay-banner">
+            <div class="conteudo-banner">
                 
-                <div class="cta-area">
-                    <h2 class="cta-title">
-                        Pronto para uma experiência<br>de Relaxamento?
+                <div class="area-cta">
+                    <h2 class="titulo-cta">
+                        Pronto para uma experiência de Relaxamento?
                     </h2>
-                    <a href="#" class="button">
-                        Agende sua sessão
-                    </a>
+                    <a href="../html/saiba1.html" class="btn-secundario">Agende sua sessão</a> 
                 </div>
 
-                <div class="depoimento-area">
-                    <h3 class="depoimentos-title">DEPOIMENTOS</h3>
-                    <p class="depoimento-text">
-                        Experiência incrível! Os terapeutas são extremamente profissionais e atenciosos. Saí de lá completamente renovada, sem aquelas dores nas costas que me incomodavam há semanas. O ambiente é tranquilo e acolhedor. Com certeza voltarei e já indiquei para minhas amigas. Parabéns pela qualidade do atendimento!
-                    </p>
-                    <p class="depoimento-author">
-                        Joana Silva
+                <div class="area-depoimento">
+                    <h3 class="titulo-depoimento">DEPOIMENTOS</h3>
+                    <blockquote class="texto-depoimento">
+                        Experiência incrível! Os terapeutas são extremamente profissionais e atenciosos. Saí de lá completamente renovada, sem aquelas dores nas costas que me incomodavam há semanas. O ambiente é tranquilo e acolhedor...
+                    </blockquote>
+                    <p class="autor-depoimento">
+                        — Joana Silva
                     </p>
                 </div>
             </div>
         </div>
     </section>
 
+
+    
+
+    <section class="secao-cards">
+
+        <div class="cabecalho-secao"> 
+            <h1>Descubra mais</h1>
+            <div class="line"></div>
+        </div>
+
+        <div class="container">
+            <div class="card-blog">
+                <a href="../html/saiba1.html">
+                    <img src="../img/dores.jpg" alt="Homem com dor nas costas após massagem">
+                </a>
+                <div class="card-conteudo">
+                    <p class="card-titulo">
+                        FICAR DOLORIDO APÓS MASSAGEM TERAPÊUTICA, LIBERAÇÃO MIOFASCIAL OU SHIATSU É ...
+                    </p>
+                </div>
+            </div>
+
+            <div class="card-blog">
+                <a href="#">
+                    <img src="../img/pexels-716713554-28321588.jpg" alt="Fachada da Rokuizen Massagem">
+                </a>
+                <div class="card-conteudo">
+                    <p class="card-titulo">
+                        DESCUBRA O NOVO CONCEITO TERAPÊUTICO DA ROKUIZEN MASSAGEM NA SOMBRA ...
+                    </p>
+                </div>
+            </div>
+
+            <div class="card-blog">
+                <a href="#">
+                    <img src="../img/Person with winter cold, summer heat and thermometer (1).jpg" alt="Pessoas com calor e frio, termômetros">
+                </a>
+                <div class="card-conteudo">
+                    <p class="card-titulo">
+                        MUDANÇA CLIMÁTICA E SUA INFLUÊNCIA NA IMUNIDADE: O PAPEL BENEFÍCIO ...
+                    </p>
+                </div>
+            </div>
+        </div>  
+    </section>
+
+    <script src="https://cdn.userway.org/widget.js" data-account="td5B3BWoK8"></script> 
     <div vw class="enabled">
         <div vw-access-button class="active"></div>
         <div vw-plugin-wrapper>
@@ -132,6 +163,5 @@
         new window.VLibras.Widget('https://vlibras.gov.br/app');
     </script>
         
-    
 </body>
 </html>

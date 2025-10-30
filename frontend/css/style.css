@@ -1,74 +1,117 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&display=swap');
+/* 0. CONFIGURAÇÕES GLOBAIS / UTILS     */
 
-*{
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root { 
+    /* Cores */
+    --cor-primaria: #9AB946; /* Verde principal */
+    --cor-primaria-escuro: #689F38; /* Verde mais escuro para hover */
+    --cor-texto-escuro: #000000;
+    --cor-texto-claro: #fff;
+    --cor-texto-cinza: #555;
+    --cor-borda: #ddd;
+
+    /* Fontes */
+    --fonte-titulo: "Cinzel", serif;
+    --fonte-subtitulo: "League Spartan", sans-serif;
+    --fonte-corpo: "Montserrat", sans-serif;
+
+}
+
+* {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
 }
 
-body{
-    background-color: #9AB946;
+body {
+    background-color: var(--cor-texto-claro);
+    color: var(--cor-texto-escuro); 
+    font-family: var(--fonte-subtitulo);
 }
 
-.hero-banner {
-    /* Substitua 'your-image.jpg' pelo caminho da sua imagem */
+/* Estilo para Links e Botões */
+.btn-primario { /* Login/Padrão */
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: var(--cor-primaria);
+    color: var(--cor-texto-claro);
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+.btn-primario:hover {
+    background-color: var(--cor-primaria-escuro);
+}
+
+/* 1. HERO BANNER (banner-hero)         */
+
+.banner-hero {
+    /* Ajuste o caminho da imagem se necessário */
     background: url('../img/painel.jpg') center center/cover no-repeat;
-    height: 100vh; /* Ocupa 100% da altura da tela */
+    height: 100vh;
     position: relative;
     display: flex;
-    align-items: center; /* Centraliza o conteúdo verticalmente */
+    align-items: center; 
 }
 
-.hero-overlay {
+.overlay-hero {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    /* Gradiente sutil para escurecer o lado esquerdo e destacar o texto */
     background: linear-gradient(to right, rgba(0, 0, 0, 0.4) 30%, rgba(255, 255, 255, 0.1) 70%);
 }
 
-.hero-content {
+.conteudo-hero {
     position: relative;
     z-index: 10;
-    padding: 20px;
-    margin-left: 10%; /* Espaçamento do lado esquerdo */
-    color: #fff;
-    max-width: 500px; /* Limita a largura do texto */
+    padding: 80px;
+    margin-left: 5%;
+    color: var(--cor-texto-claro);
+    max-width: 500px;
 }
 
-.main-title {
-    font-size: 4rem; /* Ajuste o tamanho da fonte */
+.titulo-principal {
+    font-size: 3rem;
     font-weight: 500;
     line-height: 1.1;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
+    font-family: var(--fonte-titulo);
 }
 
-.subtitle {
+.subtitulo {
     font-size: 1.5rem;
     font-weight: 300;
     margin-bottom: 30px;
+    font-family: var(--fonte-subtitulo);
 }
 
-.cta-button {
+.btn-cta { /* Chamada para Ação no Hero */
     display: inline-block;
     padding: 15px 25px;
-    background-color: #9AB946; /* Cor verde/musgo do botão */
-    color: #fff;
+    background-color: var(--cor-primaria);
+    color: var(--cor-texto-claro);
     text-decoration: none;
     font-size: 1rem;
     font-weight: bold;
-    border-radius: 5px; /* Bordas levemente arredondadas */
+    border-radius: 5px;
     transition: background-color 0.3s;
+    font-family: var(--fonte-subtitulo);
 }
 
-.cta-button:hover {
-    background-color: #689F38;
+.btn-cta:hover {
+    background-color: var(--cor-primaria-escuro);
 }
 
-/* --- Highlights Section (Cards) --- */
-.text-section {
+/* 2. SEÇÃO DE CARDS (secao-destaques)  */
+
+.secao-destaques {
     display: flex;
     justify-content: center;
     padding: 100px 50px;
@@ -76,212 +119,299 @@ body{
     position: relative;
 }
 
-.text-container {
+.container-destaques {
     display: flex;
     gap: 80px;
     max-width: 1200px;
     margin: 0 auto;
 }
 
-.card {
-    background-color: #fff;
-    border: 1px solid #ddd;
+.card-destaque {
+    background-color: var(--cor-texto-claro);
+    border: 1px solid var(--cor-borda);
     border-radius: 20px;
     padding: 40px;
-    flex: 1; /* Distribuição igual do espaço */
+    flex: 1;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.534);
     text-align: center;
 }
 
-.card img{
-    width: 100px; /* Largura fixa */
-    height: 100px; /* Altura fixa */
-    object-fit: cover; /* Garante que a imagem preencha o espaço sem distorcer (cortando se necessário) */
+.card-destaque img {
+    width: 100px; 
+    height: 100px;
+    object-fit: cover;
     margin-bottom: 20px;
 }
 
-.card-text {
+.texto-card {
     font-size: 0.95rem;
-    color: #555;
+    color: var(--cor-texto-cinza);
     text-align: left;
 }
 
-.depoimentos-banner {
-    /* Dou uma altura legal para preencher bem a tela */
-    height: 60vh; 
+/* 3. BANNER DEPOIMENTOS (banner-depoimentos-cta) */
+
+.banner-depoimentos-cta {
     min-height: 400px;
-    
-    /* Configuro a imagem de fundo: AJUSTE O CAMINHO DA IMAGEM! */
+    /* AJUSTE O CAMINHO DA IMAGEM! */
     background: url('./img/massagem2.png') no-repeat center center/cover;
-    height: 100vh; /* Ocupa 100% da altura da tela */
+    height: 30vh;
     position: relative;
     display: flex;
     align-items: center; 
-    color: #fff; /* A cor do texto principal será branca */
+    color: var(--cor-texto-claro);
 }
 
-/* O FILTRO DE COR (OVERLAY) */
-.banner-overlay {
+.banner-depoimentos-cta .overlay-banner {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    /* Cor que eu "chutei" que seria a da imagem (verde-oliva transparente). */
-    background-color: rgba(188, 203, 114, 0.85); 
+    background-color: rgba(188, 203, 114, 0.85);
 }
 
-/* O CONTEÚDO DENTRO DO BANNER */
-.banner-content {
+.conteudo-banner {
     position: relative; 
-    z-index: 10; /* Precisa estar acima do overlay (z-index) */
+    z-index: 10;
     width: 100%;
-    max-width: 1200px; /* Limito a largura para não esticar demais em telas grandes */
+    max-width: 1200px;
     margin: 0 auto;
     padding: 50px;
     display: flex;
     justify-content: space-between;
-    align-items: flex-end; /* Alinho o conteúdo à parte de baixo */
+    align-items: center; 
 }
 
 /* ÁREA ESQUERDA: CHAMADA PARA AÇÃO (CTA) */
-.cta-area {
-    /* Dou um peso maior para essa área, mas limitando */
+.area-cta {
     flex: 1;
     max-width: 45%; 
-    padding-bottom: 20px; /* Um pequeno respiro da borda */
 }
 
-.cta-title {
-    font-size: 2.8rem;
+.titulo-cta {
+    font-size: 2.5rem;
+    font-family: var(--fonte-titulo);
     font-weight: 500;
     line-height: 1.2;
-    color: #fff; 
+    color: var(--cor-texto-claro); 
     margin-bottom: 30px;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* Para destacar no fundo */
-    
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
 
-/* O BOTÃO DE AGENDAMENTO */
-.button {
+/* O BOTÃO SECUNDÁRIO (Invertido) */
+.btn-secundario { 
     display: inline-block;
     padding: 15px 40px;
-    background-color: #fff; 
-    color: #9AB946; /* Cor da fonte, combinando com o ícone */
+    background-color: var(--cor-texto-claro); 
+    color: var(--cor-primaria);
     text-decoration: none;
     font-size: 1.2rem;
+    font-family: var(--fonte-subtitulo);
     font-weight: bold;
-    /* A borda roxa é a chave para o visual! */
     border-radius: 5px; 
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
     transition: background-color 0.3s;
 }
 
-.button:hover {
+.btn-secundario:hover {
     background-color: #f0f0f0;
 }
 
-
 /* ÁREA DIREITA: DEPOIMENTO */
-.depoimento-area {
-    /* Dou um peso maior para essa área, pois o texto é longo */
+.area-depoimento {
     flex: 1;
     max-width: 55%;
-    text-align: right; /* Alinhamento à direita como na imagem */
+    text-align: right; 
 }
 
-.depoimentos-title {
-    font-size: 2.5rem;
+.titulo-depoimento {
+    font-size: 2rem;
     font-weight: 300;
-    color: #fff;
+    font-family: var(--fonte-titulo);
+    color: var(--cor-texto-claro);
     margin-bottom: 10px;
-    letter-spacing: 5px;
+    letter-spacing: 3px;
 }
 
-.depoimento-text {
+.texto-depoimento {
     font-size: 1rem;
-    color: #fff;
+    font-family: var(--fonte-subtitulo);
+    color: var(--cor-texto-claro);
     font-weight: 300;
     margin-bottom: 15px;
-    /* Linha de texto estreita para ficar elegante. */
     max-width: 600px;
-    margin-left: auto; /* Garante o alinhamento à direita quando limitado por max-width */
+    margin-left: auto;
     text-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
 
-.depoimento-author {
+.autor-depoimento {
     font-size: 1.1rem;
     font-weight: 500;
-    color: #fff;
+    color: var(--cor-texto-claro);
     margin-top: 20px;
 }
 
+/* 4. SEÇÃO DE INFORMAÇÕES (secao-info) */
 
-/* --- Responsividade (Media Queries) --- */
+
+.cabecalho-secao {
+    text-align: center;
+    font-size: 2.5rem; 
+    color: var(--cor-primaria);
+    font-family: var(--fonte-titulo);
+    margin-bottom: 40px;
+}
+
+.cabecalho-secao h1 {
+    font-size: inherit;
+    font-weight: 500;
+}
+
+.line{
+    width: 150px;
+    height: 4px;
+    background: var(--cor-primaria);
+    margin: 10px auto;
+    border-radius: 5px;
+}
+
+/* Container Principal (Geralmente centraliza e limita a largura) */
+.secao-cards {
+    padding: 50px 20px;
+    background-color: #f8f8f8;
+}
+
+/* O 'container' é onde o layout flexível acontece */
+.secao-cards .container {
+    display: flex;
+    flex-wrap: wrap; 
+    justify-content: center;
+    gap: 30px; 
+    max-width: 1200px; 
+    margin: 0 auto;
+}
+
+.card-blog {
+    flex: 1 1 300px; 
+    max-width: 350px; 
+    background-color: #fff;
+    border: 1px solid #ddd; 
+    border-radius: 4px;
+    overflow: hidden; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); 
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.card-blog:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+
+.card-blog:has(.card-titulo) {
+    border-bottom: 3px solid var(--cor-primaria, #6aa84f); 
+}
+
+
+/* Estilo da Imagem */
+.card-blog img {
+    width: 100%;
+    height: 250px; 
+    object-fit: cover; 
+}
+
+/* Estilo do Conteúdo e Título */
+.card-conteudo {
+    padding: 20px 15px;
+    height: 100px; 
+    display: flex; 
+    align-items: center; 
+}
+
+.card-titulo {
+    font-size: 1rem;
+    color: #333;
+    line-height: 1.4;
+    font-weight: 500;
+}
+
+
+/* Estilos para Responsividade (Exemplo: em telas pequenas, os cards se empilham) */
+@media (max-width: 768px) {
+    .card-blog {
+        max-width: 90%; /* Ocupa mais espaço em telas menores */
+        margin: 15px auto;
+    }
+}
+
+/* 5. RESPONSIVIDADE (MEDIA QUERIES)    */
 
 /* Para telas menores que 900px (Ex: tablets) */
 @media (max-width: 900px) {
-    .text-container {
-        flex-direction: column; /* Cards empilham */
+    .container-destaques {
+        flex-direction: column;
+        gap: 40px;
     }
 
-    .hero-content {
+    .conteudo-hero {
         margin-left: 5%;
         max-width: 90%;
     }
     
-    .main-title {
-        font-size: 3rem; 
+    .linha-info {
+        flex-direction: column;
+        align-items: center;
     }
 
-    .sidebar-text {
-        width: 60px; /* Diminui a barra lateral */
+    .conteudo-banner {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 40px 20px;
     }
 
-    .highlights-section {
-        padding-right: 80px; /* Adiciona padding para evitar que os cards fiquem por baixo da sidebar */
+    .area-cta, .area-depoimento {
+        max-width: 100%;
+        margin-bottom: 40px;
+        text-align: center;
+    }
+
+    .texto-depoimento {
+        margin: 0 auto 15px auto;
     }
 }
 
 /* Para telas muito pequenas (Ex: celulares) */
 @media (max-width: 600px) {
-    .hero-banner {
+    .banner-hero {
         height: 80vh; 
     }
 
-    .hero-overlay {
-         /* Ajusta o gradiente para telas menores */
-        background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4) 30%, rgba(255, 255, 255, 0.1) 70%);
+    .overlay-hero {
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 40%, rgba(255, 255, 255, 0.1) 80%);
     }
 
-    .hero-content {
+    .conteudo-hero {
         margin-left: 0;
-        text-align: center; /* Centraliza o texto no celular */
+        text-align: center;
         width: 100%;
-        margin-top: auto; /* Empurra o conteúdo para a parte inferior do hero */
-        padding-bottom: 50px;
+        margin-top: auto; 
+        padding: 50px 20px;
     }
 
-    .main-title {
-        font-size: 2.5rem; 
-        text-align: center;
+    .titulo-principal {
+        font-size: 2rem; 
     }
 
-    .subtitle {
-        font-size: 1.2rem;
-        text-align: center;
+    .subtitulo {
+        font-size: 1rem;
     }
 
-    .sidebar-text {
-        display: none; /* Oculta a barra lateral vertical em telas pequenas para economizar espaço */
-    }
-
-    .text-section {
+    .secao-destaques {
         padding: 40px 20px;
-        padding-right: 20px; /* Remove o padding extra */
     }
 
-    .card {
+    .card-destaque {
         padding: 30px;
     }
 }

@@ -1,130 +1,190 @@
-*{
+/* 0. CONFIGURAÇÕES GLOBAIS / UTILS     */
+
+
+/* Importação das Fontes */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel&family=League+Spartan:wght@100..900&display=swap');
+
+:root {
+    /* Cores */
+    --cor-primaria: #9AB946; /* Verde principal */
+    --cor-primaria-escuro: #689F38; /* Verde mais escuro para hover */
+    --cor-texto-escuro: #333; /* Cor escura padrão para links/texto */
+    --cor-texto-claro: #fff;
+    --cor-texto-cinza: #555;
+    --cor-borda: #ddd;
+
+    /* Fontes */
+    --fonte-titulo: "Cinzel", serif;
+    --fonte-corpo: "League Spartan", sans-serif;
+}
+
+* {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
 }
 
-body{
-    font-family: Cin;
-    line-height: 1.6;
+body {
+    background-color: var(--cor-texto-claro);
+    color: var(--cor-texto-escuro);
+    font-family: var(--fonte-corpo); /* Usando a variável */
+    line-height: 1.6; /* Melhoria de legibilidade */
+}
+
+/* Estilo para Links e Botões */
+.btn-primario { /* Login/Padrão */
+    background-color: var(--cor-primaria);
+    color: var(--cor-texto-claro);
+    border: none;
+    padding: 0.2rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-block;
+}
+.btn-primario:hover {
+    background-color: var(--cor-primaria-escuro);
 }
 
 
-header{
+/* ==================================== */
+/* 1. CABEÇALHO E NAVEGAÇÃO (header)    */
+/* ==================================== */
+
+header {
     width: 100%;
 }
 
-#navbar {
+#barra-navegacao { /* Era #navbar */
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 1rem 2rem;
     position: relative;
-    background-color: #fff; /* Ajuste a cor de fundo conforme necessário */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Opcional: sombra para o header */
+    background-color: var(--cor-texto-claro);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.nav-container {
+.container-nav { /* Era .nav-container */
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
-    max-width: calc(100% - 100px); /* Ajuste para dar espaço aos botões à direita */
+    max-width: calc(100% - 100px);
 } 
 
 .logo {
     position: absolute;
-    left: 2rem; /* Posiciona a logo mais à esquerda */
+    left: 2rem;
     flex-shrink: 0;
 }
 
 .logo img {
-    height: 40px; /* Ajuste o tamanho da logo conforme necessário */
+    height: 40px;
     width: auto;
 }
 
-.nav-list {
+.lista-nav { /* Era .nav-list */
     display: flex;
     list-style: none;
-    gap: 3rem; /* Espaçamento entre os itens do menu */
+    gap: 3rem;
     margin: 0;
     padding: 0;
 }
 
-.nav-item a {
+.item-nav a { /* Era .nav-item a */
     text-decoration: none;
-    color: #333; /* Cor dos links, ajuste conforme necessário */
+    color: var(--cor-texto-escuro);
     font-weight: 500;
     transition: color 0.3s ease;
 }
 
-.nav-item a:hover {
-    color: #9AB946; /* Cor no hover, ajuste conforme necessário */
+.item-nav a:hover,
+.pagina-atual a { /* Estilo para a página atual (opcional) */
+    color: var(--cor-primaria);
 }
 
-.btn-default {
-    background-color: #9AB946; /* Cor do botão Login */
-    color: white;
-    border: none;
-    padding: 0.2rem 1rem;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-left: 1rem; /* Espaço antes do botão */
+.btn-primario { /* Reaproveitando a classe .btn-primario */
+    margin-left: 1rem; 
     margin-right: 2rem;
     flex-shrink: 0;
-    text-decoration: none;
 }
 
-.btn-default:hover {
-    background-color: #9AB946;
-}
-
-#mobile-btn {
-    display: none; /* Escondido no desktop; mostre no mobile com media query */
+#btn-mobile { 
+    display: none;
     background: none;
     border: none;
     font-size: 1.5rem;
     cursor: pointer;
     flex-shrink: 0;
+    color: var(--cor-texto-escuro);
 }
 
-.mobile-menu {
-    display: none; /* Escondido por padrão; ative com JS para mobile */
+.menu-mobile { 
+    display: none;
 }
 
 
 
-/* Media query para mobile (exemplo básico) */
+/* Para telas menores que 1170px (Mobile) */
 @media (max-width: 1170px) {
-    .nav-list {
+    /* Esconde o menu de desktop e mostra o botão mobile */
+    .lista-nav,
+    .container-nav { 
         display: none;
     }
 
-    #mobile-btn {
+    /* O botão mobile é ativado */
+    #btn-mobile {
         display: block;
-        border: none;
-        background-color: transparent;
-        font-size: 1.5rem;
-        cursor: pointer;
+        margin-right: 0;
     }
 
-    .btn-default {
-        margin-left: 0;
+    /* O botão Login/Primário no Header */
+    .btn-primario {
+        margin-left: auto; /* Empurra para a direita */
+        margin-right: 1rem; /* Dá um espaço da borda */
     }
 
+    /* O container da navegação principal muda */
+    #barra-navegacao {
+        justify-content: space-around;
+        padding: 1rem 1rem;
+    }
+    
     .logo {
-        left: 1rem;
+        position: static; /* Remove o posicionamento absoluto */
+        left: auto;
     }
 
-    * {
+    /* Layout do menu mobile (se estiver ativo/aberto) */
+    .menu-mobile.aberto { /* Exemplo de como você ativaria o menu com JS */
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        position: absolute;
+        top: 60px; /* Abaixo do header */
+        background-color: var(--cor-texto-claro);
+        box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+        z-index: 999;
+        padding: 20px;
+    }
+
+    .lista-nav-mobile { /* Era .mbile-nav-list */
+        list-style: none;
         padding: 0;
-        margin: 0;
-        box-sizing: border-box;
     }
 
-    body {
-        background-color: #fff;
-        font-family: Arial, sans-serif; /* Adicione uma fonte padrão se necessário */
+    .lista-nav-mobile .item-nav {
+        text-align: center;
+        margin-bottom: 15px;
     }
+}
+
+/* Para telas muito pequenas (Ex: celulares) */
+@media (max-width: 600px) {
+    /* ... media queries das outras seções ... */
 }
