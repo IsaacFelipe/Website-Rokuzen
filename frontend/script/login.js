@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const formCadastroDiv = document.getElementById('form-cadastro');
     const mostrarCadastroLink = document.getElementById('link-mostrar-cadastro');
     const mostrarLoginLink = document.getElementById('link-mostrar-login');
-    
+
     const loginForm = document.getElementById('loginForm');
     const cadastroForm = document.getElementById('cadastroForm');
     const alerta = document.getElementById('alerta');
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Lógica para mostrar/ocultar senha ---
     togglePasswordIcons.forEach(icon => {
-        icon.addEventListener('click', function() {
+        icon.addEventListener('click', function () {
             const input = this.previousElementSibling;
             const eyeIcon = this.querySelector('i');
             if (input.type === 'password') {
@@ -42,18 +42,27 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- Função para exibir alertas ---
+    // --- Função para exibir alertas (FIX: Remove d-none pra mostrar) ---
     function exibirAlerta(mensagem, tipo = 'danger') {
         alerta.textContent = mensagem;
         alerta.className = `alert alert-${tipo} text-center`;
+        alerta.classList.remove('d-none');  // FIX: Garante visibilidade
     }
 
-    // --- Lógica de Cadastro ---
+    // --- Função para decodificar token (pra checar tipo) ---
+    function getUserFromToken(token) {
+        try {
+            return jwt_decode(token);  // Usa CDN
+        } catch (err) {
+            return null;
+        }
+    }
+
+    // --- Lógica de Cadastro (sem CPF) ---
     cadastroForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const nome = document.getElementById('cadastroNome').value;
         const email = document.getElementById('cadastroEmail').value;
-        const cpf = document.getElementById('cadastroCPF').value;
         const telefone = document.getElementById('cadastroTelefone').value;
         const senha = document.getElementById('cadastroSenha').value;
         const confirmaSenha = document.getElementById('cadastroConfirmaSenha').value;
@@ -67,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch('http://localhost:3001/cadastro', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ nome, email, cpf, telefone, senha })
+                body: JSON.stringify({ nome, email, telefone, senha })  // Sem CPF
             });
 
             const data = await response.json();
@@ -83,8 +92,8 @@ document.addEventListener('DOMContentLoaded', () => {
             exibirAlerta(error.message, 'danger');
         }
     });
-    
-    // --- Lógica de Login ---
+
+    // --- Lógica de Login (redireciona por tipo) ---
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const email = document.getElementById('loginEmail').value;
@@ -94,9 +103,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch('http://localhost:3001/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, senha })
+                body: JSON.stringify({ email, senha })  // FIX: { email, senha } (não { email, senha })
             });
-            
+
             const data = await response.json();
 
             if (!response.ok) {
@@ -105,9 +114,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
             localStorage.setItem('token', data.token);
             exibirAlerta(data.message, 'success');
-            
+
+            // Decode token e redireciona baseado em tipo
+            const user = getUserFromToken(data.token);
+            const redirectUrl = (user && user.tipo === 'cliente') ? 'agendamento.html' : 'index.html';
+
             setTimeout(() => {
-                window.location.href = 'index.html';
+                window.location.href = redirectUrl;
             }, 1500);
 
         } catch (error) {
