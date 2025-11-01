@@ -6,13 +6,14 @@ const bcrypt = require('bcrypt'); // Para criptografar as senhas
 const jwt = require('jsonwebtoken'); // Para gerar tokens JWT
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
+const fs = require('fs'); // Para ler o certificado SSL do Aiven
 
 // --- CONFIGURAÇÃO DO NODEMAILER (serviço de e-mail) ---
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: 'rokuzenmaua@gmail.com', // Seu e-mail do Gmail
-        pass: 'zqbk zpvx stef nkhp' // Senha de app gerada (ative 2FA no Gmail)
+        pass: '' // Senha de app gerada (ative 2FA no Gmail)
     }
 });
 
@@ -24,13 +25,17 @@ app.use(express.json()); // Habilita o servidor para receber e entender o format
 // Chave secreta para assinar os tokens JWT (mova para .env em produção!)
 const JWT_SECRET = 'sua-chave-super-secreta-e-longa-para-seguranca';
 
-// 3. Configuração da Conexão com o Banco de Dados SQL (CORRIGIDO para rokuzen_db)
+// 3. Configuração da Conexão com o Banco de Dados SQL (ATUALIZADO para Aiven Cloud)
 const db = mysql.createConnection({
-    host: 'localhost',      // Endereço do seu servidor de banco de dados
-    user: 'root',           // Seu nome de usuário do MySQL
-    password: 'imtdb',       // Sua senha do MySQL
-    database: 'rokuzen_db', // CORREÇÃO: Nome correto do banco
-    charset: 'utf8mb4'      // CORREÇÃO: Suporte a acentos (do schema)
+    host: 'mysql-161534ef-isaacfelipeferreira3-e7a2.d.aivencloud.com',
+    port: 28104,
+    user: 'avnadmin',
+    password: '',
+    database: 'rokuzen_db',
+    charset: 'utf8mb4',
+    ssl: {
+        ca: fs.readFileSync('../backend/ca.pem') // Caminho do certificado CA do Aiven
+    }
 });
 
 // Tenta estabelecer a conexão com o banco de dados
@@ -39,7 +44,7 @@ db.connect(err => {
         console.error('Erro ao conectar ao banco de dados:', err);
         return;
     }
-    console.log('Conectado ao banco de dados MySQL com sucesso!');
+    console.log('Conectado ao banco de dados MySQL na nuvem (Aiven) com sucesso!');
 });
 
 // 4. ROTAS DA API (ENDPOINTS) - AJUSTADAS PARA TABELA 'clientes'
@@ -54,7 +59,7 @@ app.post('/cadastro', async (req, res) => {
     // Cria a versão criptografada (hash) da senha
     const senhaHash = await bcrypt.hash(senha, saltRounds);
 
-    // CORREÇÃO: SQL para tabela 'clientes' e campos corretos
+    // SQL para tabela 'clientes' e campos corretos
     const sql = "INSERT INTO clientes (nome_cliente, email_cliente, telefone_cliente, senha) VALUES (?, ?, ?, ?)";
 
     // Executa o comando SQL no banco de dados
@@ -77,7 +82,7 @@ app.post('/cadastro', async (req, res) => {
 app.post('/login', (req, res) => {
     const { email, senha } = req.body;
 
-    // CORREÇÃO: SQL para tabela 'clientes' e campo 'email_cliente'
+    // SQL para tabela 'clientes' e campo 'email_cliente'
     const sql = "SELECT * FROM clientes WHERE email_cliente = ? AND ativo = TRUE";
 
     db.query(sql, [email], async (err, results) => {
@@ -103,7 +108,7 @@ app.post('/login', (req, res) => {
 
         // Se o login for bem-sucedido, gera um token JWT (COM 'tipo: cliente' para frontend)
         const token = jwt.sign(
-            { id: cliente.cliente_id, nome: cliente.nome_cliente, tipo: 'cliente' }, // CORREÇÃO: Campos e tipo corretos
+            { id: cliente.cliente_id, nome: cliente.nome_cliente, tipo: 'cliente' }, // Campos e tipo corretos
             JWT_SECRET,                             // Chave secreta para assinar o token
             { expiresIn: '1h' }                     // Opções, como o tempo de expiração do token
         );
@@ -117,7 +122,7 @@ app.post('/login', (req, res) => {
 app.post('/esqueci-senha', (req, res) => {
     const { email } = req.body;
 
-    // CORREÇÃO: SQL para tabela 'clientes' e campo 'email_cliente'
+    // SQL para tabela 'clientes' e campo 'email_cliente'
     const sql = "SELECT * FROM clientes WHERE email_cliente = ?";
     db.query(sql, [email], (err, results) => {
         if (err || results.length === 0) {
@@ -134,7 +139,7 @@ app.post('/esqueci-senha', (req, res) => {
         // Define o tempo de expiração do token (ex: 1 hora)
         const expires = new Date(Date.now() + 3600000); // 1 hora em milissegundos
 
-        // CORREÇÃO: UPDATE para tabela 'clientes'
+        // UPDATE para tabela 'clientes'
         const updateSql = "UPDATE clientes SET reset_password_token = ?, reset_password_expires = ? WHERE cliente_id = ?";
         db.query(updateSql, [token, expires, cliente.cliente_id], (err, result) => {
             if (err) {
@@ -145,7 +150,7 @@ app.post('/esqueci-senha', (req, res) => {
             const resetLink = `http://127.0.0.1:5501/frontend/html/redefinir-senha.html?token=${token}`;
 
             const mailOptions = {
-                to: cliente.email_cliente,  // CORREÇÃO: Campo correto
+                to: cliente.email_cliente,  // Campo correto
                 from: 'rokuzenmaua@gmail.com',
                 subject: 'Redefinição de Senha - Rokuzen',
                 text: `Você está recebendo este e-mail porque solicitou a redefinição de senha para sua conta.\n\n` +
@@ -168,7 +173,7 @@ app.post('/esqueci-senha', (req, res) => {
 app.post('/redefinir-senha', async (req, res) => {
     const { token, novaSenha } = req.body;
 
-    // CORREÇÃO: SQL para tabela 'clientes'
+    // SQL para tabela 'clientes'
     const sql = "SELECT * FROM clientes WHERE reset_password_token = ? AND reset_password_expires > NOW()";
 
     db.query(sql, [token], async (err, results) => {
@@ -179,7 +184,7 @@ app.post('/redefinir-senha', async (req, res) => {
         const cliente = results[0];
         const senhaHash = await bcrypt.hash(novaSenha, 10);
 
-        // CORREÇÃO: UPDATE para tabela 'clientes'
+        // UPDATE para tabela 'clientes'
         const updateSql = "UPDATE clientes SET senha = ?, reset_password_token = NULL, reset_password_expires = NULL WHERE cliente_id = ?";
         db.query(updateSql, [senhaHash, cliente.cliente_id], (err, result) => {
             if (err) {

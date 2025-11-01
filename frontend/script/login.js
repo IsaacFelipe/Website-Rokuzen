@@ -42,33 +42,45 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- Função para exibir alertas (FIX: Remove d-none pra mostrar) ---
+    // --- Função para exibir alertas ---
     function exibirAlerta(mensagem, tipo = 'danger') {
         alerta.textContent = mensagem;
         alerta.className = `alert alert-${tipo} text-center`;
-        alerta.classList.remove('d-none');  // FIX: Garante visibilidade
+        alerta.classList.remove('d-none');
     }
 
-    // --- Função para decodificar token (pra checar tipo) ---
-    function getUserFromToken(token) {
+    // --- Função para decodificar token JWT manualmente ---
+    function decodeJWT(token) {
         try {
-            return jwt_decode(token);  // Usa CDN
-        } catch (err) {
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            return JSON.parse(jsonPayload);
+        } catch (error) {
+            console.error('Erro ao decodificar token:', error);
             return null;
         }
     }
 
-    // --- Lógica de Cadastro (sem CPF) ---
+    // --- Lógica de Cadastro ---
     cadastroForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const nome = document.getElementById('cadastroNome').value;
-        const email = document.getElementById('cadastroEmail').value;
-        const telefone = document.getElementById('cadastroTelefone').value;
+        const nome = document.getElementById('cadastroNome').value.trim();
+        const email = document.getElementById('cadastroEmail').value.trim();
+        const telefone = document.getElementById('cadastroTelefone').value.trim();
         const senha = document.getElementById('cadastroSenha').value;
         const confirmaSenha = document.getElementById('cadastroConfirmaSenha').value;
 
+        // Validação de senhas
         if (senha !== confirmaSenha) {
             exibirAlerta('As senhas não coincidem.', 'danger');
+            return;
+        }
+
+        if (senha.length < 6) {
+            exibirAlerta('A senha deve ter pelo menos 6 caracteres.', 'danger');
             return;
         }
 
@@ -76,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch('http://localhost:3001/cadastro', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ nome, email, telefone, senha })  // Sem CPF
+                body: JSON.stringify({ nome, email, telefone, senha })
             });
 
             const data = await response.json();
@@ -86,6 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             exibirAlerta(data.message, 'success');
+            cadastroForm.reset();
             setTimeout(() => mostrarLoginLink.click(), 2000);
 
         } catch (error) {
@@ -93,17 +106,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- Lógica de Login (redireciona por tipo) ---
+    // --- Lógica de Login ---
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const email = document.getElementById('loginEmail').value;
+        const email = document.getElementById('loginEmail').value.trim();
         const senha = document.getElementById('loginSenha').value;
+
+        // Validação básica
+        if (!email || !senha) {
+            exibirAlerta('Por favor, preencha todos os campos.', 'danger');
+            return;
+        }
 
         try {
             const response = await fetch('http://localhost:3001/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, senha })  // FIX: { email, senha } (não { email, senha })
+                body: JSON.stringify({ email, senha })
             });
 
             const data = await response.json();
@@ -112,11 +131,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error(data.message || 'Erro ao fazer login.');
             }
 
+            // Armazena o token
             localStorage.setItem('token', data.token);
             exibirAlerta(data.message, 'success');
 
-            // Decode token e redireciona baseado em tipo
-            const user = getUserFromToken(data.token);
+            // Decodifica o token para verificar o tipo de usuário
+            const user = decodeJWT(data.token);
+            console.log('Dados do usuário:', user); // Para debug
+
+            // Redireciona baseado no tipo
             const redirectUrl = (user && user.tipo === 'cliente') ? 'agendamento.html' : 'index.html';
 
             setTimeout(() => {
@@ -124,6 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 1500);
 
         } catch (error) {
+            console.error('Erro no login:', error);
             exibirAlerta(error.message, 'danger');
         }
     });
