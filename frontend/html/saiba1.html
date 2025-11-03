@@ -4,119 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ficar Dolorido Após Massagem Terapêutica</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            line-height: 1.7;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #333;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .container {
-            max-width: 900px;
-            margin: 20px;
-            padding: 40px;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(10px);
-            animation: fadeIn 1s ease-in-out;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        h1 {
-            color: #2c3e50;
-            text-align: center;
-            font-weight: 600;
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        .meta {
-            text-align: center;
-            font-size: 0.9em;
-            color: #7f8c8d;
-            margin-bottom: 30px;
-            font-weight: 300;
-        }
-        h2 {
-            color: #3498db;
-            margin-top: 40px;
-            font-weight: 600;
-            font-size: 1.8em;
-            border-left: 5px solid #3498db;
-            padding-left: 15px;
-            transition: color 0.3s;
-        }
-        h2:hover {
-            color: #2980b9;
-        }
-        p {
-            margin-bottom: 20px;
-            font-weight: 300;
-            text-align: justify;
-        }
-        .highlight {
-            background: linear-gradient(90deg, #a8edea 0%, #fed6e3 100%);
-            padding: 15px;
-            border-radius: 10px;
-            margin: 20px 0;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        .share {
-            text-align: center;
-            margin-top: 40px;
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-        }
-        .share a {
-            display: inline-flex;
-            align-items: center;
-            padding: 12px 20px;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: #fff;
-            text-decoration: none;
-            border-radius: 25px;
-            font-weight: 400;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        }
-        .share a:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-        }
-        .share a i {
-            margin-right: 8px;
-        }
-        @media (max-width: 768px) {
-            .container {
-                margin: 10px;
-                padding: 20px;
-            }
-            h1 {
-                font-size: 2em;
-            }
-            h2 {
-                font-size: 1.5em;
-            }
-            .share {
-                flex-direction: column;
-                align-items: center;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="../css/saiba1.css">
+    <link rel="stylesheet" href="../css/header.css">
+    
 </head>
 <body>
+
+
+    <header>
+        <nav id="barra-navegacao" class="navegacao-principal">
+            <div class="container-nav">
+                <div class="logo">
+                    <img src="../img/logo.png" alt="Logo Rokuzen">
+                </div>
+
+                <ul class="lista-nav">
+                    <li class="item-nav pagina-atual"><a href="../html/index.html">Home</a></li>
+                    <li class="item-nav"><a href="../html/sobrenos.html">Sobre nós</a></li>
+                    <li class="item-nav"><a href="#">Unidades</a></li>
+                    <li class="item-nav"><a href="#">Serviços</a></li>
+                    <li class="item-nav"><a href="../html/contatar.html">Fale conosco</a></li>
+                </ul>
+            </div>
+
+            <a href="../html/login.html" class="btn-primario">Login</a>
+
+            <button id="btn-mobile" aria-label="Abrir menu de navegação"><i class="fa-solid fa-bars"></i></button>
+        </nav>
+
+        <div class="menu-mobile">
+            <ul class="lista-nav-mobile">
+                <li class="item-nav"><a href="../html/index.html">Home</a></li>
+                <li class="item-nav"><a href="../html/sobrenos.html">Sobre nós</a></li>
+                <li class="item-nav"><a href="#">Unidades</a></li>
+                <li class="item-nav"><a href="#">Serviços</a></li>
+                <li class="item-nav"><a href="../html/contatar.html">Fale conosco</a></li>
+            </ul>
+
+            <a href="../html/login.html" class="btn-primario">Login</a>
+        </div>
+    </header>
+
     <div class="container">
         <h1>Ficar Dolorido Após Massagem Terapêutica, Liberação Miofascial ou Shiatsu é Normal?</h1>
         <div class="meta">6 nov, 2024 em Matérias por Rokuzen</div>
@@ -142,10 +71,10 @@
         <p>À medida que o corpo se adapta, a dor pós-massagem diminui e os benefícios se tornam mais evidentes: maior relaxamento, flexibilidade e alívio de tensões. Na Rokuzen, cada sessão é mais do que um alívio imediato — é um passo contínuo em direção ao bem-estar e à qualidade de vida, com profissionais preparados para atender a condições específicas e ajudar no manejo de condições crônicas.</p>
         
         <div class="share">
-            <a href="#" target="_blank"><i class="fab fa-facebook-f"></i> </a>
-            <a href="#" target="_blank"><i class="fab fa-twitter"></i> </a>
-            <a href="#" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
-            <a href="#" target="_blank"><i class="fas fa-share-alt"></i> Compartilhar</a>
+            <a href="https://www.facebook.com/rokuzen.massagem" target="_blank" class="fab fa-facebook-f"></a>
+            <a href="https://www.instagram.com/rokuzen.massagem/" target="_blank" class="fab fa-instagram"></a>
+            <a href="https://www.linkedin.com/company/rokuzen?trk=top_nav_home" target="_blank" class="fab fa-linkedin-in"></a>
+            <a href="mailto:contato@rokuzen.com.br" target="_blank" class="fa-solid fa-envelope"></a>
         </div>
     </div>
 </body>
