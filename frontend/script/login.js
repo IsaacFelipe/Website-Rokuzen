@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- Lógica de Login ---
+    // --- Lógica de Login (MODIFICADA PARA SUPORTE A TERAPEUTAS E COLABORADORES) ---
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const email = document.getElementById('loginEmail').value.trim();
@@ -139,8 +139,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const user = decodeJWT(data.token);
             console.log('Dados do usuário:', user); // Para debug
 
-            // Redireciona baseado no tipo
-            const redirectUrl = (user && user.tipo === 'cliente') ? 'agendamento.html' : 'index.html';
+            // Redireciona baseado no tipo (SUPORTE A TERAPEUTAS)
+            let redirectUrl;
+            if (user && user.tipo === 'cliente') {
+                redirectUrl = 'agendamento.html';
+            } else if (user && user.tipo === 'colaborador' && user.subtipo === 'Terapeuta') {
+                redirectUrl = 'terapeuta.html'; // Ajuste o nome do arquivo se necessário
+            } else {
+                redirectUrl = 'index.html'; // Para Admin/Recepcionista ou outros
+            }
 
             setTimeout(() => {
                 window.location.href = redirectUrl;

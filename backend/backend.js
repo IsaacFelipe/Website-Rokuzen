@@ -78,47 +78,71 @@ app.post('/cadastro', async (req, res) => {
     });
 });
 
-// --- Rota de Login de Cliente ---
+// --- Rota de Login (AGORA SUPORTA CLIENTES E COLABORADORES/TERAPEUTAS) ---
 app.post('/login', (req, res) => {
     const { email, senha } = req.body;
 
-    // SQL para tabela 'clientes' e campo 'email_cliente'
-    const sql = "SELECT * FROM clientes WHERE email_cliente = ? AND ativo = TRUE";
-
-    db.query(sql, [email], async (err, results) => {
+    // Primeiro, tenta como CLIENTE
+    const sqlCliente = "SELECT * FROM clientes WHERE email_cliente = ? AND ativo = TRUE";
+    db.query(sqlCliente, [email], async (err, resultsCliente) => {
         if (err) {
             console.error(err);
             return res.status(500).json({ message: "Erro no servidor." });
         }
 
-        // Se a consulta não retornar nenhum resultado, o cliente não existe ou está inativo
-        if (results.length === 0) {
-            return res.status(401).json({ message: "E-mail ou senha inválidos." });
+        if (resultsCliente.length > 0) {
+            // É um cliente: valida senha e gera token
+            const cliente = resultsCliente[0];
+            const senhaCorreta = await bcrypt.compare(senha, cliente.senha);
+            if (!senhaCorreta) {
+                return res.status(401).json({ message: "E-mail ou senha inválidos." });
+            }
+
+            const token = jwt.sign(
+                { id: cliente.cliente_id, nome: cliente.nome_cliente, tipo: 'cliente' },
+                JWT_SECRET,
+                { expiresIn: '1h' }
+            );
+            return res.status(200).json({ message: "Login bem-sucedido!", token: token });
         }
 
-        const cliente = results[0];
+        // Se não é cliente, tenta como COLABORADOR (terapeuta, admin, etc.)
+        const sqlColaborador = "SELECT * FROM colaboradores WHERE email_colaborador = ? AND ativo = TRUE AND deletado_em IS NULL";
+        db.query(sqlColaborador, [email], async (err, resultsColaborador) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({ message: "Erro no servidor." });
+            }
 
-        // Compara a senha enviada pelo usuário com a senha criptografada que está no banco
-        const senhaCorreta = await bcrypt.compare(senha, cliente.senha);
+            if (resultsColaborador.length === 0) {
+                return res.status(401).json({ message: "E-mail ou senha inválidos." });
+            }
 
-        // Se as senhas não baterem, retorna um erro
-        if (!senhaCorreta) {
-            return res.status(401).json({ message: "E-mail ou senha inválidos." });
-        }
+            const colaborador = resultsColaborador[0];
+            const senhaCorreta = await bcrypt.compare(senha, colaborador.senha); // Agora usa o novo campo senha
 
-        // Se o login for bem-sucedido, gera um token JWT (COM 'tipo: cliente' para frontend)
-        const token = jwt.sign(
-            { id: cliente.cliente_id, nome: cliente.nome_cliente, tipo: 'cliente' }, // Campos e tipo corretos
-            JWT_SECRET,                             // Chave secreta para assinar o token
-            { expiresIn: '1h' }                     // Opções, como o tempo de expiração do token
-        );
+            if (!senhaCorreta) {
+                return res.status(401).json({ message: "E-mail ou senha inválidos." });
+            }
 
-        // Envia a resposta de sucesso com o token
-        res.status(200).json({ message: "Login bem-sucedido!", token: token });
+            // Token para colaborador, com subtipo para diferenciar (ex: 'Terapeuta')
+            const token = jwt.sign(
+                {
+                    id: colaborador.colaborador_id,
+                    nome: colaborador.nome_colaborador,
+                    tipo: 'colaborador',
+                    subtipo: colaborador.tipo_colaborador
+                },
+                JWT_SECRET,
+                { expiresIn: '1h' }
+            );
+
+            res.status(200).json({ message: "Login bem-sucedido!", token: token });
+        });
     });
 });
 
-// --- Rota para SOLICITAR a redefinição de senha ---
+// --- Rota para SOLICITAR a redefinição de senha (SÓ PARA CLIENTES, por enquanto) ---
 app.post('/esqueci-senha', (req, res) => {
     const { email } = req.body;
 
@@ -169,7 +193,7 @@ app.post('/esqueci-senha', (req, res) => {
     });
 });
 
-// --- Rota para REDEFINIR a senha com o token ---
+// --- Rota para REDEFINIR a senha com o token (SÓ PARA CLIENTES, por enquanto) ---
 app.post('/redefinir-senha', async (req, res) => {
     const { token, novaSenha } = req.body;
 
