@@ -30,7 +30,6 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column; /* <-- Adicione esta linha! Isso fará com que os filhos (header e container) fiquem empilhados verticalmente. */
-    align-items: center; /* Centraliza o conteúdo (header e container) horizontalmente */
 }
 
 .container {
