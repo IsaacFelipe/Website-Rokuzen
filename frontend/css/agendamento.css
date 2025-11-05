@@ -114,3 +114,37 @@ para que a classe funcione em QUALQUER seção.
     border-color: #6a9b52;
     color: #fff;
 }
+
+.link-login-existente {
+    font-size: 0.8rem; /* Letra pequena */
+    color: #8dc26f; /* Sua cor verde */
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.link-login-existente:hover {
+    color: #6a9b52; /* Verde mais escuro no hover */
+    text-decoration: underline;
+}
+
+.separador-ou {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #8dc26f; /* Sua cor verde */
+}
+
+/* Cria as linhas antes e depois do texto */
+.separador-ou::before,
+.separador-ou::after {
+    content: '';
+    flex: 1; /* Faz as linhas ocuparem o espaço disponível */
+    border-bottom: 2px solid #8dc26f; /* Linha verde */
+}
+
+/* Adiciona espaço entre as linhas e o texto "OU" */
+.separador-ou span {
+    padding: 0 1rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+}

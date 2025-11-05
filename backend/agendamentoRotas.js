@@ -1,11 +1,10 @@
-// Arquivo: agendamentoRotas.js (ATUALIZADO PARA ENVIAR foto_url)
+// Arquivo: agendamentoRotas.js (VALIDAÇÃO CORRIGIDA)
 
 const express = require('express');
 const router = express.Router();
 const db = require('./db.js'); 
 
 function formatMySQLDateTime(date) {
-    // ... (Sua função formatMySQLDateTime - NÃO MUDA) ...
     const Y = date.getFullYear();
     const M = String(date.getMonth() + 1).padStart(2, '0');
     const D = String(date.getDate()).padStart(2, '0');
@@ -15,25 +14,96 @@ function formatMySQLDateTime(date) {
     return `${Y}-${M}-${D} ${H}:${Min}:${S}`;
 }
 
+// =================================================================
+// ROTA POST /api/agendar (VALIDAÇÃO CORRIGIDA)
+// =================================================================
 router.post('/api/agendar', (req, res) => {
-    // ... (Sua rota POST /api/agendar está 100% correta - NÃO MUDA) ...
+    
     // 1. RECEBEMOS OS DADOS
     const { 
-        unidadeId, 
-        servicoId, 
-        colaboradorId, 
-        valor, 
-        clienteId,
-        data,      
-        horario    
+        unidadeId, servicoId, colaboradorId, valor, 
+        clienteId, // Pode ser 'null'
+        guestNome, // Pode ser 'null'
+        guestEmail, // Pode ser 'null'
+        data, horario    
     } = req.body;
 
-    // 2. Validação
-    if (!unidadeId || !servicoId || !colaboradorId || !valor || !clienteId || !data || !horario) {
+    // 2. VALIDAÇÃO CORRIGIDA
+    // Primeiro, validamos os DADOS DO AGENDAMENTO (o que foi clicado)
+    if (!unidadeId || !servicoId || !colaboradorId || !valor || !data || !horario) {
         return res.status(400).json({ success: false, message: 'Dados incompletos para o agendamento.' });
     }
 
-    // 3. BUSCAMOS A DURAÇÃO CORRETA NO BANCO
+    // Segundo, validamos os DADOS DO USUÁRIO (logado OU convidado)
+    if (!clienteId && (!guestNome || !guestEmail)) {
+         return res.status(400).json({ success: false, message: 'Usuário não identificado. Faça login ou preencha os dados de convidado.' });
+    }
+    
+    // 3. VERIFICA SE ESTÁ LOGADO OU É CONVIDADO
+    if (clienteId) {
+        // --- CENÁRIO 1: USUÁRIO LOGADO ---
+        console.log(`Iniciando agendamento para cliente LOGADO: ${clienteId}`);
+        // Temos o clienteId, podemos prosseguir direto para salvar o agendamento
+        salvarAgendamento(clienteId, req.body, res);
+
+    } else if (guestNome && guestEmail) {
+        // --- CENÁRIO 2: USUÁRIO CONVIDADO ---
+        console.log(`Iniciando agendamento para CONVIDADO: ${guestEmail}`);
+        
+        // Precisamos primeiro criar esse cliente (ou encontrar, se já existir)
+        const sqlCheckEmail = "SELECT cliente_id, tipo_cliente FROM clientes WHERE email_cliente = ?";
+        db.query(sqlCheckEmail, [guestEmail], (err, results) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({ success: false, message: 'Erro ao verificar email.' });
+            }
+
+            if (results.length > 0) {
+                // Email já existe.
+                const clienteExistente = results[0];
+                
+                // Se for um cliente "Cadastrado" (tipo 1, não 2), ele DEVE fazer login.
+                if (clienteExistente.tipo_cliente != 2) {
+                    return res.status(409).json({ success: false, message: 'Este e-mail já está cadastrado. Por favor, faça login para agendar.' });
+                }
+                
+                // Se for um "Convidado" (tipo 2), apenas reutilizamos o ID
+                console.log(`Convidado ${guestEmail} já existia. Reutilizando ID: ${clienteExistente.cliente_id}`);
+                salvarAgendamento(clienteExistente.cliente_id, req.body, res);
+
+            } else {
+                // Email não existe. Criamos o novo cliente como convidado (tipo 2)
+                const sqlInsertCliente = "INSERT INTO clientes (nome_cliente, email_cliente, tipo_cliente) VALUES (?, ?, ?)";
+                
+                db.query(sqlInsertCliente, [guestNome, guestEmail, 2], (err, insertResult) => {
+                    if (err) {
+                        // << AQUI VAI DAR O ERRO DA SENHA SE VOCÊ NÃO FIZER A PARTE 2
+                        console.error('Erro ao inserir novo cliente convidado:', err);
+                        return res.status(500).json({ success: false, message: 'Erro ao registrar convidado.' });
+                    }
+                    
+                    const newClienteId = insertResult.insertId;
+                    console.log(`Novo convidado ${guestEmail} criado. ID: ${newClienteId}`);
+                    salvarAgendamento(newClienteId, req.body, res);
+                });
+            }
+        });
+
+    } 
+    // (O 'else' foi removido porque já foi validado na Etapa 2)
+});
+
+
+/**
+ * =================================================================
+ * FUNÇÃO HELPER: Salvar o agendamento
+ * (NENHUMA MUDANÇA AQUI)
+ * =================================================================
+ */
+function salvarAgendamento(clienteId, body, res) {
+    const { unidadeId, servicoId, colaboradorId, valor, data, horario } = body;
+
+    // 1. Busca a duração (para ser seguro)
     db.query('SELECT duracao_padrao FROM servicos WHERE servico_id = ?', [servicoId], (err, servicoResult) => {
         
         if (err || servicoResult.length === 0) {
@@ -43,16 +113,15 @@ router.post('/api/agendar', (req, res) => {
         
         const duracao = servicoResult[0].duracao_padrao; 
 
-        // 4. CÁLCULO DAS DATAS
+        // 2. Cálculo das Datas
         const horaFormatada = horario.replace('h', ':') + ':00';
         const inicio_atendimento = `${data} ${horaFormatada}`;
 
         const dataInicio = new Date(inicio_atendimento);
         dataInicio.setMinutes(dataInicio.getMinutes() + duracao); 
-        
         const fim_atendimento = formatMySQLDateTime(dataInicio);
         
-        // 5. A Query SQL
+        // 3. Query SQL
         const query = `
             INSERT INTO atendimentos 
             (
@@ -65,52 +134,50 @@ router.post('/api/agendar', (req, res) => {
 
         const valores = [
             unidadeId, clienteId, servicoId, colaboradorId,
-            duracao, 
-            valor,
-            1, // 'foi_marcado_online'
-            'Agendado',
-            inicio_atendimento, 
-            fim_atendimento 
+            duracao, valor, 1, 'Agendado',
+            inicio_atendimento, fim_atendimento 
         ];
 
-        // 6. Executa a query
+        // 4. Executa
         db.query(query, valores, (err, result) => {
             if (err) {
                 console.error('Erro ao salvar agendamento:', err);
                 return res.status(500).json({ success: false, message: 'Erro ao salvar agendamento.' });
             }
             
-            console.log('Agendamento salvo com sucesso! ID:', result.insertId);
+            console.log(`Agendamento [${result.insertId}] salvo com sucesso para Cliente [${clienteId}]`);
             res.status(201).json({ success: true, message: 'Agendamento confirmado!', id: result.insertId });
         });
     });
-});
+}
+
 
 // =================================================================
-// ROTA GET /api/horarios-disponiveis (MUDANÇA AQUI)
+// ROTA GET /api/horarios-disponiveis (NÃO MUDA)
 // =================================================================
 router.get('/api/horarios-disponiveis', (req, res) => {
     
-    // ... (Passos 1, 2, 3: Validação, data, dia_semana - permanecem iguais) ...
+    // ... (O resto do seu arquivo, incluindo 'calcularSlots', está perfeito e não precisa mudar) ...
+
     const { data, unidade_id, servico_id } = req.query;
+
     if (!data || !unidade_id || !servico_id) {
         return res.status(400).json({ message: 'Dados incompletos (data, unidade, serviço).' });
     }
+
     const dataObj = new Date(data + 'T12:00:00'); 
     const dia_semana = dataObj.getDay();
-    console.log(`\n--- BUSCA DE HORÁRIOS INICIADA ---`);
-    console.log(`Buscando para: Unidade=${unidade_id}, Servico=${servico_id}, Data=${data}, DiaSemana=${dia_semana}`);
 
-    // ... (Passo 4: Pega a duração do serviço - permanece igual) ...
+    console.log(`\n--- BUSCA DE HORÁRIOS: U:${unidade_id}, S:${servico_id}, Dia:${dia_semana}`);
+
     db.query('SELECT duracao_padrao FROM servicos WHERE servico_id = ?', [servico_id], (err, servicoResult) => { 
         if (err || servicoResult.length === 0) {
-            console.error("--- ERRO LOG 2 --- Erro ao buscar duracao_padrao:", err);
+            console.error("Erro ao buscar duracao_padrao:", err);
             return res.status(500).json({ message: 'Serviço não encontrado ou erro na query de serviço.' });
         }
         const duracaoServico = servicoResult[0].duracao_padrao; 
-        console.log(`--- LOG 2 --- Duração do Serviço encontrada: ${duracaoServico} min.`);
+        console.log(`--- Duração: ${duracaoServico} min.`);
 
-        // ... (Passo 5: Query 1: Encontrar jornadas - permanece igual) ...
         const queryJornadas = `
             SELECT E.colaborador_id, E.hora_inicio, E.hora_fim
             FROM escalas_semanais AS E
@@ -120,16 +187,15 @@ router.get('/api/horarios-disponiveis', (req, res) => {
         
         db.query(queryJornadas, [unidade_id, servico_id, dia_semana], (err, jornadas) => {
             if (err) {
-                console.error("--- ERRO LOG 3 --- Erro ao buscar jornadas:", err);
+                console.error("Erro ao buscar jornadas:", err);
                 return res.status(500).json({ message: 'Erro ao buscar jornadas.' });
             }
-            console.log(`--- LOG 3 --- Terapeutas/Jornadas encontrados: ${jornadas.length}`);
+            console.log(`--- Jornadas encontradas: ${jornadas.length}`);
             
             if (jornadas.length === 0) {
                 return res.json({ mapeamento: {}, terapeutas: [] }); 
             }
 
-            // ... (Passo 6: Query 2: Buscar horários ocupados - permanece igual) ...
             const idsTerapeutas = [...new Set(jornadas.map(j => j.colaborador_id))]; 
             const queryOcupados = `
                 SELECT colaborador_id, inicio_atendimento, fim_atendimento 
@@ -139,31 +205,26 @@ router.get('/api/horarios-disponiveis', (req, res) => {
 
             db.query(queryOcupados, [data, idsTerapeutas], (err, ocupados) => {
                 if (err) {
-                    console.error("--- ERRO LOG 4 --- Erro ao buscar agendamentos ocupados:", err);
+                    console.error("Erro ao buscar agendamentos ocupados:", err);
                     return res.status(500).json({ message: 'Erro ao buscar agendamentos.' });
                 }
-                console.log(`--- LOG 4 --- Agendamentos ocupados encontrados: ${ocupados.length}`);
+                console.log(`--- Ocupados: ${ocupados.length}`);
 
-                // --- 7. MUDANÇA AQUI: Buscar nomes E FOTOS dos terapeutas ---
                 const queryTerapeutas = `
                     SELECT colaborador_id, nome_colaborador, foto_url 
                     FROM colaboradores 
                     WHERE colaborador_id IN (?)
-                `; // <-- foto_url FOI ADICIONADA
+                `;
                 
                 db.query(queryTerapeutas, [idsTerapeutas], (err, terapeutas) => {
                     if (err) {
-                        console.error("--- ERRO LOG 5 --- Erro ao buscar nomes de terapeutas:", err);
+                        console.error("Erro ao buscar nomes de terapeutas:", err);
                         return res.status(500).json({ message: 'Erro ao buscar nomes de terapeutas.' });
                     }
 
-                    // ... (Passo 8: Calcular o mapeamento - permanece igual) ...
                     const mapeamento = calcularSlots(jornadas, ocupados, duracaoServico, data); 
+                    console.log(`--- Mapeamento calculado. \n`);
                     
-                    console.log(`--- LOG 5 --- Mapeamento de slots/terapeutas calculado.`);
-                    console.log(`----------------------------------\n`);
-                    
-                    // ... (Passo 9: Resposta final - permanece igual, agora 'terapeutas' inclui foto_url) ...
                     res.json({
                         mapeamento: mapeamento,
                         terapeutas: terapeutas

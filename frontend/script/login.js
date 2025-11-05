@@ -1,3 +1,5 @@
+// Arquivo: login.js (ATUALIZADO COM REDIRECIONAMENTO CORRETO)
+
 document.addEventListener('DOMContentLoaded', () => {
     // Seletores dos elementos principais
     const formLoginDiv = document.getElementById('form-login');
@@ -66,6 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Lógica de Cadastro ---
     cadastroForm.addEventListener('submit', async (e) => {
+        // ... (Sua lógica de cadastro está correta e não precisa mudar) ...
         e.preventDefault();
         const nome = document.getElementById('cadastroNome').value.trim();
         const email = document.getElementById('cadastroEmail').value.trim();
@@ -73,12 +76,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const senha = document.getElementById('cadastroSenha').value;
         const confirmaSenha = document.getElementById('cadastroConfirmaSenha').value;
 
-        // Validação de senhas
         if (senha !== confirmaSenha) {
             exibirAlerta('As senhas não coincidem.', 'danger');
             return;
         }
-
         if (senha.length < 6) {
             exibirAlerta('A senha deve ter pelo menos 6 caracteres.', 'danger');
             return;
@@ -106,13 +107,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- Lógica de Login (MODIFICADA PARA SUPORTE A TERAPEUTAS E COLABORADORES) ---
+    // --- Lógica de Login (MODIFICADA PARA REDIRECIONAMENTO INTELIGENTE) ---
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const email = document.getElementById('loginEmail').value.trim();
         const senha = document.getElementById('loginSenha').value;
 
-        // Validação básica
         if (!email || !senha) {
             exibirAlerta('Por favor, preencha todos os campos.', 'danger');
             return;
@@ -131,23 +131,54 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error(data.message || 'Erro ao fazer login.');
             }
 
-            // Armazena o token
             localStorage.setItem('token', data.token);
             exibirAlerta(data.message, 'success');
 
-            // Decodifica o token para verificar o tipo de usuário
             const user = decodeJWT(data.token);
-            console.log('Dados do usuário:', user); // Para debug
+            console.log('Dados do usuário:', user);
 
-            // Redireciona baseado no tipo (SUPORTE A TERAPEUTAS)
+            // ================================================================
+            // LÓGICA DE REDIRECIONAMENTO ATUALIZADA (CONFORME SEU PEDIDO)
+            // ================================================================
+            
             let redirectUrl;
-            if (user && user.tipo === 'cliente') {
-                redirectUrl = 'index.html';
-            } else if (user && user.tipo === 'colaborador' && user.subtipo === 'Terapeuta') {
-                redirectUrl = 'terapeuta.html'; // Ajuste o nome do arquivo se necessário
+
+            // REGRA 1: Checa se é Colaborador (Terapeuta, Admin, etc.)
+            if (user && user.tipo === 'colaborador') {
+                if (user.subtipo === 'Terapeuta') {
+                    // REGRA 1A: Terapeuta SEMPRE vai para terapeuta.html
+                    redirectUrl = 'terapeuta.html';
+                } else {
+                    // REGRA 1B: Outros colaboradores (Admin, etc.) vão para o index
+                    redirectUrl = 'index.html';
+                }
+            
+            // REGRA 2: Se não for colaborador, checa se é Cliente
+            } else if (user && user.tipo === 'cliente') {
+                
+                // Tenta pegar a URL da página anterior
+                let urlAnterior = document.referrer;
+                
+                // Verifica se a URL anterior é válida (não é o próprio login ou cadastro)
+                const isPaginaDeAuth = urlAnterior.includes('login.html') || 
+                                      urlAnterior.includes('cadastro.html') || 
+                                      urlAnterior.includes('esqueci-senha.html');
+
+                if (urlAnterior && !isPaginaDeAuth) {
+                    // REGRA 2A: Se for válida, usamos a URL anterior
+                    console.log('Cliente redirecionado para a página anterior:', urlAnterior);
+                    redirectUrl = urlAnterior;
+                } else {
+                    // REGRA 2B (Plano B): Se não for válida (ou vazia), vai para o index
+                    console.log('Nenhuma página anterior válida. Cliente redirecionado para index.html.');
+                    redirectUrl = 'index.html';
+                }
+            
+            // REGRA 3: Plano B geral
             } else {
-                redirectUrl = 'index.html'; // Para Admin/Recepcionista ou outros
+                redirectUrl = 'index.html';
             }
+
 
             setTimeout(() => {
                 window.location.href = redirectUrl;
