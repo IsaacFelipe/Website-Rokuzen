@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Redireciona baseado no tipo (SUPORTE A TERAPEUTAS)
             let redirectUrl;
             if (user && user.tipo === 'cliente') {
-                redirectUrl = 'agendamento.html';
+                redirectUrl = 'index.html';
             } else if (user && user.tipo === 'colaborador' && user.subtipo === 'Terapeuta') {
                 redirectUrl = 'terapeuta.html'; // Ajuste o nome do arquivo se necessário
             } else {

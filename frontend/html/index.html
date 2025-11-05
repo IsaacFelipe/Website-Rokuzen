@@ -29,8 +29,19 @@
                 </ul>
             </div>
 
-            <a href="../html/login.html" class="btn-primario">Login</a>
+            <div id="auth-container-desktop">
+                <a href="../html/login.html" class="btn-primario auth-login-link">Login</a>
 
+                <div class="profile-dropdown auth-profile-menu" style="display: none;">
+                    <button class="btn-profile" aria-label="Abrir menu do perfil">
+                        <img src="https://icongr.am/feather/user.svg?size=24&color=ffffff" alt="Ícone de Perfil">
+                    </button>
+                    <div class="profile-menu-content">
+                        <a href="#">Minhas Informações</a>
+                        <a href="#" class="logout-link">Sair</a>
+                    </div>
+                </div>
+            </div>
             <button id="btn-mobile" aria-label="Abrir menu de navegação"><i class="fa-solid fa-bars"></i></button>
         </nav>
 
@@ -43,8 +54,20 @@
                 <li class="item-nav"><a href="#">Fale conosco</a></li>
             </ul>
 
-            <a href="../html/login.html" class="btn-primario">Login</a>
-        </div>
+            <div id="auth-container-mobile">
+                <a href="../html/login.html" class="btn-primario auth-login-link">Login</a>
+
+                <div class="profile-dropdown auth-profile-menu" style="display: none;">
+                    <button class="btn-profile" aria-label="Abrir menu do perfil">
+                        <img src="https://icongr.am/feather/user.svg?size=24&color=ffffff" alt="Ícone de Perfil">
+                    </button>
+                    <div class="profile-menu-content">
+                        <a href="#">Minhas Informações</a>
+                        <a href="#" class="logout-link">Sair</a>
+                    </div>
+                </div>
+            </div>
+            </div>
     </header>
 
     <section class="banner-hero">
@@ -158,7 +181,18 @@
         </div>
     </section>
 
+    <script>
+        var _userway_config = {
+            // Isso força o widget a ficar no canto inferior esquerdo
+            // Assim ele não briga com o VLibras (que fica à direita)
+            position: 'bottom_left', 
+
+            account: 'td5B3BWoK8'
+        };
+    </script>
     <script src="https://cdn.userway.org/widget.js" data-account="td5B3BWoK8"></script>
+
+
     <div vw class="enabled">
         <div vw-access-button class="active"></div>
         <div vw-plugin-wrapper>
@@ -168,6 +202,9 @@
     <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
     <script>
         new window.VLibras.Widget('https://vlibras.gov.br/app');
+    </script>
+    <script 
+        src="../script/auth.js">
     </script>
 
 </body>

@@ -188,3 +188,63 @@ header {
 @media (max-width: 600px) {
     /* ... media queries das outras seções ... */
 }
+
+/* Estilos para o Dropdown de Perfil */
+
+/* O container principal */
+.profile-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* O botão do ícone de perfil */
+.btn-profile {
+    background-color: #A68668; /* Cor do seu .btn-primario */
+    color: white;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-profile:hover {
+    background-color: #8f6e53; /* Um pouco mais escuro no hover */
+}
+
+/* O conteúdo do menu (escondido por padrão) */
+.profile-menu-content {
+    display: none; /* Escondido por padrão */
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    border-radius: 5px;
+    z-index: 100;
+    right: 0; /* Alinha o menu à direita do botão */
+}
+
+/* Links dentro do menu */
+.profile-menu-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+}
+
+/* Hover dos links */
+.profile-menu-content a:hover {
+    background-color: #ddd;
+}
+
+/* Classe 'show' que o JavaScript vai adicionar para exibir o menu */
+.profile-menu-content.show {
+    display: block;
+}
+
+.btn-profile img {
+    vertical-align: middle; /* Ajuda a centralizar verticalmente */
+    width: 24px; /* Garante o tamanho */
+    height: 24px; /* Garante o tamanho */
+}
