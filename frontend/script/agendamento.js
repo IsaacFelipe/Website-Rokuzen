@@ -1,8 +1,10 @@
-// Aguarda o conteúdo da página ser totalmente carregado
+// Arquivo: agendamento.js (ATUALIZADO PARA MOSTRAR foto_url)
+
+// --- 0. (Função decodeJWT - permanece a mesma) ---
 document.addEventListener('DOMContentLoaded', function() {
 
-    // --- 0. Função para decodificar o JWT (copiada do seu login.js) ---
     function decodeJWT(token) {
+        // ... (seu código decodeJWT) ...
         try {
             const base64Url = token.split('.')[1];
             const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -18,19 +20,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // --- 1. Objeto para guardar as escolhas ---
     const agendamentoEmProgresso = {
+        // ... (permanece o mesmo) ...
         unidadeId: null,
         servicoId: null,
         data: null, 
         horario: null, 
-        colaboradorId: null, // (Agora vamos pegar o colaboradorId DEPOIS do horário)
+        colaboradorId: null,
         valor: null,
         duracao: null,
         clienteId: null 
     };
+    
+    // --- NOVO: Variável global para o mapeamento ---
+    let mapeamentoHorarios = new Map();
 
-    // --- 2. VERIFICA O LOGIN DO CLIENTE (Importante!) ---
+    // --- 2. (Verifica Login - permanece o mesmo) ---
     const token = localStorage.getItem('token');
     if (token) {
+        // ... (seu código de verificação de login) ...
         const user = decodeJWT(token);
         if (user && user.tipo === 'cliente') {
             agendamentoEmProgresso.clienteId = user.id; 
@@ -41,17 +48,16 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- 3. Seleciona todas as seções ---
     const secaoServicos = document.getElementById('secao-servicos');
     const secaoDataHorario = document.getElementById('secao-data-horario');
-    const secaoHorariosContainer = document.querySelector('#secao-data-horario .row.g-2'); // Container dos botões
-    const secaoProfissionais = document.getElementById('secao-profissionais'); // (Vamos mostrar junto com o botão)
+    const secaoHorariosContainer = document.querySelector('#secao-data-horario .row.g-2');
+    const secaoProfissionais = document.getElementById('secao-profissionais');
+    const secaoProfissionaisContainer = document.querySelector('#secao-profissionais .row.g-4'); // <-- CORRETO
     const seletorData = document.getElementById('data-agendamento'); 
     const secaoConfirmar = document.getElementById('secao-confirmar');
     const btnAgendar = document.getElementById('btn-agendar'); 
 
-    // --- 4. LÓGICA DE SELEÇÃO DE DATA (AGORA ATIVA E COM FETCH) ---
+    // --- 4. LÓGICA DE SELEÇÃO DE DATA (ATUALIZADA) ---
     seletorData.addEventListener('change', async function() {
-        const dataSelecionada = seletorData.value; // Ex: "2025-11-20"
-        
-        // Pega os IDs que já foram selecionados
+        const dataSelecionada = seletorData.value; 
         const { unidadeId, servicoId } = agendamentoEmProgresso;
 
         if (!dataSelecionada) {
@@ -61,18 +67,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (!unidadeId || !servicoId) {
             alert("Por favor, selecione a Unidade e o Serviço antes de escolher a data.");
-            seletorData.value = ''; // Limpa a data
+            seletorData.value = ''; 
             return;
         }
 
-        agendamentoEmProgresso.data = dataSelecionada; // Salva a data
+        agendamentoEmProgresso.data = dataSelecionada; 
 
-        // Mostra um "Carregando..."
         secaoHorariosContainer.innerHTML = '<p class="text-secondary">Buscando horários...</p>';
-        secaoHorariosContainer.classList.remove('oculto'); // Mostra a seção de horários
-        
+        secaoProfissionaisContainer.innerHTML = ''; 
+        secaoProfissionais.classList.add('oculto'); 
+        secaoConfirmar.classList.add('oculto'); 
+
         try {
-            // Chama a nova API que criamos
             const url = `http://localhost:3001/api/horarios-disponiveis?data=${dataSelecionada}&unidade_id=${unidadeId}&servico_id=${servicoId}`;
             const response = await fetch(url);
 
@@ -80,17 +86,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 throw new Error('Falha ao buscar horários.');
             }
 
-            const horarios = await response.json(); // Ex: ['09h00', '09h30', '11h00']
+            const data = await response.json(); 
 
-            // Limpa o "Carregando..."
+            // --- A. POPULA HORÁRIOS (Sem mudança) ---
             secaoHorariosContainer.innerHTML = '';
+            const horarios = Object.keys(data.mapeamento).sort();
+            mapeamentoHorarios = new Map(Object.entries(data.mapeamento)); 
 
             if (horarios.length === 0) {
                 secaoHorariosContainer.innerHTML = '<p class="text-danger">Nenhum horário disponível para esta data.</p>';
                 return;
             }
 
-            // Cria os botões de horário dinamicamente
             horarios.forEach(hora => {
                 const btnHtml = `
                     <div class="col-4 col-sm-3 col-md-2">
@@ -99,10 +106,30 @@ document.addEventListener('DOMContentLoaded', function() {
                 `;
                 secaoHorariosContainer.innerHTML += btnHtml;
             });
+            gerenciarSelecao('.btn-horario'); 
 
-            // IMPORTANTE: Aplica a lógica de clique aos NOVOS botões
-            gerenciarSelecao('.btn-horario');
-
+            // --- B. POPULA TERAPEUTAS (MUDANÇA AQUI) ---
+            if (data.terapeutas.length > 0) {
+                data.terapeutas.forEach(terapeuta => {
+                    
+                    // Se a foto_url for nula/vazia, usamos um placeholder
+                    const foto = terapeuta.foto_url || 'https://via.placeholder.com/100';
+                    
+                    const terapeutaHtml = `
+                        <div class="col-12 col-md-6 col-lg-3" style="display: none;"> 
+                             <div class="card card-selecionavel card-profissional h-100 text-center" data-id="${terapeuta.colaborador_id}">
+                                <img src="${foto}" class="imagem-perfil mx-auto mt-3" alt="${terapeuta.nome_colaborador}">
+                                <div class="card-body">
+                                    <h6 class="card-title fw-bold">${terapeuta.nome_colaborador}</h6>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    secaoProfissionaisContainer.innerHTML += terapeutaHtml;
+                });
+                gerenciarSelecao('.card-profissional'); 
+            }
+            
         } catch (error) {
             console.error('Erro ao buscar horários:', error);
             secaoHorariosContainer.innerHTML = '<p class="text-danger">Erro ao buscar horários. Tente novamente.</p>';
@@ -110,9 +137,9 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 
-    // --- 5. LÓGICA PARA SELEÇÃO INTERATIVA DOS ITENS ---
-
+    // --- 5. LÓGICA PARA SELEÇÃO INTERATIVA (Sem mudança) ---
     function gerenciarSelecao(seletor) {
+        // ... (Esta função está 100% correta, não mude nada) ...
         const elementos = document.querySelectorAll(seletor);
 
         elementos.forEach(elemento => {
@@ -135,7 +162,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 } else if (seletor === '.item-servico') {
                     agendamentoEmProgresso.servicoId = idSelecionado;
-                    
                     const texto = this.querySelector('.text-end').textContent; 
                     const regex = /(\d+)\s*min - R\$ ([\d,]+)/;
                     const match = texto.match(regex);
@@ -143,43 +169,45 @@ document.addEventListener('DOMContentLoaded', function() {
                         agendamentoEmProgresso.duracao = parseInt(match[1]);
                         agendamentoEmProgresso.valor = parseFloat(match[2].replace(',', '.'));
                     }
-
-                    // Agora mostramos a DATA/HORÁRIO
                     secaoDataHorario.classList.remove('oculto');
                     secaoDataHorario.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 
                 } else if (seletor === '.btn-horario') {
                     agendamentoEmProgresso.horario = this.textContent; 
+                    
+                    const idsDisponiveis = mapeamentoHorarios.get(agendamentoEmProgresso.horario);
+                    const todasColunasTerapeutas = document.querySelectorAll('#secao-profissionais .col-12');
+
+                    todasColunasTerapeutas.forEach(coluna => {
+                        const card = coluna.querySelector('.card-profissional');
+                        const cardId = card ? parseInt(card.dataset.id) : null;
+                        
+                        if (cardId && idsDisponiveis.includes(cardId)) {
+                            coluna.style.display = 'block'; 
+                        } else {
+                            coluna.style.display = 'none'; 
+                        }
+                    });
                 
                 } else if (seletor === '.card-profissional') {
-                    agendamentoEmProgresso.colaboradorId = idSelecionado;
+                    agendamentoEmProgresso.colaboradorId = this.dataset.id;
                 }
                 
-                // (ATUALIZAÇÃO DE LÓGICA: O botão de agendar só aparece ao selecionar um HORÁRIO)
-                // (A seleção de terapeuta foi simplificada)
                 verificarAgendamentoCompleto();
             });
         });
     }
 
-    // --- 6. Função que verifica se tudo foi preenchido (RE-SIMPLIFICADA) ---
+    // --- 6. (Função verificarAgendamentoCompleto - sem mudança) ---
     function verificarAgendamentoCompleto() {
-        
-        // O botão de agendar agora aparece ao selecionar o HORÁRIO
-        // Estamos assumindo que o back-end vai alocar o 'colaborador_id' automaticamente
-        // (Para o teste, vamos manter a seleção de profissional)
-        
+        // ... (Esta função está 100% correta, não mude nada) ...
         const { unidadeId, servicoId, data, horario, clienteId } = agendamentoEmProgresso;
 
-        // Se o usuário selecionou até o horário, mostramos os profissionais
         if (data && horario) {
-            // (Para o seu fluxo original, o correto seria mostrar os profissionais SÓ AGORA)
             secaoProfissionais.classList.remove('oculto');
             secaoProfissionais.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
-        // --- LÓGICA FINAL PARA O BOTÃO ---
-        // (Vamos manter a seleção de profissional por enquanto)
         const profissionalAtivo = document.querySelector('.card-profissional.ativo');
         
         if (unidadeId && servicoId && data && horario && profissionalAtivo && clienteId) {
@@ -190,16 +218,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // --- 7. APLICA A LÓGICA DE SELEÇÃO ---
+    // --- 7. (Aplica Seleção - sem mudança) ---
     gerenciarSelecao('.card-unidade');
     gerenciarSelecao('.item-servico');
-    // '.btn-horario' será chamado DEPOIS que o fetch criar os botões
     gerenciarSelecao('.card-profissional');
 
-
-    // --- 8. LÓGICA DO BOTÃO FINAL DE AGENDAR ---
+    // --- 8. (Botão Agendar - sem mudança) ---
     btnAgendar.addEventListener('click', async function() {
-        
+        // ... (Esta função está 100% correta, não mude nada) ...
         if (!agendamentoEmProgresso.clienteId) {
             alert("Você precisa estar logado como cliente para fazer um agendamento.");
             return;
@@ -228,7 +254,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (resultado.success) {
                 alert(resultado.message);
-                window.location.reload(); // Recarrega a página após o sucesso
+                window.location.reload(); 
             } else {
                 alert('Houve um erro: ' + resultado.message);
             }

@@ -1,12 +1,11 @@
-// Arquivo: agendamentoRotas.js (CORREÇÃO DE FUSO HORÁRIO)
+// Arquivo: agendamentoRotas.js (ATUALIZADO PARA ENVIAR foto_url)
 
 const express = require('express');
 const router = express.Router();
 const db = require('./db.js'); 
 
-// --- 1. NOVA FUNÇÃO HELPER ---
-// Esta função formata a data para o MySQL sem convertê-la para UTC
 function formatMySQLDateTime(date) {
+    // ... (Sua função formatMySQLDateTime - NÃO MUDA) ...
     const Y = date.getFullYear();
     const M = String(date.getMonth() + 1).padStart(2, '0');
     const D = String(date.getDate()).padStart(2, '0');
@@ -17,7 +16,7 @@ function formatMySQLDateTime(date) {
 }
 
 router.post('/api/agendar', (req, res) => {
-    
+    // ... (Sua rota POST /api/agendar está 100% correta - NÃO MUDA) ...
     // 1. RECEBEMOS OS DADOS
     const { 
         unidadeId, 
@@ -51,10 +50,7 @@ router.post('/api/agendar', (req, res) => {
         const dataInicio = new Date(inicio_atendimento);
         dataInicio.setMinutes(dataInicio.getMinutes() + duracao); 
         
-        // --- 2. LINHA CORRIGIDA ---
-        // Trocamos o .toISOString() pela nossa função manual
         const fim_atendimento = formatMySQLDateTime(dataInicio);
-
         
         // 5. A Query SQL
         const query = `
@@ -74,7 +70,7 @@ router.post('/api/agendar', (req, res) => {
             1, // 'foi_marcado_online'
             'Agendado',
             inicio_atendimento, 
-            fim_atendimento // Agora salva '2025-11-10 08:30:00'
+            fim_atendimento 
         ];
 
         // 6. Executa a query
@@ -90,46 +86,36 @@ router.post('/api/agendar', (req, res) => {
     });
 });
 
-
 // =================================================================
-// A ROTA GET /api/horarios-disponiveis (NÃO MUDA)
+// ROTA GET /api/horarios-disponiveis (MUDANÇA AQUI)
 // =================================================================
 router.get('/api/horarios-disponiveis', (req, res) => {
     
-    // ... (O resto do seu arquivo, incluindo 'calcularSlots', está perfeito e não precisa mudar) ...
-
+    // ... (Passos 1, 2, 3: Validação, data, dia_semana - permanecem iguais) ...
     const { data, unidade_id, servico_id } = req.query;
-
     if (!data || !unidade_id || !servico_id) {
         return res.status(400).json({ message: 'Dados incompletos (data, unidade, serviço).' });
     }
-
     const dataObj = new Date(data + 'T12:00:00'); 
     const dia_semana = dataObj.getDay();
-
     console.log(`\n--- BUSCA DE HORÁRIOS INICIADA ---`);
     console.log(`Buscando para: Unidade=${unidade_id}, Servico=${servico_id}, Data=${data}, DiaSemana=${dia_semana}`);
 
+    // ... (Passo 4: Pega a duração do serviço - permanece igual) ...
     db.query('SELECT duracao_padrao FROM servicos WHERE servico_id = ?', [servico_id], (err, servicoResult) => { 
         if (err || servicoResult.length === 0) {
             console.error("--- ERRO LOG 2 --- Erro ao buscar duracao_padrao:", err);
             return res.status(500).json({ message: 'Serviço não encontrado ou erro na query de serviço.' });
         }
-        
         const duracaoServico = servicoResult[0].duracao_padrao; 
         console.log(`--- LOG 2 --- Duração do Serviço encontrada: ${duracaoServico} min.`);
 
+        // ... (Passo 5: Query 1: Encontrar jornadas - permanece igual) ...
         const queryJornadas = `
-            SELECT
-                E.colaborador_id,
-                E.hora_inicio,
-                E.hora_fim
+            SELECT E.colaborador_id, E.hora_inicio, E.hora_fim
             FROM escalas_semanais AS E
             JOIN colaboradores_servicos AS CS ON E.colaborador_id = CS.colaborador_id
-            WHERE
-                E.unidade_id = ?
-                AND CS.servico_id = ?
-                AND E.dia_semana = ?
+            WHERE E.unidade_id = ? AND CS.servico_id = ? AND E.dia_semana = ?
         `;
         
         db.query(queryJornadas, [unidade_id, servico_id, dia_semana], (err, jornadas) => {
@@ -137,25 +123,18 @@ router.get('/api/horarios-disponiveis', (req, res) => {
                 console.error("--- ERRO LOG 3 --- Erro ao buscar jornadas:", err);
                 return res.status(500).json({ message: 'Erro ao buscar jornadas.' });
             }
-
             console.log(`--- LOG 3 --- Terapeutas/Jornadas encontrados: ${jornadas.length}`);
             
             if (jornadas.length === 0) {
-                return res.json([]); 
+                return res.json({ mapeamento: {}, terapeutas: [] }); 
             }
 
-            const idsTerapeutas = jornadas.map(j => j.colaborador_id); 
-            
+            // ... (Passo 6: Query 2: Buscar horários ocupados - permanece igual) ...
+            const idsTerapeutas = [...new Set(jornadas.map(j => j.colaborador_id))]; 
             const queryOcupados = `
-                SELECT
-                    colaborador_id,
-                    inicio_atendimento,
-                    fim_atendimento 
+                SELECT colaborador_id, inicio_atendimento, fim_atendimento 
                 FROM atendimentos
-                WHERE
-                    DATE(inicio_atendimento) = ?
-                    AND colaborador_id IN (?)
-                    AND status != 'Cancelado'
+                WHERE DATE(inicio_atendimento) = ? AND colaborador_id IN (?) AND status != 'Cancelado'
             `;
 
             db.query(queryOcupados, [data, idsTerapeutas], (err, ocupados) => {
@@ -163,15 +142,33 @@ router.get('/api/horarios-disponiveis', (req, res) => {
                     console.error("--- ERRO LOG 4 --- Erro ao buscar agendamentos ocupados:", err);
                     return res.status(500).json({ message: 'Erro ao buscar agendamentos.' });
                 }
-
                 console.log(`--- LOG 4 --- Agendamentos ocupados encontrados: ${ocupados.length}`);
+
+                // --- 7. MUDANÇA AQUI: Buscar nomes E FOTOS dos terapeutas ---
+                const queryTerapeutas = `
+                    SELECT colaborador_id, nome_colaborador, foto_url 
+                    FROM colaboradores 
+                    WHERE colaborador_id IN (?)
+                `; // <-- foto_url FOI ADICIONADA
                 
-                const horariosDisponiveis = calcularSlots(jornadas, ocupados, duracaoServico, data); 
-                
-                console.log(`--- LOG 5 --- Slots disponíveis calculados: ${horariosDisponiveis.length}`);
-                console.log(`----------------------------------\n`);
-                
-                res.json(horariosDisponiveis);
+                db.query(queryTerapeutas, [idsTerapeutas], (err, terapeutas) => {
+                    if (err) {
+                        console.error("--- ERRO LOG 5 --- Erro ao buscar nomes de terapeutas:", err);
+                        return res.status(500).json({ message: 'Erro ao buscar nomes de terapeutas.' });
+                    }
+
+                    // ... (Passo 8: Calcular o mapeamento - permanece igual) ...
+                    const mapeamento = calcularSlots(jornadas, ocupados, duracaoServico, data); 
+                    
+                    console.log(`--- LOG 5 --- Mapeamento de slots/terapeutas calculado.`);
+                    console.log(`----------------------------------\n`);
+                    
+                    // ... (Passo 9: Resposta final - permanece igual, agora 'terapeutas' inclui foto_url) ...
+                    res.json({
+                        mapeamento: mapeamento,
+                        terapeutas: terapeutas
+                    });
+                });
             });
         });
     });
@@ -179,11 +176,11 @@ router.get('/api/horarios-disponiveis', (req, res) => {
 
 
 /**
- * Função que gera os slots de horário
+ * Função que gera os slots de horário (NÃO MUDA)
  */
 function calcularSlots(jornadas, ocupados, duracaoServico, data) { 
-    // ... (Esta função está correta e não precisa mudar) ...
-    const slotsDisponiveis = new Set();
+    // ... (Esta função está 100% correta, não mude nada) ...
+    const slotsMap = new Map(); 
     const dataAgendamento = data; 
     
     const slotsOcupados = ocupados.map(o => ({
@@ -226,14 +223,23 @@ function calcularSlots(jornadas, ocupados, duracaoServico, data) {
             if (!estaOcupado) {
                 const hora = String(dataSlotAtual.getHours()).padStart(2, '0');
                 const min = String(dataSlotAtual.getMinutes()).padStart(2, '0');
-                slotsDisponiveis.add(`${hora}h${min}`); 
+                const horaString = `${hora}h${min}`;
+                
+                if (!slotsMap.has(horaString)) {
+                    slotsMap.set(horaString, new Set());
+                }
+                slotsMap.get(horaString).add(colaborador_id);
             }
 
             dataSlotAtual.setTime(dataSlotAtual.getTime() + 30 * 60000); 
         }
     });
 
-    return Array.from(slotsDisponiveis).sort();
+    const objParaJson = {};
+    slotsMap.forEach((idsSet, hora) => {
+        objParaJson[hora] = Array.from(idsSet);
+    });
+    return objParaJson;
 }
 
 module.exports = router;
