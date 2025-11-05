@@ -27,7 +27,6 @@ h2 {
 }
 
 /* Adicione esta regra ao seu CSS, por exemplo, depois do estilo do .icone-perfil */
-
 .logo {
   height: 55px; /* Você pode ajustar este valor como preferir */
   width: auto;  /* Importante: mantém a proporção original da imagem */
@@ -91,7 +90,27 @@ h2 {
     background-color: #f6fff2;
 }
 
-/* Classe para ocultar a seção de profissionais */
-#secao-profissionais.oculto {
+/* ================================================================
+MUDANÇA AQUI:
+Trocamos '#secao-profissionais.oculto' por '.oculto'
+para que a classe funcione em QUALQUER seção.
+================================================================
+*/
+.oculto {
     display: none;
+}
+
+.btn-confirmar {
+    background-color: #8dc26f;
+    border-color: #7cb362;
+    color: #fff;
+    font-weight: 600;
+    padding: 0.75rem 2rem; /* Botão maior */
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.btn-confirmar:hover {
+    background-color: #7cb362;
+    border-color: #6a9b52;
+    color: #fff;
 }
