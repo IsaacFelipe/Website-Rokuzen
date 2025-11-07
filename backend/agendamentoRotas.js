@@ -1,4 +1,4 @@
-// Arquivo: agendamentoRotas.js (ATUALIZADO PARA 'tipos_permitidos')
+// Arquivo: agendamentoRotas.js (LÓGICA DE STATUS REMOVIDA)
 
 const express = require('express');
 const router = express.Router();
@@ -71,14 +71,13 @@ router.post('/api/agendar', (req, res) => {
 
 /**
  * =================================================================
- * FUNÇÃO HELPER: salvarAgendamento (MUDANÇA SIGNIFICATIVA)
+ * FUNÇÃO HELPER: salvarAgendamento (LÓGICA DE STATUS REMOVIDA)
  * =================================================================
  */
 function salvarAgendamento(clienteId, body, res) {
     const { unidadeId, servicoId, colaboradorId, valor, data, horario } = body;
 
     // --- ETAPA 1: Descobrir duração E os tipos de posto permitidos ---
-    // (Nome da coluna corrigido para 'tipos_permitidos')
     const sqlGetServico = "SELECT duracao_padrao, tipos_permitidos FROM servicos WHERE servico_id = ?";
     
     db.query(sqlGetServico, [servicoId], (err, servicoResult) => {
@@ -88,81 +87,66 @@ function salvarAgendamento(clienteId, body, res) {
         }
         
         const duracao = servicoResult[0].duracao_padrao; 
-        const tiposPermitidosString = servicoResult[0].tipos_permitidos; // Ex: 'maca,poltrona'
+        const tiposPermitidosString = servicoResult[0].tipos_permitidos; 
 
         if (!tiposPermitidosString) {
             return res.status(500).json({ success: false, message: `Serviço (ID ${servicoId}) não tem 'tipos_permitidos' configurado.` });
         }
 
-        // --- LÓGICA NOVA: Separar a string em um array ---
         const tiposArray = tiposPermitidosString.split(','); // Ex: ['maca', 'poltrona']
 
-        // --- ETAPA 2: Encontrar um posto livre de QUALQUER um dos tipos permitidos ---
-        // (Query corrigida para usar 'IN (?)' em vez de '= ?')
+        // --- ETAPA 2: Encontrar um posto que corresponda (sem checar status) ---
         const sqlFindPosto = `
             SELECT posto_id, tipo_posto FROM postos 
             WHERE 
                 unidade_id = ? 
-                AND tipo_posto IN (?)  -- <-- MUDANÇA AQUI
-                AND status = 'Livre' 
+                AND tipo_posto IN (?)
                 AND ativo = 1 
-            LIMIT 1
-        `;
+            LIMIT 1 
+        `; // <-- "status = 'Livre'" FOI REMOVIDO
 
         db.query(sqlFindPosto, [unidadeId, tiposArray], (err, postoResult) => {
             if (err) {
-                console.error("Erro ao buscar posto livre:", err);
+                console.error("Erro ao buscar posto:", err);
                 return res.status(500).json({ success: false, message: 'Erro ao buscar postos.' });
             }
 
             if (postoResult.length === 0) {
-                // Mensagem de erro melhorada
-                return res.status(409).json({ success: false, message: `Não há postos (como ${tiposPermitidosString}) livres nesta unidade no momento.` });
+                return res.status(409).json({ success: false, message: `Nenhum posto do tipo '${tiposPermitidosString}' encontrado nesta unidade.` });
             }
 
             const postoId = postoResult[0].posto_id;
-            const tipoPostoOcupado = postoResult[0].tipo_posto;
-            console.log(`Posto ID ${postoId} (tipo ${tipoPostoOcupado}) encontrado e será ocupado.`);
+            console.log(`Posto ID ${postoId} (tipo ${postoResult[0].tipo_posto}) alocado para este agendamento.`);
 
-            // --- ETAPA 3: Ocupar o posto (Sem mudança) ---
-            const sqlUpdatePosto = "UPDATE postos SET status = 'Ocupado' WHERE posto_id = ?";
+            // --- ETAPA 3: Salvar o agendamento (Etapa de Ocupar foi removida) ---
+            const horaFormatada = horario.replace('h', ':') + ':00';
+            const inicio_atendimento = `${data} ${horaFormatada}`;
+            const dataInicio = new Date(inicio_atendimento);
+            dataInicio.setMinutes(dataInicio.getMinutes() + duracao); 
+            const fim_atendimento = formatMySQLDateTime(dataInicio);
             
-            db.query(sqlUpdatePosto, [postoId], (err, updateResult) => {
+            const sqlInsertAtendimento = `
+                INSERT INTO atendimentos (
+                    unidade_id, cliente_id, servico_id, colaborador_id, posto_id,
+                    duracao_real, valor_servico, foi_marcado_online, status,
+                    inicio_atendimento, fim_atendimento
+                ) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            `;
+            const valores = [
+                unidadeId, clienteId, servicoId, colaboradorId, postoId, // postoId foi adicionado
+                duracao, valor, 1, 'Agendado',
+                inicio_atendimento, fim_atendimento 
+            ];
+
+            db.query(sqlInsertAtendimento, valores, (err, result) => {
                 if (err) {
-                    console.error("Erro ao ocupar posto:", err);
-                    return res.status(500).json({ success: false, message: 'Erro ao atualizar status do posto.' });
+                    console.error('Erro ao salvar agendamento:', err);
+                    return res.status(500).json({ success: false, message: 'Erro ao salvar agendamento.' });
                 }
-
-                // --- ETAPA 4: Salvar o agendamento (Sem mudança, mas agora inclui posto_id) ---
-                const horaFormatada = horario.replace('h', ':') + ':00';
-                const inicio_atendimento = `${data} ${horaFormatada}`;
-                const dataInicio = new Date(inicio_atendimento);
-                dataInicio.setMinutes(dataInicio.getMinutes() + duracao); 
-                const fim_atendimento = formatMySQLDateTime(dataInicio);
                 
-                const sqlInsertAtendimento = `
-                    INSERT INTO atendimentos (
-                        unidade_id, cliente_id, servico_id, colaborador_id, posto_id,
-                        duracao_real, valor_servico, foi_marcado_online, status,
-                        inicio_atendimento, fim_atendimento
-                    ) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                `;
-                const valores = [
-                    unidadeId, clienteId, servicoId, colaboradorId, postoId, // postoId foi adicionado
-                    duracao, valor, 1, 'Agendado',
-                    inicio_atendimento, fim_atendimento 
-                ];
-
-                db.query(sqlInsertAtendimento, valores, (err, result) => {
-                    if (err) {
-                        console.error('Erro ao salvar agendamento:', err);
-                        return res.status(500).json({ success: false, message: 'Erro ao salvar agendamento.' });
-                    }
-                    
-                    console.log(`Agendamento [${result.insertId}] salvo com sucesso para Cliente [${clienteId}] no Posto [${postoId}]`);
-                    res.status(201).json({ success: true, message: 'Agendamento confirmado!', id: result.insertId });
-                });
+                console.log(`Agendamento [${result.insertId}] salvo com sucesso para Cliente [${clienteId}] no Posto [${postoId}]`);
+                res.status(201).json({ success: true, message: 'Agendamento confirmado!', id: result.insertId });
             });
         });
     });
