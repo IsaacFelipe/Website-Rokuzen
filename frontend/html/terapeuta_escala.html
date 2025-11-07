@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escala</title>
+    <link rel="stylesheet" href="../css/escala_t.css">
+</head>
+
+<body>
+    <header class="cabecalho">
+        <div class="perfil-terapeuta">
+            <img src="../img/primeiro profissional 1.png" alt="Avatar de Midori Arawaka">
+            <span>Midori Arawaka</span>
+        </div>
+        <nav class="barra-navegacao">
+            <ul>
+                <li><a href="../html/login.html">Início</a></li>
+                <li><a href="#" class="ativo">Escalas</a></li>
+                <li><a href="#">Agendamentos</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="card-principal-wrapper">
+            <div class="card-principal">
+                <div class="cabecalho-card">
+                    <div class="info-esquerda">
+                        <div class="avatar-inicials avatar-ms">MS</div>
+                        <div class="texto-terapeuta">
+                            <h3>Sua Escala</h3>
+                            <p>Dra. Maria Silva - CRP 06/123456</p>
+                        </div>
+                    </div>
+                    <div class="status status-em-sessao">
+                        <span>Em Sessão</span>
+                    </div>
+                </div>
+
+                <div class="card-body-principal">
+
+                    <div class="coluna-agendamentos">
+                        <h4>Sessão Atual</h4>
+                        <div class="info-box sessao-atual-box">
+                            <p><strong>João Pedro Santos</strong></p>
+                            <p class="horario">🕑 09:00 - 09:50</p>
+                        </div>
+
+                        <h4>Próximo Agendamento</h4>
+                        <div class="info-box proximo-agendamento-box">
+                            <p><strong>Ana Carolina Lima</strong></p>
+                            <p class="horario">🕑 10:00</p>
+                        </div>
+                    </div>
+
+                    <div class="coluna-intervalos">
+                        <div class="titulo-intervalo">
+                            <h4>Intervalos</h4>
+                            <a href="#" class="btn-registrar-intervalo">
+                                📅 Registrar Intervalo
+                            </a>
+                        </div>
+                        <div class="info-box intervalo-box">
+                            <div class="info-intervalo-header">
+                                <span class="tag-intervalo">Automático</span>
+                                <a href="#" class="btn-remover">Remover</a>
+                            </div>
+                            <p class="horario">🕑 09:50 - 10:00</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="outros-terapeutas-section">
+            <h2>Outros Terapeutas</h2>
+
+            <div class="outros-terapeutas-grid">
+
+                <div class="card-terapeuta card-disponivel">
+                    <div class="cabecalho-terapeuta">
+                        <div class="info-esquerda">
+                            <div class="avatar-inicials avatar-dc">DC</div>
+                            <div class="texto-terapeuta">
+                                <h5>Dr. Carlos Mendes</h5>
+                                <p>CRP 06/234567</p>
+                            </div>
+                        </div>
+                        <div class="status status-disponivel">
+                            <span>Disponível</span>
+                        </div>
+                    </div>
+                    <p class="info-entrada">
+                        ➔ Entrada: 08:30
+                    </p>
+                    <div class="info-box-terapeuta proximo-box-disponivel">
+                        <p><strong>Próximo: Roberto Alves</strong></p>
+                        <p class="horario">🕑 10:30</p>
+                    </div>
+                </div>
+
+                <div class="card-terapeuta card-em-intervalo">
+                    <div class="cabecalho-terapeuta">
+                        <div class="info-esquerda">
+                            <div class="avatar-inicials avatar-dp">DP</div>
+                            <div class="texto-terapeuta">
+                                <h5>Dra. Patrícia Costa</h5>
+                                <p>CRP 06/345678</p>
+                            </div>
+                        </div>
+                        <div class="status status-em-intervalo">
+                            <span>Em Intervalo</span>
+                        </div>
+                    </div>
+                    <p class="info-entrada">
+                        ➔ Entrada: 07:00
+                    </p>
+                    <div class="info-box-terapeuta proximo-box-intervalo">
+                        <p><strong>Próximo: Fernanda Rocha</strong></p>
+                        <p class="horario">🕑 11:00</p>
+                    </div>
+                    <p class="info-extra">
+                        🍴 Almoço 09:30-10:30
+                    </p>
+                </div>
+
+            </div>
+        </section>
+    </main>
+</body>
+
+</html>

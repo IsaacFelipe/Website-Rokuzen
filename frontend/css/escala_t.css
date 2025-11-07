@@ -1,0 +1,715 @@
+/* =========================================
+   1. IMPORTS DE FONTES (Conforme pedido)
+   ========================================= */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+/* Amatic SC e Motoya não foram usados neste layout específico */
+
+/* =========================================
+   2. :ROOT (Paleta de Cores Curada)
+   ========================================= */
+:root {
+    /* Fontes (Conforme pedido) */
+    --font-heading: 'Cinzel', serif;
+    --font-menu: 'League Spartan', sans-serif;
+    --font-body: 'Montserrat', sans-serif;
+
+    /* Cores da paleta original (Curada) */
+    --primary: #9ab946;
+    /* Verde (Disponível) */
+    --text-dark: #694300;
+    /* Marrom (Texto principal) */
+    --bg-page: #fcfbf2;
+    /* Off-white (Fundo da página) */
+    --bg-card: #ffffff;
+    /* Branco (Fundo dos cards) */
+    --black: #000000;
+    /* Preto (Raramente usado) */
+
+    /* Cores Adicionadas pelo Designer (Para Status) */
+    --status-sessao: #4A6A8A;
+    /* Azul-ardósia (Info) */
+    --status-intervalo: #CB8A02;
+    /* Âmbar/Dourado (Aviso) */
+    --status-disponivel: #9ab946;
+    /* Verde (Adicionado explicitamente para consistência) */
+    --danger: #D9534F;
+    /* Vermelho (Remover) */
+
+    /* Cores Derivadas (Tons claros e texto) */
+    --text-light: #8a7352;
+    /* Marrom claro (Subtextos) */
+    --border: #EAE5DB;
+    /* Borda (Baseado no Fundo) */
+
+    /* Fundos de caixas de informação */
+    --bg-sessao-light: #F0F4F7;
+    /* Azul claro */
+    --bg-intervalo-light: #FFFBF0;
+    /* Dourado claro */
+    --bg-disponivel-light: #F5F8EF;
+    /* Verde claro */
+    --bg-proximo-light: #F9F7F4;
+    /* Neutro (para Próximo Ag.) */
+
+    /* Novas variáveis para "vida" (gradientes e animações) */
+    --gradient-primary: linear-gradient(135deg, var(--primary), #7ea83b);
+    --gradient-hover: linear-gradient(135deg, var(--primary), #8bb73a);
+    --shadow-light: 0 4px 12px rgba(105, 67, 0, 0.05);
+    --shadow-hover: 0 8px 24px rgba(105, 67, 0, 0.1);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* =========================================
+   3. RESET E ESTILOS GLOBAIS
+   ========================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-body);
+    /* Padrão: Montserrat */
+    background: var(--bg-page);
+    color: var(--text-dark);
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    /* Evita barras laterais indesejadas em animações */
+}
+
+/* Animação de entrada suave para o body */
+body {
+    animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =========================================
+   4. CABEÇALHO (Com nova tipografia e transições)
+   ========================================= */
+.cabecalho {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 32px;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    transition: var(--transition);
+}
+
+.cabecalho:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+
+.perfil-terapeuta {
+    display: flex;
+    align-items: center;
+    font-weight: 700;
+    font-family: var(--font-menu);
+    /* League Spartan */
+    color: var(--text-dark);
+    transition: var(--transition);
+}
+
+.perfil-terapeuta:hover {
+    color: var(--primary);
+    transform: scale(1.02);
+}
+
+.perfil-terapeuta img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    transition: var(--transition);
+    box-shadow: var(--shadow-light);
+}
+
+.perfil-terapeuta img:hover {
+    transform: scale(1.1);
+    box-shadow: var(--shadow-hover);
+}
+
+.barra-navegacao ul {
+    display: flex;
+    list-style: none;
+    gap: 24px;
+}
+
+.barra-navegacao a {
+    text-decoration: none;
+    color: var(--text-light);
+    font-weight: 700;
+    /* League Spartan é melhor com peso */
+    font-size: 0.95rem;
+    font-family: var(--font-menu);
+    /* League Spartan */
+    position: relative;
+    transition: var(--transition);
+    padding-bottom: 4px;
+}
+
+.barra-navegacao a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--gradient-primary);
+    transition: var(--transition);
+}
+
+.barra-navegacao a:hover {
+    color: var(--primary);
+    transform: translateY(-1px);
+}
+
+.barra-navegacao a:hover::after {
+    width: 100%;
+}
+
+.barra-navegacao a.ativo {
+    color: var(--text-dark);
+}
+
+/* Sem barra para .ativo — só no hover */
+
+/* =========================================
+   5. CONTEÚDO PRINCIPAL (MAIN)
+   ========================================= */
+main {
+    padding: 32px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* --- Card Principal (Sua Escala) --- */
+.card-principal {
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: var(--shadow-light);
+    /* Sombra baseada no marrom */
+    border: 1px solid var(--border);
+    transition: var(--transition);
+    animation: slideInUp 0.6s ease-out;
+}
+
+.card-principal:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-4px);
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.cabecalho-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+}
+
+.info-esquerda {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+/* Avatares com Iniciais */
+.avatar-inicials {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: var(--bg-card);
+    font-size: 1.2rem;
+    font-family: var(--font-body);
+    /* Montserrat para iniciais */
+    transition: var(--transition);
+    box-shadow: var(--shadow-light);
+    animation: pulse 2s infinite ease-in-out;
+}
+
+.avatar-inicials:hover {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: var(--shadow-hover);
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.avatar-ms {
+    background: linear-gradient(135deg, var(--status-sessao), #5a7a9a);
+}
+
+.avatar-dc {
+    background: linear-gradient(135deg, var(--status-disponivel), #7ea83b);
+}
+
+.avatar-dp {
+    background: linear-gradient(135deg, var(--status-intervalo), #d89b1b);
+}
+
+/* Tipografia dos Títulos */
+.texto-terapeuta h3 {
+    font-family: var(--font-heading);
+    /* Cinzel */
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    transition: var(--transition);
+    text-shadow: 0 1px 2px rgba(105, 67, 0, 0.1);
+}
+
+.texto-terapeuta h3:hover {
+    color: var(--primary);
+    text-shadow: 0 2px 4px rgba(154, 185, 70, 0.2);
+    letter-spacing: 0.5px;
+}
+
+.texto-terapeuta p {
+    font-family: var(--font-body);
+    /* Montserrat */
+    font-size: 0.9rem;
+    color: var(--text-light);
+}
+
+.texto-terapeuta h5 {
+    font-family: var(--font-menu);
+    /* League Spartan */
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    transition: var(--transition);
+}
+
+.texto-terapeuta h5:hover {
+    color: var(--primary);
+}
+
+/* Status (com bolinha animada) */
+.status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    font-family: var(--font-body);
+    /* Montserrat */
+    transition: var(--transition);
+}
+
+.status::before {
+    content: '';
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    animation: gentlePulse 1.5s infinite ease-in-out;
+}
+
+@keyframes gentlePulse {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.7;
+        transform: scale(1.2);
+    }
+}
+
+.status-em-sessao {
+    color: var(--status-sessao);
+}
+
+.status-em-sessao::before {
+    background-color: var(--status-sessao);
+}
+
+.status-disponivel {
+    color: var(--status-disponivel);
+}
+
+.status-disponivel::before {
+    background-color: var(--status-disponivel);
+}
+
+.status-em-intervalo {
+    color: var(--status-intervalo);
+}
+
+.status-em-intervalo::before {
+    background-color: var(--status-intervalo);
+}
+
+.status:hover {
+    transform: scale(1.05);
+}
+
+/* --- Corpo do Card Principal --- */
+.card-body-principal {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    padding-top: 24px;
+}
+
+.coluna-agendamentos h4,
+.coluna-intervalos h4 {
+    font-family: var(--font-menu);
+    /* League Spartan */
+    font-size: 1.2rem;
+    color: var(--text-dark);
+    margin-bottom: 12px;
+    transition: var(--transition);
+    position: relative;
+}
+
+.coluna-agendamentos h4::after,
+.coluna-intervalos h4::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background: var(--primary);
+    transform: scaleX(0);
+    transition: var(--transition);
+}
+
+.coluna-agendamentos:hover h4::after,
+.coluna-intervalos:hover h4::after {
+    transform: scaleX(1);
+}
+
+/* Caixas de informação */
+.info-box {
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 20px;
+    transition: var(--transition);
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.info-box:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(154, 185, 70, 0.15);
+}
+
+.info-box strong {
+    color: var(--text-dark);
+    font-size: 0.95rem;
+    font-weight: 700;
+    transition: var(--transition);
+}
+
+.info-box:hover strong {
+    color: var(--primary);
+}
+
+.horario {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin-top: 4px;
+    transition: var(--transition);
+}
+
+.info-box:hover .horario {
+    color: var(--text-dark);
+}
+
+/* Cores das caixas de informação */
+.sessao-atual-box {
+    background: linear-gradient(135deg, var(--bg-sessao-light), #e8f0f5);
+}
+
+.proximo-agendamento-box {
+    background: linear-gradient(135deg, var(--bg-proximo-light), #f5f2ed);
+}
+
+.intervalo-box {
+    background: linear-gradient(135deg, var(--bg-intervalo-light), #fff8e6);
+}
+
+/* --- Coluna Intervalos --- */
+.titulo-intervalo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btn-registrar-intervalo {
+    text-decoration: none;
+    color: var(--text-dark);
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: var(--transition);
+    padding: 4px 8px;
+    border-radius: 6px;
+}
+
+.btn-registrar-intervalo:hover {
+    color: var(--primary);
+    background: rgba(154, 185, 70, 0.1);
+    transform: scale(1.05);
+}
+
+.info-intervalo-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.tag-intervalo {
+    background-color: var(--bg-card);
+    border: 1px solid var(--status-intervalo);
+    color: var(--status-intervalo);
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.tag-intervalo:hover {
+    background: rgba(203, 138, 2, 0.1);
+    transform: scale(1.1);
+}
+
+.btn-remover {
+    text-decoration: none;
+    color: var(--danger);
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: var(--transition);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.btn-remover:hover {
+    text-decoration: underline;
+    background: rgba(217, 83, 79, 0.1);
+    transform: scale(1.05);
+}
+
+/* =========================================
+   6. SEÇÃO OUTROS TERAPEUTAS
+   ========================================= */
+.outros-terapeutas-section {
+    margin-top: 32px;
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.outros-terapeutas-section h2 {
+    font-family: var(--font-heading);
+    /* Cinzel */
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+    color: var(--text-dark);
+    transition: var(--transition);
+    text-shadow: 0 1px 2px rgba(105, 67, 0, 0.1);
+}
+
+.outros-terapeutas-section h2:hover {
+    color: var(--primary);
+    text-shadow: 0 2px 4px rgba(154, 185, 70, 0.2);
+}
+
+.outros-terapeutas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 24px;
+}
+
+.card-terapeuta {
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: var(--shadow-light);
+    transition: var(--transition);
+    animation: cardFadeIn 0.6s ease-out forwards;
+    opacity: 0;
+}
+
+.card-terapeuta:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.card-terapeuta:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.card-terapeuta:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+@keyframes cardFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card-terapeuta:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-6px);
+}
+
+.card-disponivel {
+    border: 1px solid var(--status-disponivel);
+    background: linear-gradient(135deg, var(--bg-card), rgba(154, 185, 70, 0.02));
+}
+
+.card-em-intervalo {
+    border: 1px solid var(--status-intervalo);
+    background: linear-gradient(135deg, var(--bg-card), rgba(203, 138, 2, 0.02));
+}
+
+.cabecalho-terapeuta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+}
+
+.info-entrada {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin-top: 16px;
+    transition: var(--transition);
+}
+
+.info-entrada:hover {
+    color: var(--text-dark);
+}
+
+.info-box-terapeuta {
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 16px;
+    transition: var(--transition);
+}
+
+.info-box-terapeuta:hover {
+    transform: translateX(4px);
+}
+
+.proximo-box-disponivel {
+    background: linear-gradient(135deg, var(--bg-disponivel-light), #ebf2e0);
+}
+
+.proximo-box-intervalo {
+    background: linear-gradient(135deg, var(--bg-proximo-light), #f4f1ea);
+}
+
+.info-extra {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin-top: 16px;
+    padding: 12px;
+    background: linear-gradient(135deg, #F9F9F9, #f0f0f0);
+    /* Um cinza bem leve com gradiente */
+    border-radius: 12px;
+    transition: var(--transition);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.info-extra:hover {
+    background: linear-gradient(135deg, #f5f5f5, #ffffff);
+    transform: scale(1.02);
+}
+
+/* =========================================
+   7. RESPONSIVIDADE
+   ========================================= */
+@media (max-width: 900px) {
+    .card-body-principal {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    main {
+        padding: 16px;
+    }
+
+    .cabecalho-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .outros-terapeutas-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Reduzir animações em mobile para performance */
+    .card-terapeuta,
+    .info-box,
+    .avatar-inicials {
+        transition: all 0.2s ease;
+    }
+}

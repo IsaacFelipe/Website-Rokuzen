@@ -52,7 +52,7 @@
     --bg-proximo-light: #F9F7F4;
     /* Neutro (Próximo) */
 
-    /* Variáveis para "vida" (Gradientes e animações) */
+    /* Variáveis para "vida" (Gradientes e animações - Adicionadas) */
     --gradient-primary: linear-gradient(135deg, var(--primary), #7ea83b);
     --gradient-hover: linear-gradient(135deg, var(--primary), #8bb73a);
     --shadow-light: 0 4px 12px rgba(105, 67, 0, 0.05);
@@ -69,8 +69,8 @@
     /* Mapeado para sessão */
     --dot-concluida: #9ab946;
     /* Verde concluída */
-    --dot-andamento: #4A6A8A;
-    /* Azul para andamento */
+    --dot-andamento: #CB8A02;
+    /* Âmbar em andamento */
     --dot-proxima: #EAE5DB;
     /* Neutro próxima */
 }
@@ -147,7 +147,6 @@ body {
     margin-right: 12px;
     transition: var(--transition);
     box-shadow: var(--shadow-light);
-    border: 1px solid var(--border);
 }
 
 .perfil-terapeuta img:hover {
@@ -273,7 +272,11 @@ body {
     transition: var(--transition);
     background: var(--bg-card);
     color: var(--text-dark);
+}
+
+.btn-grande {
     width: 100%;
+    padding: 14px;
 }
 
 .btn-primario {
@@ -508,6 +511,7 @@ body {
     background: var(--secondary-bg);
     color: var(--text-dark);
     border: 1px solid var(--secondary-border);
+    width: 100%;
     transition: var(--transition);
 }
 
@@ -533,7 +537,6 @@ body {
     border-radius: 6px;
     transition: var(--transition);
     border: 1px solid var(--border);
-    margin-bottom: 8px;
 }
 
 .cartao-lista-intervalo li:hover {
@@ -553,7 +556,7 @@ body {
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background: var(--secondary-bg);
+    background: var(--bg-card);
     color: var(--danger);
     font-size: 0.9rem;
     font-weight: 700;
