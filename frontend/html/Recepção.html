@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tela de Controle de Sessões</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/Recepção.css">
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="header-title">
+            Portal da Recepção
+            <div style="font-size: 0.9rem; color: var(--c-texto); font-weight: 400;">Carlos Alberto - Unidade Centro
+            </div>
+        </div>
+        <div class="header-info">
+            <div class="info-block">
+                <span>Login: <strong>08:00</strong></span>
+                <span>Horas trabalhadas: 0.0h</span>
+            </div>
+            <div class="info-block">
+                <span>Remuneração Variável</span>
+                <strong>R$ 42,00</strong>
+                <span>0 pontos</span>
+            </div>
+        </div>
+        <div class="user-actions">
+            <span class="notification-bell">🔔</span>
+            <button class="logout-btn">Logout</button>
+        </div>
+    </header>
+    <nav class="main-nav">
+        <div class="nav-tab active" data-tab="visao-geral">Visão Geral</div>
+        <div class="nav-tab" data-tab="agendamentos">Agendamentos</div>
+        <div class="nav-tab" data-tab="vendas">Vendas</div>
+        <div class="nav-tab" data-tab="terapeutas">Terapeutas</div>
+    </nav>
+    <div id="visao-geral" class="tab-content active">
+        <div class="dashboard-layout">
+            <main class="main-column">
+                <section>
+                    <div class="section-header">
+                        <h2 class="section-title">Ocupação dos Postos - Tempo Real</h2>
+                        <div class="legend">
+                            <span class="legend-item livre">Livre</span>
+                            <span class="legend-item ocupado">Ocupado</span>
+                            <span class="legend-item intervalo">Intervalo</span>
+                            <span class="legend-item manutencao">Manutenção</span>
+                        </div>
+                    </div>
+                    <div class="station-group">
+                        <h3 class="group-title">Salas de Maca (2/6 ocupadas)</h3>
+                        <div class="station-grid">
+                            <article class="station-card status-ocupado">
+                                <span class="status-dot"></span>
+                                <h4 class="card-header">Sala 1</h4>
+                                <div class="card-content">
+                                    <p><strong>Mariana Silva</strong></p>
+                                    <p>Ana Costa</p>
+                                    <p>14:00 - 15:30</p>
+                                    <div class="progress-bar">
+                                        <div class="progress-bar-inner" style="width: 100%;"></div>
+                                    </div>
+                                    <div class="status-warning">▲ Atrasado</div>
+                                </div>
+                            </article>
+                            <article class="station-card status-livre">
+                                <span class="status-dot"></span>
+                                <h4 class="card-header">Sala 2</h4>
+                                <div class="card-content">
+                                    <p style="opacity: 0.6">Disponível</p>
+                                </div>
+                            </article>
+                            <article class="station-card status-ocupado">
+                                <span class="status-dot"></span>
+                                <h4 class="card-header">Sala 3</h4>
+                                <div class="card-content">
+                                    <p><strong>Carlos Mendes</strong></p>
+                                    <p>João Silva</p>
+                                    <p>13:30 - 14:30</p>
+                                    <div class="progress-bar">
+                                        <div class="progress-bar-inner" style="width: 100%;"></div>
+                                    </div>
+                                    <div class="status-warning">▲ Atrasado</div>
+                                </div>
+                            </article>
+                            <article class="station-card status-intervalo">
+                                <span class="status-dot"></span>
+                                <h4 class="card-header">Sala 4</h4>
+                                <div class="card-content">
+                                    <p>Intervalo da terapeuta</p>
+                                </div>
+                            </article>
+                            <article class="station-card status-livre">
+                                <span class="status-dot"></span>
+                                <h4 class="card-header">Sala 5</h4>
+                                <div class="card-content">
+                                    <p style="opacity: 0.6">Disponível</p>
+                                </div>
+                            </article>
+                            <article class="station-card status-manutencao">
+                                <span class="status-dot"></span>
+                                <h4 class="card-header">Sala 6</h4>
+                                <div class="card-content">
+                                    <p>Troca de lençóis</p>
+                                    <p>Até: 16:00</p>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+                    <div class="station-group">
+                        <h3 class="group-title">Cadeiras Quick Massage (1/4 ocupadas)</h3>
+                        <div class="station-grid">
+                            <article class="station-card status-livre">
+                                <span class="status-dot"></span>
+                                <h4 class="card-header">Quick 1</h4>
+                            </article>
+                            <article class="station-card status-ocupado">
+                                <span class="status-dot"></span>
+                                <h4 class="card-header">Quick 2</h4>
+                                <div class="card-content">
+                                    <p><strong>Juliana Rocha</strong></p>
+                                    <p>Pedro Lima</p>
+                                    <p>14:30 - 14:45</p>
+                                    <div class="progress-bar">
+                                        <div class="progress-bar-inner" style="width: 100%;"></div>
+                                    </div>
+                                    <div class="status-warning">▲ Atrasado</div>
+                                </div>
+                            </article>
+                            <article class="station-card status-livre">
+                                <span class="status-dot"></span>
+                                <h4 class="card-header">Quick 3</h4>
+                            </article>
+                            <article class="station-card status-livre">
+                                <span class="status-dot"></span>
+                                <h4 class="card-header">Quick 4</h4>
+                            </article>
+                        </div>
+                    </div>
+                </section>
+            </main>
+            <aside class="sidebar-column">
+                <section class="sidebar-widget">
+                    <h2 class="widget-title">Pontuação da Unidade</h2>
+                    <div class="score-card">
+                        <h3 class="score-title">Pontuação Total</h3>
+                        <div class="score-value">210</div>
+                        <div class="score-detail">pontos hoje</div>
+                    </div>
+                    <div class="score-list">
+                        <div class="score-list-item">
+                            <span>Sessões Realizadas</span>
+                            <span>0 pts</span>
+                        </div>
+                        <div class="score-list-item pending">
+                            <span>Vendas Pendentes</span>
+                            <span>210 pts</span>
+                        </div>
+                    </div>
+                    <div class="warning-box">
+                        <strong>Evita dupla contagem:</strong>
+                        Vendas contam para pontuação apenas uma vez - na venda ou na realização pelo terapeuta.
+                    </div>
+                    <div class="sidebar-divider"></div>
+                    <div class="score-list" style="margin-top: 0;">
+                        <div class="score-list-item">
+                            <span>Atendimentos completados:</span>
+                            <span>0 pts</span>
+                        </div>
+                        <div class="score-list-item">
+                            <span>Vendas não realizadas:</span>
+                            <span>210 pts</span>
+                        </div>
+                    </div>
+                </section>
+                <section class="sidebar-widget">
+                    <h2 class="widget-title">Sessões em Andamento (4)</h2>
+                    <div class="session-list">
+                        <article class="session-card">
+                            <div class="session-card-header">
+                                <span class="session-client">Ana Costa</span>
+                                <span class="session-location">Sala 1</span>
+                            </div>
+                            <div class="session-card-body">
+                                <p>Mariana Silva</p>
+                                <p>Massagem Terapêutica</p>
+                                <p>14:00 • 90 min</p>
+                                <div class="progress-bar">
+                                    <div class="progress-bar-inner" style="width: 100%;"></div>
+                                </div>
+                                <div class="status-warning" style="font-size: 0.8rem; color: var(--c-status-ocupado)">▲
+                                    Atrasado</div>
+                                <span class="session-tag">Usando pacote</span>
+                            </div>
+                        </article>
+                        <article class="session-card">
+                            <div class="session-card-header">
+                                <span class="session-client">João Silva</span>
+                                <span class="session-location">Sala 3</span>
+                            </div>
+                            <div class="session-card-body">
+                                <p>Carlos Mendes</p>
+                                <p>Massagem Relaxante</p>
+                                <p>13:30 • 60 min</p>
+                                <div class="progress-bar">
+                                    <div class="progress-bar-inner" style="width: 100%;"></div>
+                                </div>
+                                <div class="status-warning" style="font-size: 0.8rem; color: var(--c-status-ocupado)">▲
+                                    Atrasado</div>
+                                <span class="session-tag">Gympass</span>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+            </aside>
+        </div>
+    </div>
+    <div id="agendamentos" class="tab-content" style="padding: 2rem;">
+        <h2>Página de Agendamentos</h2>
+        <p>O conteúdo dos agendamentos iria aqui...</p>
+    </div>
+    <div id="vendas" class="tab-content" style="padding: 2rem;">
+        <h2>Página de Vendas</h2>
+        <p>O conteúdo de vendas iria aqui...</p>
+    </div>
+    <div id="terapeutas" class="tab-content" style="padding: 2rem;">
+        <h2>Página de Terapeutas</h2>
+        <p>O conteúdo dos terapeutas iria aqui...</p>
+    </div>
+    <script src="../script/Recepção.js"></script>
+</body>
+
+</html>
