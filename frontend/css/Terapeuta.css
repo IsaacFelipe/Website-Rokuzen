@@ -1,0 +1,349 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap');
+
+/* Variáveis de Cor */
+:root {
+    --bg-page: #f7fcf7;
+    --bg-main: #efffed;
+    --primary: #8BC34A;
+    --primary-dark: #689F38;
+    --secondary-bg: #f0f0f0;
+    --secondary-border: #e0e0e0;
+    --secondary-text: #a0a0a0;
+    --text-dark: #333;
+    --text-light: #555;
+    --white: #ffffff;
+    --border: #e0e0e0;
+    --status-disponivel: #dcedc8;
+    --status-ocupado: #ffcdd2;
+    --status-intervalo: #f5f5f5;
+    --dot-concluida: #8BC34A;
+    --dot-andamento: #FF9800;
+    --dot-proxima: #BDBDBD;
+}
+
+/* Reset e Body */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg-page);
+    color: var(--text-dark);
+}
+
+/* Cabeçalho */
+.cabecalho {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 32px;
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+}
+
+.perfil-terapeuta {
+    display: flex;
+    align-items: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.perfil-terapeuta img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 12px;
+    background: #e0e0e0;
+    border: 1px solid #ccc;
+}
+
+.barra-navegacao ul {
+    display: flex;
+    list-style: none;
+    gap: 24px;
+}
+
+.barra-navegacao a {
+    text-decoration: none;
+    color: var(--text-light);
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.barra-navegacao a:hover,
+.barra-navegacao a.ativo {
+    color: var(--text-dark);
+}
+
+/* Conteúdo Principal */
+.conteudo-principal {
+    background: var(--bg-main);
+    margin: 24px;
+    padding: 24px;
+    border-radius: 16px;
+}
+
+.grade-painel {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.titulo-modulo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+/* Cartões */
+.cartao {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    height: 100%;
+}
+
+/* Botões */
+.btn {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: var(--white);
+    color: var(--text-dark);
+}
+
+.btn-grande {
+    width: 100%;
+    padding: 14px;
+}
+
+.btn-primario {
+    border: 1px solid var(--primary);
+}
+
+.btn-primario:hover {
+    background: #f9f9f9;
+    border-color: #9CCC65;
+}
+
+.btn-primario:disabled,
+.btn-inativo {
+    background: var(--white);
+    color: var(--secondary-text);
+    border: 1px solid var(--secondary-border);
+    cursor: not-allowed;
+}
+
+.btn-inativo:hover {
+    background: #f9f9f9;
+}
+
+.btn-inativo:disabled {
+    opacity: 0.7;
+}
+
+/* Controle de Sessão */
+.controle-sessao .sessao-atual {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.controle-sessao .tempo-sessao-atual {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin-bottom: 16px;
+}
+
+.grupo-botoes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.lista-sessao {
+    list-style: none;
+}
+
+.lista-sessao li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.lista-sessao li:last-child {
+    border-bottom: none;
+}
+
+.lista-sessao .hora {
+    font-weight: 700;
+}
+
+.lista-sessao .status-sessao {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.lista-sessao .status-sessao::before {
+    content: '';
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.lista-sessao .status-concluida {
+    color: var(--dot-concluida);
+}
+
+.lista-sessao .status-concluida::before {
+    background: var(--dot-concluida);
+}
+
+.lista-sessao .status-andamento {
+    color: var(--dot-andamento);
+}
+
+.lista-sessao .status-andamento::before {
+    background: var(--dot-andamento);
+}
+
+.lista-sessao .status-proxima {
+    color: var(--dot-proxima);
+}
+
+.lista-sessao .status-proxima::before {
+    background: var(--dot-proxima);
+}
+
+/* Registro de Entrada/Saída */
+.registro-entrada-saida .grupo-botoes {
+    margin-bottom: 12px;
+}
+
+.registro-entrada-saida .texto-status {
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--text-light);
+}
+
+/* Lista de Escala */
+.lista-escala {
+    list-style: none;
+}
+
+.lista-escala li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.lista-escala .hora {
+    font-weight: 600;
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+.tag-status {
+    width: 70%;
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.tag-status.disponivel {
+    background: var(--status-disponivel);
+    color: var(--primary-dark);
+}
+
+.tag-status.ocupado {
+    background: var(--status-ocupado);
+    color: #b71c1c;
+}
+
+.tag-status.intervalo {
+    background: var(--status-intervalo);
+    color: var(--text-light);
+}
+
+/* Gerenciamento de Intervalo */
+.gerenciamento-intervalo p {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin-bottom: 12px;
+}
+
+.gerenciamento-intervalo .btn {
+    background: var(--secondary-bg);
+    color: var(--text-dark);
+    border: 1px solid var(--secondary-border);
+    width: 100%;
+}
+
+.gerenciamento-intervalo .btn:hover {
+    background: #e8e8e8;
+}
+
+/* Cartão Lista de Intervalo */
+.cartao-lista-intervalo ul {
+    list-style: none;
+}
+
+.cartao-lista-intervalo li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: var(--status-intervalo);
+    border-radius: 6px;
+}
+
+.cartao-lista-intervalo .tempo-intervalo {
+    font-weight: 600;
+}
+
+.cartao-lista-intervalo .btn-remover {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #e0e0e0;
+    color: #777;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+}
+
+/* Responsividade */
+@media (max-width: 900px) {
+    .grade-painel {
+        grid-template-columns: 1fr;
+    }
+    .cabecalho {
+        flex-direction: column;
+        gap: 16px;
+    }
+    .barra-navegacao ul {
+        gap: 16px;
+    }
+}

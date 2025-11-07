@@ -1,0 +1,144 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root { 
+    /* Cores */
+    --cor-primaria: #9AB946; /* Verde principal */
+    --cor-primaria-escuro: #689F38; /* Verde mais escuro para hover */
+    --cor-texto-escuro: #000000;
+    --cor-texto-claro: #fff;
+    --cor-texto-cinza: #555;
+    --cor-borda: #ddd;
+
+    /* Fontes */
+    --fonte-titulo: "Cinzel", serif;
+    --fonte-subtitulo: "League Spartan", sans-serif;
+    --fonte-corpo: "Montserrat", sans-serif;
+
+}
+
+body {
+    font-family: var(--fonte-corpo);
+    line-height: 1.7;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #fffffff2 0%, #fffffff2 100%);
+    color: #333;
+    
+    /* Configuração Flexbox para empilhar e centralizar, se necessário: */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column; /* <-- Adicione esta linha! Isso fará com que os filhos (header e container) fiquem empilhados verticalmente. */
+}
+
+.container {
+    max-width: 900px;
+    margin: 20px auto; /* Mude para 'auto' para centralizar quando o body não tiver align-items: center */
+    padding: 40px;
+    background: #fffffff2;
+    /* ... o restante dos seus estilos ... */
+    backdrop-filter: blur(10px);
+    animation: fadeIn 1s ease-in-out;
+
+}
+    
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+h1 {
+    color: var(--cor-texto-cinza);
+    font-family: var(--fonte-titulo);
+    text-align: center;
+    font-weight: 600;
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+        
+.meta {
+    text-align: center;
+    font-size: 0.9em;
+    color: #7f8c8d;
+    margin-bottom: 30px;
+    font-weight: 300;
+}
+        
+h2 {
+    color: var(--cor-primaria);
+    font-family: var(--fonte-subtitulo);
+    margin-top: 40px;
+    font-weight: 600;
+    font-size: 1.8em;
+    border-left: 5px solid var(--cor-primaria-escuro);
+    padding-left: 15px;
+    transition: color 0.3s;
+}
+
+h2:hover {
+    color: var(--cor-primaria-escuro);
+}
+p {
+    margin-bottom: 20px;
+    font-weight: 300;
+    text-align: justify;
+}
+.highlight {
+    background: linear-gradient(90deg, #aec966 0%, #f6ffdd 100%);
+    padding: 15px;
+    border-radius: 10px;
+    margin: 20px 0;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.share {
+    text-align: center;
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+        
+.share a {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 20px;
+    background: linear-gradient(45deg, #7777779f, #7777779f);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: 400;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+        
+.share a:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+        
+.share a i {
+    margin-right: 8px;
+}
+        
+@media (max-width: 768px) {
+    .container {
+        margin: 10px;
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 2em;
+    }
+
+    h2 {
+        font-size: 1.5em;
+    }
+
+    .share {
+        flex-direction: column;
+        align-items: center;
+    }
+}

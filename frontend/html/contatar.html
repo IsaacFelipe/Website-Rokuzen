@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contato | ROKUZEN</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../css/contatar.css">
+    <link rel="stylesheet" href="../css/header.css">
+    
+</head>
+<body>
+
+    <header>
+        <nav id="barra-navegacao" class="navegacao-principal">
+            <div class="container-nav">
+                <div class="logo">
+                    <img src="../img/logo.png" alt="Logo Rokuzen">
+                </div>
+
+                <ul class="lista-nav">
+                    <li class="item-nav"><a href="../html/index.html">Home</a></li>
+                    <li class="item-nav"><a href="../html/sobrenos.html">Sobre nós</a></li>
+                    <li class="item-nav pagina-atual"><a href="../html/contatar.html">Unidades</a></li>
+                    <li class="item-nav"><a href="#">Serviços</a></li>
+                    <li class="item-nav"><a href="#">Fale conosco</a></li>
+                </ul>
+            </div>
+
+            <a href="../html/login.html" class="btn-primario btn-primario-nav">Login</a>
+
+            <button id="btn-mobile" aria-label="Abrir menu de navegação"><i class="fa-solid fa-bars"></i></button>
+        </nav>
+
+        <div class="menu-mobile">
+            <ul class="lista-nav-mobile">
+                <li class="item-nav"><a href="../html/index.html">Home</a></li>
+                <li class="item-nav"><a href="../html/sobrenos.html">Sobre nós</a></li>
+                <li class="item-nav"><a href="#">Unidades</a></li>
+                <li class="item-nav"><a href="#">Serviços</a></li>
+                <li class="item-nav"><a href="../html/contatar.html">Fale conosco</a></li>
+            </ul>
+
+            <a href="../html/login.html" class="btn-primario" style="margin: 15px auto 0 auto;">Login</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>Contato</h1>
+        
+        <p style="text-align: center; font-style: italic; margin-bottom: 40px; color: var(--cor-texto-cinza);">Escolha a unidade mais próxima ou utilize nosso formulário abaixo.</p>
+
+        <div class="contato-grid">
+            
+            <div class="unidade-card">
+                <h3><i class="fas fa-map-marker-alt"></i> Golden Square Shopping</h3>
+                <p>Av. Kennedy, 700 | Piso 1</p>
+                <p>Jardim do Mar | São Bernardo do Campo | SP</p>
+                <p>CEP: 09726-253</p>
+                <a href="https://wa.me/5511947495306" target="_blank" class="whatsapp-link">
+                    <i class="fab fa-whatsapp"></i> +55 11 9 4749 5306
+                </a>
+            </div>
+
+            <div class="unidade-card">
+                <h3><i class="fas fa-map-marker-alt"></i> Mooca Plaza Shopping</h3>
+                <p>Rua Capitão Pacheco e Chaves, 313 | Piso 1</p>
+                <p>Mooca | São Paulo | SP</p>
+                <p>CEP: 03126-000</p>
+                <a href="https://wa.me/5511950841087" target="_blank" class="whatsapp-link">
+                    <i class="fab fa-whatsapp"></i> +55 11 9 5084 1087
+                </a>
+            </div>
+
+            <div class="unidade-card">
+                <h3><i class="fas fa-map-marker-alt"></i> Grand Plaza Shopping</h3>
+                <p>Av. Industrial, 600 | Centro</p>
+                <p>Santo André | SP</p>
+                <p>CEP: 09080-510</p>
+                <a href="https://wa.me/5511916657900" target="_blank" class="whatsapp-link">
+                    <i class="fab fa-whatsapp"></i> +55 11 91665 7900
+                </a>
+            </div>
+
+            <div class="unidade-card">
+                <h3><i class="fas fa-map-marker-alt"></i> Shopping West Plaza</h3>
+                <p>Avenida Antártica, 380 | 2º Piso | Bloco A | Loja 3102</p>
+                <p>Água Branca | São Paulo | SP</p>
+                <p>CEP: 03126-000</p>
+                <a href="https://wa.me/5511919427901" target="_blank" class="whatsapp-link">
+                    <i class="fab fa-whatsapp"></i> +55 11 9 1942 7901
+                </a>
+            </div>
+        </div>
+
+        <hr style="border-color: var(--cor-borda); margin: 30px 0;">
+
+        <div class="info-geral">
+            <p class="email-contato">
+                <i class="fas fa-envelope" style="color: var(--cor-secundaria);"></i>
+                E-mail para contato: <a href="mailto:contato@rokuzen.com.br">contato@rokuzen.com.br</a>
+            </p>
+            <div class="share">
+                <a href="https://www.facebook.com/rokuzen.massagem" target="_blank" class="fab fa-facebook-f" aria-label="Facebook"></a>
+                <a href="https://www.instagram.com/rokuzen.massagem/" target="_blank" class="fab fa-instagram" aria-label="Instagram"></a>
+                <a href="https://www.linkedin.com/company/rokuzen?trk=top_nav_home" target="_blank" class="fab fa-linkedin-in" aria-label="LinkedIn"></a>
+                <a href="mailto:contato@rokuzen.com.br" target="_blank" class="fa-solid fa-envelope" aria-label="E-mail"></a>
+            </div>
+        </div>
+        
+        <hr style="border-color: var(--cor-borda); margin: 30px 0;">
+
+        <div class="form-container">
+            <h2>Fale Conosco</h2>
+            <form id="contactForm">
+                
+                <div class="input-grid">
+                    <div class="form-group">
+                        <label for="nome">Seu nome</label>
+                        <input type="text" id="nome" name="nome" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Seu e-mail</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="celular">Seu celular/WhatsApp</label>
+                        <input type="text" id="celular" name="celular" required placeholder="(DDD) xxxx-xxxx">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="assunto">Assunto</label>
+                        <input type="text" id="assunto" name="assunto">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="mensagem">Sua mensagem</label>
+                    <textarea id="mensagem" name="mensagem" required></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn">Enviar mensagem</button>
+
+                <div id="alerta" class="mensagem-alerta"></div>
+            </form>
+        </div>
+
+    </div>
+
+    <script>
+        // JS do Formulário
+        document.getElementById('contactForm').addEventListener('submit', function(event) {
+            event.preventDefault(); 
+            
+            const form = event.target;
+            const alerta = document.getElementById('alerta');
+            
+            const dados = {
+                nome: form.nome.value,
+                email: form.email.value,
+                celular: form.celular.value,
+                assunto: form.assunto.value,
+                mensagem: form.mensagem.value
+            };
+            
+            if (!dados.nome || !dados.email || !dados.celular || !dados.mensagem) {
+                alerta.textContent = 'Por favor, preencha todos os campos obrigatórios.';
+                alerta.className = 'mensagem-alerta erro';
+                alerta.style.display = 'block';
+                return;
+            }
+           
+            // SIMULAÇÃO DE SUCESSO
+            console.log('Dados do formulário enviados (simulado):', dados);
+            alerta.textContent = 'Mensagem enviada com sucesso! Em breve entraremos em contato.';
+            alerta.className = 'mensagem-alerta sucesso';
+            alerta.style.display = 'block';
+            form.reset(); 
+
+            setTimeout(() => {
+                alerta.style.display = 'none';
+            }, 5000); 
+        });
+
+        // JS do Menu Mobile
+        document.getElementById('btn-mobile').addEventListener('click', function() {
+            const menu = document.querySelector('.menu-mobile');
+            menu.classList.toggle('aberto');
+            // Altera o ícone do botão (opcional)
+            const icon = this.querySelector('i');
+            if (menu.classList.contains('aberto')) {
+                icon.className = 'fa-solid fa-xmark';
+            } else {
+                icon.className = 'fa-solid fa-bars';
+            }
+        });
+    </script>
+</body>
+</html>
