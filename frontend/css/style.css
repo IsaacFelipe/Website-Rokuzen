@@ -152,9 +152,9 @@ body {
 /* 3. BANNER DEPOIMENTOS (banner-depoimentos-cta) */
 
 .banner-depoimentos-cta {
-    min-height: 400px;
+    min-height: 600px;
     /* AJUSTE O CAMINHO DA IMAGEM! */
-    background: url('../img/massagem2.png') no-repeat center center/cover;
+    background: url('../img/pexels-olly-3757942\ 2.png') no-repeat center center/cover;
     height: 30vh;
     position: relative;
     display: flex;
