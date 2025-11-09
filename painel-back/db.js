@@ -8,11 +8,11 @@ const db = mysql.createPool({
     host: 'mysql-161534ef-isaacfelipeferreira3-e7a2.d.aivencloud.com',
     port: 28104,
     user: 'avnadmin',
-    password: '',
+    password: 'AVNS_ZnE_cs-MDXy07N1Wrmo',
     database: 'defaultdb',
     waitForConnections: true,
     connectionLimit: 10,
-    queueLimit: 0,
+    queueLimit: 0,  
     charset: 'utf8mb4',
     ssl: {
         ca: fs.readFileSync(caPath)
