@@ -1,0 +1,1696 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROKUZEN - Painel de Controle</title>
+    <link rel="stylesheet" href="painel-styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard-container">
+        <div id="dashboard-loader" class="dashboard-loader">
+            <div class="loader-spinner"></div>
+            <span>Carregando painel...</span>
+        </div>
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <div class="logo">
+                    <img src="assets/img/logo-rokuzen-pequena.png" alt="ROKUZEN" class="logo-image">
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="user-profile">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation Sidebar -->
+        <nav class="sidebar">
+            <ul class="nav-menu">
+                <li class="nav-item active">
+                    <a href="#" data-section="painel">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Painel</span>
+                        <i class="fas fa-chevron-right arrow"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" data-section="atendimento">
+                        <i class="fas fa-calendar-check"></i>
+                        <span>Atendimento</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" data-section="clientes">
+                        <i class="fas fa-users"></i>
+                        <span>Clientes</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" data-section="colaboradores">
+                        <i class="fas fa-user-tie"></i>
+                        <span>Colaboradores</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" data-section="entradas-saidas">
+                        <i class="fas fa-exchange-alt"></i>
+                        <span>Entradas/Saídas</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" data-section="gift-card">
+                        <i class="fas fa-gift"></i>
+                        <span>Gift Card</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" data-section="biblioteca">
+                        <i class="fas fa-book"></i>
+                        <span>Biblioteca</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" data-section="parceiros">
+                        <i class="fas fa-handshake"></i>
+                        <span>Parceiros</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" data-section="escala-compartilhada">
+                        <i class="fas fa-clock"></i>
+                        <span>Escala Compartilhada</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" data-section="procedimentos">
+                        <i class="fas fa-list-alt"></i>
+                        <span>Procedimentos</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" data-section="auditoria">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Auditoria</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Painel Section -->
+            <section id="painel" class="content-section active">
+                <div class="dashboard-cards">
+                    <!-- Painel de Controle Principal -->
+                    <div class="card card-purple full-width">
+                        <div class="card-header">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <h3>Painel de Controle</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="control-panel-header">
+                                <div class="points-info">
+                                    <i class="fas fa-chart-line"></i>
+                                    <span>Painel de Controle Principal - ROKUZEN</span>
+                                </div>
+                                <div class="panel-actions">
+                                    <button class="btn btn-primary" id="add-therapist-btn">
+                                        <i class="fas fa-user-plus"></i>
+                                        Adicionar Terapeuta
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="dashboard-overview">
+                                <div class="overview-stats">
+                                    <div class="stat-item">
+                                        <div class="stat-number" id="total-therapists">0</div>
+                                        <div class="stat-label">Total de Terapeutas</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-number" id="active-therapists">0</div>
+                                        <div class="stat-label">Terapeutas Ativos</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-number" id="total-appointments">0</div>
+                                        <div class="stat-label">Atendimentos Hoje</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-number" id="total-clients-today">0</div>
+                                        <div class="stat-label">Clientes Atendidos</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card card-light-half">
+                        <div class="card-header">
+                            <i class="fas fa-ranking-star"></i>
+                            <h3>Ranking de Terapeutas</h3>
+                        </div>
+                        <div class="card-content">
+                            <table class="mini-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>Sessões</th>
+                                        <th>Próximo Horário</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="therapist-points-tbody">
+                                    <tr>
+                                        <td colspan="3" class="empty-state">Carregando dados...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card card-light-half">
+                        <div class="card-header">
+                            <i class="fas fa-bell"></i>
+                            <h3>Agenda de Hoje</h3>
+                        </div>
+                        <div class="card-content">
+                            <ul id="today-appointments-list" class="simple-list">
+                                <li class="empty-state">Nenhum atendimento agendado para hoje.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Atendimento Section -->
+            <section id="atendimento" class="content-section">
+                <div class="section-header">
+                    <h2>Atendimentos</h2>
+                    <p>Gerencie os atendimentos e agendamentos</p>
+                </div>
+                
+                <div class="attendance-controls">
+                    <div class="date-filter">
+                        <label for="date-select">Data:</label>
+                        <input type="date" id="date-select" class="date-input">
+                    </div>
+                    <div class="filter-buttons">
+                        <button class="btn btn-primary" id="add-appointment">
+                            <i class="fas fa-plus"></i>
+                            Novo Atendimento
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="appointments-table">
+                        <thead>
+                            <tr>
+                                <th>Data/Hora</th>
+                                <th>Cliente</th>
+                                <th>Celular</th>
+                                <th>Terapeuta</th>
+                                <th>Duração</th>
+                                <th>Tipo Pagamento</th>
+                                <th>Status</th>
+                                <th>Valor</th>
+                                <th>Tipo de Sessão</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="appointments-tbody">
+                            <!-- Dados serão carregados via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="clientes" class="content-section">
+                <div class="section-header">
+                    <h2>Clientes</h2>
+                    <p>Gestão de clientes e histórico</p>
+                </div>
+                
+                <div class="clients-controls">
+                    <div class="search-filters">
+                        <div class="search-box">
+                            <input type="text" id="client-search" placeholder="Buscar cliente por nome, telefone ou email...">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <select id="status-filter" class="filter-select">
+                            <option value="">Todos os status</option>
+                            <option value="ativo">Ativo</option>
+                            <option value="inativo">Inativo</option>
+                            <option value="bloqueado">Bloqueado</option>
+                        </select>
+                    </div>
+                    <div class="client-actions">
+                        <button class="btn btn-primary" id="add-client">
+                            <i class="fas fa-plus"></i>
+                            Novo Cliente
+                        </button>
+                        <button class="btn btn-secondary" id="export-clients">
+                            <i class="fas fa-download"></i>
+                            Exportar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="clients-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-number" id="total-clients">0</div>
+                            <div class="stat-label">Total de Clientes</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-number" id="active-clients">0</div>
+                            <div class="stat-label">Clientes Ativos</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-number" id="new-this-month">0</div>
+                            <div class="stat-label">Novos Este Mês</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="clients-table">
+                        <thead>
+                            <tr>
+                                <th>Cliente</th>
+                                <th>Contato</th>
+                                <th>Última Visita</th>
+                                <th>Total Sessões</th>
+                                <th>Terapeuta Favorito</th>
+                                <th>Sessão Favorita</th>
+                                <th>Status</th>
+                                <th>Valor Total</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clients-tbody">
+                            <!-- Dados serão carregados via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="colaboradores" class="content-section">
+                <div class="section-header">
+                    <h2>Colaboradores</h2>
+                    <p>Administre a equipe de colaboradores</p>
+                </div>
+                
+                <div class="therapists-controls">
+                    <div class="search-filters">
+                        <div class="search-box">
+                            <input type="text" id="therapist-search" placeholder="Buscar terapeuta por nome, especialidade ou telefone...">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <select id="therapist-status-filter" class="filter-select">
+                            <option value="">Todos os status</option>
+                            <option value="ativo">Ativo</option>
+                            <option value="inativo">Inativo</option>
+                            <option value="férias">Férias</option>
+                        </select>
+                    </div>
+                    <div class="therapist-actions">
+                        <button class="btn btn-primary" id="add-therapist-from-list">
+                            <i class="fas fa-user-plus"></i>
+                            Novo Terapeuta
+                        </button>
+                        <button class="btn btn-secondary" id="export-therapists">
+                            <i class="fas fa-download"></i>
+                            Exportar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="therapists-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-number" id="total-therapists-list">0</div>
+                            <div class="stat-label">Total de Terapeutas</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-number" id="active-therapists-list">0</div>
+                            <div class="stat-label">Terapeutas Ativos</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-number" id="therapists-on-vacation">0</div>
+                            <div class="stat-label">Em Férias</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-number" id="specialties-count">0</div>
+                            <div class="stat-label">Especialidades</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="therapists-table">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Especialidade</th>
+                                <th>Contato</th>
+                                <th>Status</th>
+                                <th>Data Contratação</th>
+                                <th>Observações</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="therapists-tbody">
+                            <!-- Dados serão carregados via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="entradas-saidas" class="content-section">
+                <div class="section-header">
+                    <h2>Entradas/Saídas</h2>
+                    <p>Controle financeiro e movimentações</p>
+                </div>
+
+                <div class="section-actions">
+                    <div class="filters">
+                        <div class="filter-group">
+                            <label for="financial-period">Período</label>
+                            <select id="financial-period">
+                                <option value="30">Últimos 30 dias</option>
+                                <option value="7">Últimos 7 dias</option>
+                                <option value="90">Últimos 90 dias</option>
+                                <option value="365">Último ano</option>
+                                <option value="custom">Personalizado</option>
+                            </select>
+                        </div>
+                        <div class="filter-group" id="financial-custom-range" style="display: none;">
+                            <label for="financial-start">De</label>
+                            <input type="date" id="financial-start">
+                            <label for="financial-end">Até</label>
+                            <input type="date" id="financial-end">
+                            <button class="btn btn-secondary" id="financial-apply-range"><i class="fas fa-filter"></i> Aplicar</button>
+                        </div>
+                        <div class="filter-group">
+                            <label for="financial-type">Tipo</label>
+                            <select id="financial-type">
+                                <option value="">Todos</option>
+                                <option value="entrada">Entrada</option>
+                                <option value="saida">Saída</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="financial-method">Meio</label>
+                            <select id="financial-method">
+                                <option value="">Todos</option>
+                                <option value="dinheiro">Dinheiro</option>
+                                <option value="cartao">Cartão</option>
+                                <option value="pix">PIX</option>
+                                <option value="boleto">Boleto</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="actions">
+                        <button class="btn btn-secondary" id="financial-export">
+                            <i class="fas fa-file-export"></i>
+                            Exportar
+                        </button>
+                        <button class="btn btn-primary" id="financial-add">
+                            <i class="fas fa-plus-circle"></i>
+                            Registrar Movimento
+                        </button>
+                    </div>
+                </div>
+
+                <div class="insight-cards">
+                    <div class="insight-card entrada">
+                        <span class="label">Entradas</span>
+                        <strong id="financial-total-in">R$ 0,00</strong>
+                        <small id="financial-total-in-count">0 transações</small>
+                    </div>
+                    <div class="insight-card saida">
+                        <span class="label">Saídas</span>
+                        <strong id="financial-total-out">R$ 0,00</strong>
+                        <small id="financial-total-out-count">0 transações</small>
+                    </div>
+                    <div class="insight-card saldo">
+                        <span class="label">Saldo do período</span>
+                        <strong id="financial-balance">R$ 0,00</strong>
+                        <small id="financial-balance-trend">Estável</small>
+                    </div>
+                    <div class="insight-card abrir">
+                        <span class="label">Próximos vencimentos</span>
+                        <strong id="financial-next-due">0</strong>
+                        <small id="financial-next-due-detail">Nenhum lançamento pendente</small>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Descrição</th>
+                                <th>Categoria</th>
+                                <th>Meio</th>
+                                <th>Responsável</th>
+                                <th>Valor</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="financial-tbody">
+                            <tr>
+                                <td colspan="8" class="empty-state">Nenhum lançamento cadastrado ainda.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="gift-card" class="content-section">
+                <div class="section-header">
+                    <h2>Gift Card</h2>
+                    <p>Gestão de cartões presente</p>
+                </div>
+                <div class="section-actions">
+                    <div class="filters">
+                        <div class="filter-group">
+                            <label for="gift-status-filter">Status</label>
+                            <select id="gift-status-filter">
+                                <option value="">Todos</option>
+                                <option value="ativo">Ativo</option>
+                                <option value="utilizado">Utilizado</option>
+                                <option value="expirado">Expirado</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="gift-search">Buscar</label>
+                            <input type="text" id="gift-search" placeholder="Nome ou código do gift card">
+                        </div>
+                    </div>
+                    <div class="actions">
+                        <button class="btn btn-secondary" id="gift-export">
+                            <i class="fas fa-download"></i>
+                            Exportar Relatório
+                        </button>
+                        <button class="btn btn-primary" id="gift-add">
+                            <i class="fas fa-gift"></i>
+                            Criar Gift Card
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gift-summary">
+                    <div class="gift-card-widget ativo">
+                        <span class="label">Saldo Total ativo</span>
+                        <strong id="gift-total-active">R$ 0,00</strong>
+                        <small id="gift-count-active">0 cartões</small>
+                    </div>
+                    <div class="gift-card-widget utilizado">
+                        <span class="label">Utilizados no mês</span>
+                        <strong id="gift-total-redeemed">R$ 0,00</strong>
+                        <small id="gift-count-redeemed">0 resgates</small>
+                    </div>
+                    <div class="gift-card-widget expirando">
+                        <span class="label">Expiram em breve</span>
+                        <strong id="gift-expiring-count">0</strong>
+                        <small id="gift-expiring-detail">Nenhum gift card próximo do vencimento</small>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Cliente</th>
+                                <th>Valor</th>
+                                <th>Saldo</th>
+                                <th>Emitido em</th>
+                                <th>Expira em</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="gift-cards-tbody">
+                            <tr>
+                                <td colspan="8" class="empty-state">Nenhum gift card cadastrado ainda.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="biblioteca" class="content-section">
+                <div class="section-header">
+                    <h2>Biblioteca</h2>
+                    <p>Documentos e materiais de referência</p>
+                </div>
+                <div class="library-controls">
+                    <div class="filters">
+                        <div class="filter-group">
+                            <label for="library-search">Buscar</label>
+                            <input type="text" id="library-search" placeholder="Pesquisar por título, autor ou tag">
+                        </div>
+                        <div class="filter-group">
+                            <label for="library-type">Tipo</label>
+                            <select id="library-type">
+                                <option value="">Todos</option>
+                                <option value="documento">Documento</option>
+                                <option value="protocolo">Protocolo</option>
+                                <option value="treinamento">Treinamento</option>
+                                <option value="marketing">Marketing</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="library-tag">Tag</label>
+                            <select id="library-tag">
+                                <option value="">Qualquer</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="actions">
+                        <button class="btn btn-secondary" id="library-sync">
+                            <i class="fas fa-sync"></i>
+                            Sincronizar
+                        </button>
+                        <button class="btn btn-primary" id="library-add">
+                            <i class="fas fa-upload"></i>
+                            Enviar novo material
+                        </button>
+                    </div>
+                </div>
+
+                <div class="library-grid" id="library-grid">
+                    <div class="empty-state">Nenhum material cadastrado ainda.</div>
+                </div>
+            </section>
+
+            <section id="parceiros" class="content-section">
+                <div class="section-header">
+                    <h2>Parceiros</h2>
+                    <p>Rede de parceiros e colaboradores externos</p>
+                </div>
+                <div class="section-actions">
+                    <div class="filters">
+                        <div class="filter-group">
+                            <label for="partners-search">Buscar parceiro</label>
+                            <input type="text" id="partners-search" placeholder="Nome, cidade ou tipo de parceria">
+                        </div>
+                        <div class="filter-group">
+                            <label for="partners-type">Categoria</label>
+                            <select id="partners-type">
+                                <option value="">Todas</option>
+                                <option value="academia">Academia</option>
+                                <option value="empresa">Empresa</option>
+                                <option value="clinica">Clínica</option>
+                                <option value="fornecedor">Fornecedor</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="actions">
+                        <button class="btn btn-secondary" id="partners-export">
+                            <i class="fas fa-file-download"></i>
+                            Exportar contatos
+                        </button>
+                        <button class="btn btn-primary" id="partner-add">
+                            <i class="fas fa-user-plus"></i>
+                            Novo parceiro
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Parceiro</th>
+                                <th>Categoria</th>
+                                <th>Contato</th>
+                                <th>Localidade</th>
+                                <th>Benefício</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="partners-tbody">
+                            <tr>
+                                <td colspan="7" class="empty-state">Nenhum parceiro cadastrado ainda.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="escala-compartilhada" class="content-section">
+                <div class="section-header">
+                    <h2>Escala Compartilhada</h2>
+                    <p>Gestão de escalas e horários da equipe</p>
+                </div>
+                <div class="card full-width">
+                    <div class="card-header">
+                        <i class="fas fa-calendar-alt"></i>
+                        <h3>Calendário Compartilhado</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="attendance-controls" id="shared-calendar-controls">
+                            <div class="date-filter">
+                                <label for="calendar-url-input">URL do Google Calendar (embed):</label>
+                                <input type="text" id="calendar-url-input" class="date-input" placeholder="Cole aqui a URL de incorporação do Google Calendar">
+                            </div>
+                            <div class="filter-buttons">
+                                <button class="btn btn-secondary" id="calendar-url-reset">
+                                    <i class="fas fa-undo"></i>
+                                    Limpar
+                                </button>
+                                <button class="btn btn-primary" id="calendar-url-save">
+                                    <i class="fas fa-save"></i>
+                                    Salvar URL
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="shared-calendar-container" class="shared-calendar-container">
+                            <!-- Calendário será renderizado aqui via JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="procedimentos" class="content-section">
+                <div class="section-header">
+                    <h2>Procedimentos</h2>
+                    <p>Catálogo de procedimentos e serviços</p>
+                </div>
+                <div class="section-actions">
+                    <div class="filters">
+                        <div class="filter-group">
+                            <label for="procedure-search">Buscar</label>
+                            <input type="text" id="procedure-search" placeholder="Nome do procedimento, categoria, duração">
+                        </div>
+                        <div class="filter-group">
+                            <label for="procedure-category-filter">Categoria</label>
+                            <select id="procedure-category-filter">
+                                <option value="">Todas</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="actions">
+                        <button class="btn btn-secondary" id="procedure-export">
+                            <i class="fas fa-print"></i>
+                            Imprimir catálogo
+                        </button>
+                        <button class="btn btn-primary" id="procedure-add">
+                            <i class="fas fa-plus"></i>
+                            Novo procedimento
+                        </button>
+                    </div>
+                </div>
+
+                <div class="procedure-board" id="procedure-board">
+                    <div class="empty-state">Nenhum procedimento cadastrado ainda.</div>
+                </div>
+            </section>
+
+            <section id="auditoria" class="content-section">
+                <div class="section-header">
+                    <h2>Auditoria</h2>
+                    <p>Logs e relatórios de auditoria</p>
+                </div>
+                <div class="section-actions">
+                    <div class="filters">
+                        <div class="filter-group">
+                            <label for="audit-search">Filtrar logs</label>
+                            <input type="text" id="audit-search" placeholder="Usuário, ação ou módulo">
+                        </div>
+                        <div class="filter-group">
+                            <label for="audit-module">Módulo</label>
+                            <select id="audit-module">
+                                <option value="">Todos</option>
+                                <option value="clientes">Clientes</option>
+                                <option value="atendimentos">Atendimentos</option>
+                                <option value="financeiro">Financeiro</option>
+                                <option value="gift-card">Gift Card</option>
+                                <option value="biblioteca">Biblioteca</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="actions">
+                        <button class="btn btn-secondary" id="audit-export">
+                            <i class="fas fa-file-export"></i>
+                            Exportar logs
+                        </button>
+                        <button class="btn btn-primary" id="audit-add">
+                            <i class="fas fa-pen"></i>
+                            Registrar log manual
+                        </button>
+                    </div>
+                </div>
+
+                <div class="timeline" id="audit-timeline">
+                    <div class="empty-state">Nenhum log registrado ainda.</div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <!-- Modal Visualizar Atendimento -->
+    <div id="viewAppointmentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Detalhes do Atendimento</h3>
+                <button class="modal-close" onclick="closeModal('viewAppointmentModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="appointment-details">
+                    <div class="detail-row">
+                        <label>Cliente:</label>
+                        <span id="view-appointment-client-name">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <label>Celular:</label>
+                        <span id="view-client-phone">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <label>Data/Hora:</label>
+                        <span id="view-datetime">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <label>Terapeuta:</label>
+                        <span id="view-therapist">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <label>Duração:</label>
+                        <span id="view-duration">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <label>Tipo de Sessão:</label>
+                        <span id="view-session-type">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <label>Tipo Pagamento:</label>
+                        <span id="view-payment-type">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <label>Status:</label>
+                        <span id="view-status">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <label>Valor:</label>
+                        <span id="view-value">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <label>Observações:</label>
+                        <span id="view-notes">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Editar/Adicionar Atendimento -->
+    <div id="editAppointmentModal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3 id="edit-modal-title">Editar Atendimento</h3>
+                <button class="modal-close" onclick="closeModal('editAppointmentModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="appointment-form">
+                    <input type="hidden" id="appointment-id" value="">
+                    <input type="hidden" id="appointment-client-id" name="clientId" value="">
+                    
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label class="checkbox-label" for="existing-client-toggle">
+                                <input type="checkbox" id="existing-client-toggle">
+                                Cliente já cadastrado
+                            </label>
+                        </div>
+                        
+                        <div class="form-group full-width" id="existing-client-section" style="display: none;">
+                            <label for="existing-client-select">Selecionar Cliente</label>
+                            <input type="text" id="existing-client-search" placeholder="Buscar por nome ou CPF...">
+                            <select id="existing-client-select" name="existingClientId">
+                                <option value="">Selecione um cliente</option>
+                            </select>
+                            <div class="client-summary" id="existing-client-details">
+                                Selecione um cliente cadastrado para preencher automaticamente.
+                            </div>
+                        </div>
+
+                        <div class="form-group" data-role="client-name-group">
+                            <label for="client-name">Cliente *</label>
+                            <input type="text" id="client-name" name="clientName" required>
+                        </div>
+                        
+                        <div class="form-group" data-role="client-phone-group">
+                            <label for="client-phone">Celular *</label>
+                            <input type="tel" id="client-phone" name="clientPhone" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="appointment-date">Data *</label>
+                            <input type="date" id="appointment-date" name="appointmentDate" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="appointment-time">Horário *</label>
+                            <input type="time" id="appointment-time" name="appointmentTime" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="therapist-select">Terapeuta *</label>
+                            <select id="therapist-select" name="therapistId" required>
+                                <option value="">Selecione um terapeuta</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="duration-select">Duração *</label>
+                            <select id="duration-select" name="duration" required>
+                                <option value="">Selecione a duração</option>
+                                <option value="30">30 minutos</option>
+                                <option value="45">45 minutos</option>
+                                <option value="60">60 minutos</option>
+                                <option value="90">90 minutos</option>
+                                <option value="120">120 minutos</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="session-type">Tipo de Sessão *</label>
+                            <select id="session-type" name="sessionType" required>
+                                <option value="">Selecione o tipo</option>
+                                <option value="Massagem Relaxante">Massagem Relaxante</option>
+                                <option value="Terapia Corporal">Terapia Corporal</option>
+                                <option value="Reflexologia">Reflexologia</option>
+                                <option value="Massagem Desportiva">Massagem Desportiva</option>
+                                <option value="Drenagem Linfática">Drenagem Linfática</option>
+                                <option value="Shiatsu">Shiatsu</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="payment-type">Tipo de Pagamento *</label>
+                            <select id="payment-type" name="paymentType" required>
+                                <option value="">Selecione o tipo</option>
+                                <option value="dinheiro">Dinheiro</option>
+                                <option value="cartao_credito">Cartão de Crédito</option>
+                                <option value="cartao_debito">Cartão de Débito</option>
+                                <option value="pix">PIX</option>
+                                <option value="transferencia">Transferência</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="payment-status">Status do Pagamento *</label>
+                            <select id="payment-status" name="paymentStatus" required>
+                                <option value="">Selecione o status</option>
+                                <option value="pago">Pago</option>
+                                <option value="pendente">Pendente</option>
+                                <option value="parcial">Parcial</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="appointment-status">Status do Atendimento *</label>
+                            <select id="appointment-status" name="appointmentStatus" required>
+                                <option value="">Selecione o status</option>
+                                <option value="agendado">Agendado</option>
+                                <option value="em_andamento">Em Andamento</option>
+                                <option value="concluido">Concluído</option>
+                                <option value="cancelado">Cancelado</option>
+                                <option value="faltou">Faltou</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="appointment-value">Valor (R$) *</label>
+                            <input type="number" id="appointment-value" name="appointmentValue" step="0.01" min="0" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label for="appointment-notes">Observações</label>
+                        <textarea id="appointment-notes" name="appointmentNotes" rows="3" placeholder="Observações sobre o atendimento..."></textarea>
+                    </div>
+                    
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('editAppointmentModal')">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i>
+                            Salvar Atendimento
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Confirmar Exclusão -->
+    <div id="deleteConfirmModal" class="modal">
+        <div class="modal-content small">
+            <div class="modal-header">
+                <h3>Confirmar Exclusão</h3>
+            </div>
+            <div class="modal-body">
+                <p>Tem certeza que deseja excluir este atendimento?</p>
+                <p><strong>Esta ação não pode ser desfeita.</strong></p>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('deleteConfirmModal')">
+                    Cancelar
+                </button>
+                <button type="button" class="btn btn-danger" id="confirm-delete">
+                    <i class="fas fa-trash"></i>
+                    Excluir
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Visualizar Cliente -->
+    <div id="viewClientModal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3>Detalhes do Cliente</h3>
+                <button class="modal-close" onclick="closeModal('viewClientModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="client-profile">
+                    <div class="profile-header">
+                        <div class="profile-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="profile-info">
+                            <h4 id="view-client-name">-</h4>
+                            <p id="view-client-email">-</p>
+                            <span class="status-badge" id="view-client-status">-</span>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-tabs">
+                        <button class="tab-btn active" onclick="showClientTab('dados')">Dados Pessoais</button>
+                        <button class="tab-btn" onclick="showClientTab('historico')">Histórico</button>
+                        <button class="tab-btn" onclick="showClientTab('estatisticas')">Estatísticas</button>
+                    </div>
+                    
+                    <div class="tab-content">
+                        <div id="dados-tab" class="tab-pane active">
+                            <div class="form-grid">
+                                <div class="detail-row">
+                                    <label>Nome Completo:</label>
+                                    <span id="view-full-name">-</span>
+                                </div>
+                                <div class="detail-row">
+                                    <label>CPF:</label>
+                                    <span id="view-cpf">-</span>
+                                </div>
+                                <div class="detail-row">
+                                    <label>Data de Nascimento:</label>
+                                    <span id="view-birth-date">-</span>
+                                </div>
+                                <div class="detail-row">
+                                    <label>Telefone:</label>
+                                    <span id="view-phone">-</span>
+                                </div>
+                                <div class="detail-row">
+                                    <label>Email:</label>
+                                    <span id="view-email">-</span>
+                                </div>
+                                <div class="detail-row">
+                                    <label>Endereço:</label>
+                                    <span id="view-address">-</span>
+                                </div>
+                                <div class="detail-row">
+                                    <label>Data de Cadastro:</label>
+                                    <span id="view-registration-date">-</span>
+                                </div>
+                                <div class="detail-row">
+                                    <label>Observações:</label>
+                                    <span id="view-client-notes">-</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="historico-tab" class="tab-pane">
+                            <div class="appointments-history">
+                                <table class="history-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Data</th>
+                                            <th>Terapeuta</th>
+                                            <th>Sessão</th>
+                                            <th>Valor</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="client-history-tbody">
+                                        <!-- Histórico será carregado via JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div id="estatisticas-tab" class="tab-pane">
+                            <div class="client-stats-grid">
+                                <div class="stat-item">
+                                    <div class="stat-value" id="view-total-sessions">0</div>
+                                    <div class="stat-label">Total de Sessões</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" id="view-total-spent">R$ 0,00</div>
+                                    <div class="stat-label">Valor Total Gasto</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" id="view-favorite-therapist">-</div>
+                                    <div class="stat-label">Terapeuta Favorito</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" id="view-favorite-session">-</div>
+                                    <div class="stat-label">Sessão Favorita</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" id="view-last-visit">-</div>
+                                    <div class="stat-label">Última Visita</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" id="view-average-session">R$ 0,00</div>
+                                    <div class="stat-label">Valor Médio por Sessão</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('viewClientModal')">
+                    Fechar
+                </button>
+                <button type="button" class="btn btn-primary" onclick="editClientFromView()">
+                    <i class="fas fa-edit"></i>
+                    Editar Cliente
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Editar/Adicionar Cliente -->
+    <div id="editClientModal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3 id="edit-client-modal-title">Editar Cliente</h3>
+                <button class="modal-close" onclick="closeModal('editClientModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="client-form">
+                    <input type="hidden" id="client-id" value="">
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="client-full-name">Nome Completo *</label>
+                            <input type="text" id="client-full-name" name="fullName" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="client-cpf">CPF</label>
+                            <input type="text" id="client-cpf" name="cpf" maxlength="14" placeholder="000.000.000-00">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="client-email-edit">Email</label>
+                            <input type="email" id="client-email-edit" name="email" placeholder="cliente@email.com">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="client-phone-edit">Telefone *</label>
+                            <input type="tel" id="client-phone-edit" name="phone" required placeholder="(11) 99999-9999">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="client-birth-date">Data de Nascimento</label>
+                            <input type="date" id="client-birth-date" name="birthDate">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Status atual</label>
+                            <div id="client-status-display" class="client-status-display">Ativo</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="client-address">Endereço</label>
+                            <input type="text" id="client-address" name="address" placeholder="Rua, número, bairro, cidade">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="client-notes-edit">Observações</label>
+                            <textarea id="client-notes-edit" name="notes" rows="3" placeholder="Observações sobre o cliente..."></textarea>
+                        </div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('editClientModal')">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i>
+                            Salvar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Adicionar/Editar Terapeuta -->
+    <div id="therapistModal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3 id="therapist-modal-title">Adicionar Terapeuta</h3>
+                <button class="modal-close" onclick="closeModal('therapistModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="therapist-form">
+                    <input type="hidden" id="therapist-id" name="therapistId" value="">
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="therapist-name">Nome Completo *</label>
+                            <input type="text" id="therapist-name" name="name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="therapist-specialty">Especialidade *</label>
+                            <input type="text" id="therapist-specialty" name="specialty" required placeholder="Ex: Massoterapeuta, Reflexologista">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="therapist-phone">Telefone *</label>
+                            <input type="tel" id="therapist-phone" name="phone" required maxlength="15" placeholder="(11) 99999-9999">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="therapist-email">Email</label>
+                            <input type="email" id="therapist-email" name="email">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="therapist-cpf">CPF</label>
+                            <input type="text" id="therapist-cpf" name="cpf" maxlength="14" placeholder="000.000.000-00">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="therapist-birth-date">Data de Nascimento</label>
+                            <input type="date" id="therapist-birth-date" name="birthDate">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="therapist-status">Status *</label>
+                            <select id="therapist-status" name="status" required>
+                                <option value="">Selecione o status</option>
+                                <option value="ativo">Ativo</option>
+                                <option value="inativo">Inativo</option>
+                                <option value="férias">Férias</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="therapist-hire-date">Data de Contratação</label>
+                            <input type="date" id="therapist-hire-date" name="hireDate">
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label for="therapist-address">Endereço</label>
+                            <input type="text" id="therapist-address" name="address" placeholder="Rua, número, bairro, cidade">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label for="therapist-notes">Observações</label>
+                        <textarea id="therapist-notes" name="notes" rows="3" placeholder="Observações sobre o terapeuta..."></textarea>
+                    </div>
+                    
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('therapistModal')">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i>
+                            Salvar Terapeuta
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Financeiro -->
+    <div id="financialModal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3 id="financial-modal-title">Registrar Movimento</h3>
+                <button class="modal-close" onclick="closeModal('financialModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="financial-form">
+                    <input type="hidden" id="financial-id">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="financial-type-input">Tipo *</label>
+                            <select id="financial-type-input" name="type" required>
+                                <option value="">Selecione</option>
+                                <option value="entrada">Entrada</option>
+                                <option value="saida">Saída</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="financial-date">Data *</label>
+                            <input type="date" id="financial-date" name="date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="financial-category">Categoria *</label>
+                            <input type="text" id="financial-category" name="category" placeholder="Ex.: Sessões, Produtos, Comissão" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="financial-method-input">Forma de pagamento *</label>
+                            <select id="financial-method-input" name="method" required>
+                                <option value="">Selecione</option>
+                                <option value="dinheiro">Dinheiro</option>
+                                <option value="cartao">Cartão</option>
+                                <option value="pix">PIX</option>
+                                <option value="boleto">Boleto</option>
+                                <option value="transferencia">Transferência</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="financial-value">Valor (R$) *</label>
+                            <input type="number" step="0.01" min="0" id="financial-value" name="value" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="financial-responsible">Responsável</label>
+                            <input type="text" id="financial-responsible" name="responsible" placeholder="Quem registrou a movimentação">
+                        </div>
+                        <div class="form-group">
+                            <label for="financial-status">Status *</label>
+                            <select id="financial-status" name="status" required>
+                                <option value="quitado">Quitado</option>
+                                <option value="pendente">Pendente</option>
+                                <option value="agendado">Agendado</option>
+                            </select>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="financial-description">Descrição *</label>
+                            <textarea id="financial-description" name="description" rows="2" placeholder="Detalhes da movimentação" required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('financialModal')">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i>
+                            Salvar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Gift Card -->
+    <div id="giftCardModal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3 id="gift-modal-title">Criar Gift Card</h3>
+                <button class="modal-close" onclick="closeModal('giftCardModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="gift-card-form">
+                    <input type="hidden" id="gift-card-id">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="gift-code">Código *</label>
+                            <input type="text" id="gift-code" name="code" required placeholder="Ex.: ROKU-2025-001">
+                        </div>
+                        <div class="form-group">
+                            <label for="gift-client-name">Cliente *</label>
+                            <input type="text" id="gift-client-name" name="clientName" required placeholder="Nome do cliente">
+                        </div>
+                        <div class="form-group">
+                            <label for="gift-phone">Telefone</label>
+                            <input type="tel" id="gift-phone" name="phone" placeholder="(11) 99999-9999">
+                        </div>
+                        <div class="form-group">
+                            <label for="gift-email">Email</label>
+                            <input type="email" id="gift-email" name="email" placeholder="cliente@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="gift-value">Valor (R$) *</label>
+                            <input type="number" step="0.01" min="0" id="gift-value" name="value" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="gift-balance">Saldo (R$)</label>
+                            <input type="number" step="0.01" min="0" id="gift-balance" name="balance">
+                        </div>
+                        <div class="form-group">
+                            <label for="gift-issued-at">Data emissão *</label>
+                            <input type="date" id="gift-issued-at" name="issuedAt" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="gift-expiration">Data expiração *</label>
+                            <input type="date" id="gift-expiration" name="expiration" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="gift-status">Status *</label>
+                            <select id="gift-status" name="status" required>
+                                <option value="ativo">Ativo</option>
+                                <option value="utilizado">Utilizado</option>
+                                <option value="expirado">Expirado</option>
+                                <option value="cancelado">Cancelado</option>
+                            </select>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="gift-notes">Observações</label>
+                            <textarea id="gift-notes" name="notes" rows="2" placeholder="Informações adicionais, condições especiais..."></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('giftCardModal')">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i>
+                            Salvar gift card
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Biblioteca -->
+    <div id="libraryModal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3 id="library-modal-title">Adicionar material</h3>
+                <button class="modal-close" onclick="closeModal('libraryModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="library-form">
+                    <input type="hidden" id="library-id">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="library-title">Título *</label>
+                            <input type="text" id="library-title" name="title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="library-type-input">Tipo *</label>
+                            <select id="library-type-input" name="type" required>
+                                <option value="documento">Documento</option>
+                                <option value="protocolo">Protocolo</option>
+                                <option value="treinamento">Treinamento</option>
+                                <option value="marketing">Marketing</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="library-author">Responsável</label>
+                            <input type="text" id="library-author" name="author" placeholder="Quem produziu o material">
+                        </div>
+                        <div class="form-group">
+                            <label for="library-updated-at">Última revisão *</label>
+                            <input type="date" id="library-updated-at" name="updatedAt" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="library-url">Link de acesso</label>
+                            <input type="url" id="library-url" name="url" placeholder="https://...">
+                        </div>
+                        <div class="form-group">
+                            <label for="library-tags">Tags (separadas por vírgula)</label>
+                            <input type="text" id="library-tags" name="tags" placeholder="protocolo, marketing, treinamento">
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="library-description">Descrição</label>
+                            <textarea id="library-description" name="description" rows="3" placeholder="Resumo do conteúdo"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('libraryModal')">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i>
+                            Salvar material
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Parceiros -->
+    <div id="partnerModal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3 id="partner-modal-title">Novo parceiro</h3>
+                <button class="modal-close" onclick="closeModal('partnerModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="partner-form">
+                    <input type="hidden" id="partner-id">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="partner-name">Nome *</label>
+                            <input type="text" id="partner-name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="partner-category">Categoria *</label>
+                            <select id="partner-category" name="category" required>
+                                <option value="academia">Academia</option>
+                                <option value="empresa">Empresa</option>
+                                <option value="clinica">Clínica</option>
+                                <option value="fornecedor">Fornecedor</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="partner-contact">Contato principal *</label>
+                            <input type="text" id="partner-contact" name="contact" required placeholder="Nome do contato responsável">
+                        </div>
+                        <div class="form-group">
+                            <label for="partner-phone">Telefone</label>
+                            <input type="tel" id="partner-phone" name="phone" placeholder="(11) 99999-9999">
+                        </div>
+                        <div class="form-group">
+                            <label for="partner-email">Email</label>
+                            <input type="email" id="partner-email" name="email" placeholder="contato@empresa.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="partner-city">Cidade/UF</label>
+                            <input type="text" id="partner-city" name="city" placeholder="São Paulo/SP">
+                        </div>
+                        <div class="form-group">
+                            <label for="partner-benefit">Benefício oferecido *</label>
+                            <input type="text" id="partner-benefit" name="benefit" required placeholder="Ex.: 10% de desconto em sessões">
+                        </div>
+                        <div class="form-group">
+                            <label for="partner-status">Status *</label>
+                            <select id="partner-status" name="status" required>
+                                <option value="ativo">Ativo</option>
+                                <option value="negociacao">Em negociação</option>
+                                <option value="pausado">Pausado</option>
+                            </select>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="partner-notes">Observações</label>
+                            <textarea id="partner-notes" name="notes" rows="3" placeholder="Metas, contrapartidas e próximas ações"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('partnerModal')">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i>
+                            Salvar parceiro
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Procedimentos -->
+    <div id="procedureModal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3 id="procedure-modal-title">Novo procedimento</h3>
+                <button class="modal-close" onclick="closeModal('procedureModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="procedure-form">
+                    <input type="hidden" id="procedure-id">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="procedure-name">Nome *</label>
+                            <input type="text" id="procedure-name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="procedure-category">Categoria *</label>
+                            <input type="text" id="procedure-category" name="category" required placeholder="Ex.: Terapias corporais">
+                        </div>
+                        <div class="form-group">
+                            <label for="procedure-duration">Duração (min) *</label>
+                            <input type="number" id="procedure-duration" name="duration" min="15" step="15" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="procedure-price">Preço (R$)</label>
+                            <input type="number" step="0.01" min="0" id="procedure-price" name="price">
+                        </div>
+                        <div class="form-group">
+                            <label for="procedure-difficulty">Nível</label>
+                            <select id="procedure-difficulty" name="difficulty">
+                                <option value="iniciante">Iniciante</option>
+                                <option value="intermediario">Intermediário</option>
+                                <option value="avancado">Avançado</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="procedure-materials">Materiais necessários</label>
+                            <input type="text" id="procedure-materials" name="materials" placeholder="Macas, óleos essenciais, lençóis...">
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="procedure-description">Descrição *</label>
+                            <textarea id="procedure-description" name="description" rows="3" required placeholder="Resumo do procedimento, objetivos terapêuticos, benefícios esperados..."></textarea>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="procedure-care">Cuidados pós-atendimento</label>
+                            <textarea id="procedure-care" name="care" rows="2" placeholder="Recomendações ao cliente"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('procedureModal')">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i>
+                            Salvar procedimento
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Auditoria -->
+    <div id="auditModal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3 id="audit-modal-title">Registrar Log</h3>
+                <button class="modal-close" onclick="closeModal('auditModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="audit-form">
+                    <input type="hidden" id="audit-id">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="audit-user">Usuário *</label>
+                            <input type="text" id="audit-user" name="user" required placeholder="Colaborador responsável">
+                        </div>
+                        <div class="form-group">
+                            <label for="audit-module-input">Módulo *</label>
+                            <select id="audit-module-input" name="module" required>
+                                <option value="clientes">Clientes</option>
+                                <option value="atendimentos">Atendimentos</option>
+                                <option value="financeiro">Financeiro</option>
+                                <option value="gift-card">Gift Card</option>
+                                <option value="biblioteca">Biblioteca</option>
+                                <option value="procedimentos">Procedimentos</option>
+                                <option value="usuarios">Usuários</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="audit-action">Ação *</label>
+                            <input type="text" id="audit-action" name="action" required placeholder="Ex.: Atualizou cadastro do cliente">
+                        </div>
+                        <div class="form-group">
+                            <label for="audit-date">Data/Horário *</label>
+                            <input type="datetime-local" id="audit-date" name="datetime" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="audit-criticality">Criticidade *</label>
+                            <select id="audit-criticality" name="criticality" required>
+                                <option value="baixa">Baixa</option>
+                                <option value="media">Média</option>
+                                <option value="alta">Alta</option>
+                            </select>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="audit-description">Descrição</label>
+                            <textarea id="audit-description" name="description" rows="3" placeholder="Detalhes do que aconteceu"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('auditModal')">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i>
+                            Salvar log
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="script/api-client.js"></script>
+    <script src="script/painel-script.js"></script>
+</body>
+</html>
