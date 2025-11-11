@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROKUZEN - Biblioteca</title>
+    <link rel="stylesheet" href="painel-styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body data-page="biblioteca">
+    <div class="dashboard-container">
+        <div id="dashboard-loader" class="dashboard-loader">
+            <div class="loader-spinner"></div>
+            <span>Carregando painel...</span>
+        </div>
+
+        <header class="header">
+            <div class="header-left">
+                <div class="logo">
+                    <img src="assets/img/logo-rokuzen-pequena.png" alt="ROKUZEN" class="logo-image">
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="user-profile">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+            </div>
+        </header>
+
+        <nav class="sidebar">
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="painel-painel.html" data-section="painel">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Painel</span>
+                        <i class="fas fa-chevron-right arrow"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-atendimento.html" data-section="atendimento">
+                        <i class="fas fa-calendar-check"></i>
+                        <span>Atendimento</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-clientes.html" data-section="clientes">
+                        <i class="fas fa-users"></i>
+                        <span>Clientes</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-colaboradores.html" data-section="colaboradores">
+                        <i class="fas fa-user-tie"></i>
+                        <span>Colaboradores</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-entradas-saidas.html" data-section="entradas-saidas">
+                        <i class="fas fa-exchange-alt"></i>
+                        <span>Entradas/Saídas</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-gift-card.html" data-section="gift-card">
+                        <i class="fas fa-gift"></i>
+                        <span>Gift Card</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-biblioteca.html" data-section="biblioteca">
+                        <i class="fas fa-book"></i>
+                        <span>Biblioteca</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-parceiros.html" data-section="parceiros">
+                        <i class="fas fa-handshake"></i>
+                        <span>Parceiros</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-escala-compartilhada.html" data-section="escala-compartilhada">
+                        <i class="fas fa-clock"></i>
+                        <span>Escala Compartilhada</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-procedimentos.html" data-section="procedimentos">
+                        <i class="fas fa-list-alt"></i>
+                        <span>Procedimentos</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-auditoria.html" data-section="auditoria">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Auditoria</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <section id="biblioteca" class="content-section active">
+                <div class="section-header">
+                    <h2>Biblioteca</h2>
+                    <p>Documentos e materiais de referência</p>
+                </div>
+                <div class="library-controls">
+                    <div class="filters">
+                        <div class="filter-group">
+                            <label for="library-search">Buscar</label>
+                            <input type="text" id="library-search" placeholder="Pesquisar por título, autor ou tag">
+                        </div>
+                        <div class="filter-group">
+                            <label for="library-type">Tipo</label>
+                            <select id="library-type">
+                                <option value="">Todos</option>
+                                <option value="documento">Documento</option>
+                                <option value="protocolo">Protocolo</option>
+                                <option value="treinamento">Treinamento</option>
+                                <option value="marketing">Marketing</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="library-tag">Tag</label>
+                            <select id="library-tag">
+                                <option value="">Qualquer</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="actions">
+                        <button class="btn btn-secondary" id="library-sync">
+                            <i class="fas fa-sync"></i>
+                            Sincronizar
+                        </button>
+                        <button class="btn btn-primary" id="library-add">
+                            <i class="fas fa-upload"></i>
+                            Enviar novo material
+                        </button>
+                    </div>
+                </div>
+
+                <div class="library-grid" id="library-grid">
+                    <div class="empty-state">Nenhum material cadastrado ainda.</div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="libraryModal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3 id="library-modal-title">Adicionar material</h3>
+                <button class="modal-close" onclick="closeModal('libraryModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="library-form">
+                    <input type="hidden" id="library-id">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="library-title">Título *</label>
+                            <input type="text" id="library-title" name="title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="library-type-input">Tipo *</label>
+                            <select id="library-type-input" name="type" required>
+                                <option value="documento">Documento</option>
+                                <option value="protocolo">Protocolo</option>
+                                <option value="treinamento">Treinamento</option>
+                                <option value="marketing">Marketing</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="library-author">Responsável</label>
+                            <input type="text" id="library-author" name="author" placeholder="Quem produziu o material">
+                        </div>
+                        <div class="form-group">
+                            <label for="library-updated-at">Última revisão *</label>
+                            <input type="date" id="library-updated-at" name="updatedAt" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="library-url">Link de acesso</label>
+                            <input type="url" id="library-url" name="url" placeholder="https://...">
+                        </div>
+                        <div class="form-group">
+                            <label for="library-tags">Tags (separadas por vírgula)</label>
+                            <input type="text" id="library-tags" name="tags" placeholder="protocolo, marketing, treinamento">
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="library-description">Descrição</label>
+                            <textarea id="library-description" name="description" rows="3" placeholder="Resumo do conteúdo"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('libraryModal')">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i>
+                            Salvar material
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="script/api-client.js"></script>
+    <script src="script/painel-script.js"></script>
+</body>
+</html>
+

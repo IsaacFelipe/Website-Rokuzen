@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROKUZEN - Auditoria</title>
+    <link rel="stylesheet" href="painel-styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body data-page="auditoria">
+    <div class="dashboard-container">
+        <div id="dashboard-loader" class="dashboard-loader">
+            <div class="loader-spinner"></div>
+            <span>Carregando painel...</span>
+        </div>
+
+        <header class="header">
+            <div class="header-left">
+                <div class="logo">
+                    <img src="assets/img/logo-rokuzen-pequena.png" alt="ROKUZEN" class="logo-image">
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="user-profile">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+            </div>
+        </header>
+
+        <nav class="sidebar">
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="painel-painel.html" data-section="painel">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Painel</span>
+                        <i class="fas fa-chevron-right arrow"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-atendimento.html" data-section="atendimento">
+                        <i class="fas fa-calendar-check"></i>
+                        <span>Atendimento</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-clientes.html" data-section="clientes">
+                        <i class="fas fa-users"></i>
+                        <span>Clientes</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-colaboradores.html" data-section="colaboradores">
+                        <i class="fas fa-user-tie"></i>
+                        <span>Colaboradores</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-entradas-saidas.html" data-section="entradas-saidas">
+                        <i class="fas fa-exchange-alt"></i>
+                        <span>Entradas/Saídas</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-gift-card.html" data-section="gift-card">
+                        <i class="fas fa-gift"></i>
+                        <span>Gift Card</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-biblioteca.html" data-section="biblioteca">
+                        <i class="fas fa-book"></i>
+                        <span>Biblioteca</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-parceiros.html" data-section="parceiros">
+                        <i class="fas fa-handshake"></i>
+                        <span>Parceiros</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-escala-compartilhada.html" data-section="escala-compartilhada">
+                        <i class="fas fa-clock"></i>
+                        <span>Escala Compartilhada</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-procedimentos.html" data-section="procedimentos">
+                        <i class="fas fa-list-alt"></i>
+                        <span>Procedimentos</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-auditoria.html" data-section="auditoria">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Auditoria</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <section id="auditoria" class="content-section active">
+                <div class="section-header">
+                    <h2>Auditoria</h2>
+                    <p>Logs e relatórios de auditoria</p>
+                </div>
+                <div class="section-actions">
+                    <div class="filters">
+                        <div class="filter-group">
+                            <label for="audit-search">Filtrar logs</label>
+                            <input type="text" id="audit-search" placeholder="Usuário, ação ou módulo">
+                        </div>
+                        <div class="filter-group">
+                            <label for="audit-module">Módulo</label>
+                            <select id="audit-module">
+                                <option value="">Todos</option>
+                                <option value="clientes">Clientes</option>
+                                <option value="atendimentos">Atendimentos</option>
+                                <option value="financeiro">Financeiro</option>
+                                <option value="gift-card">Gift Card</option>
+                                <option value="biblioteca">Biblioteca</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="actions">
+                        <button class="btn btn-secondary" id="audit-export">
+                            <i class="fas fa-file-export"></i>
+                            Exportar logs
+                        </button>
+                        <button class="btn btn-primary" id="audit-add">
+                            <i class="fas fa-pen"></i>
+                            Registrar log manual
+                        </button>
+                    </div>
+                </div>
+
+                <div class="timeline" id="audit-timeline">
+                    <div class="empty-state">Nenhum log registrado ainda.</div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="auditModal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3 id="audit-modal-title">Registrar Log</h3>
+                <button class="modal-close" onclick="closeModal('auditModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="audit-form">
+                    <input type="hidden" id="audit-id">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="audit-user">Usuário *</label>
+                            <input type="text" id="audit-user" name="user" required placeholder="Colaborador responsável">
+                        </div>
+                        <div class="form-group">
+                            <label for="audit-module-input">Módulo *</label>
+                            <select id="audit-module-input" name="module" required>
+                                <option value="clientes">Clientes</option>
+                                <option value="atendimentos">Atendimentos</option>
+                                <option value="financeiro">Financeiro</option>
+                                <option value="gift-card">Gift Card</option>
+                                <option value="biblioteca">Biblioteca</option>
+                                <option value="procedimentos">Procedimentos</option>
+                                <option value="usuarios">Usuários</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="audit-action">Ação *</label>
+                            <input type="text" id="audit-action" name="action" required placeholder="Ex.: Atualizou cadastro do cliente">
+                        </div>
+                        <div class="form-group">
+                            <label for="audit-date">Data/Horário *</label>
+                            <input type="datetime-local" id="audit-date" name="datetime" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="audit-criticality">Criticidade *</label>
+                            <select id="audit-criticality" name="criticality" required>
+                                <option value="baixa">Baixa</option>
+                                <option value="media">Média</option>
+                                <option value="alta">Alta</option>
+                            </select>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="audit-description">Descrição</label>
+                            <textarea id="audit-description" name="description" rows="3" placeholder="Detalhes do que aconteceu"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('auditModal')">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i>
+                            Salvar log
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="script/api-client.js"></script>
+    <script src="script/painel-script.js"></script>
+</body>
+</html>
+

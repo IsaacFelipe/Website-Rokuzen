@@ -1,474 +1,9 @@
 // Dashboard JavaScript - Rokuzen
-const DASHBOARD_DEMO_DATA = (() => {
-    const now = new Date();
-    const todayStr = now.toISOString().split('T')[0];
-
-    const buildDateTime = (hours, minutes) => {
-        const date = new Date(now);
-        date.setHours(hours, minutes, 0, 0);
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        const hour = String(date.getHours()).padStart(2, '0');
-        const minute = String(date.getMinutes()).padStart(2, '0');
-        return `${year}-${month}-${day} ${hour}:${minute}`;
-    };
-
-    const formatDateOnly = (date) => {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
-    };
-
-    const shiftDate = (days) => {
-        const cloned = new Date(now);
-        cloned.setDate(cloned.getDate() + days);
-        cloned.setHours(0, 0, 0, 0);
-        return formatDateOnly(cloned);
-    };
-
-    const shiftDateTime = (days, hours = 0, minutes = 0) => {
-        const cloned = new Date(now);
-        cloned.setDate(cloned.getDate() + days);
-        cloned.setHours(hours, minutes, 0, 0);
-        return `${formatDateOnly(cloned)} ${String(cloned.getHours()).padStart(2, '0')}:${String(cloned.getMinutes()).padStart(2, '0')}`;
-    };
-
-    const therapists = [
-        {
-            id: 1,
-            name: 'Ana Oliveira',
-            specialty: 'Massoterapeuta',
-            phone: '(11) 91234-5678',
-            email: 'ana.oliveira@rokuzen.com',
-            cpf: '123.456.789-00',
-            birthDate: '1988-05-12',
-            status: 'ativo',
-            hireDate: todayStr,
-            address: 'Rua das Flores, 120 - São Paulo/SP',
-            notes: 'Especialista em shiatsu e aromaterapia.',
-            createdAt: `${todayStr} 08:00`,
-            updatedAt: `${todayStr} 08:00`
-        },
-        {
-            id: 2,
-            name: 'Bruno Costa',
-            specialty: 'Reflexologista',
-            phone: '(11) 99876-5432',
-            email: 'bruno.costa@rokuzen.com',
-            cpf: '321.654.987-00',
-            birthDate: '1990-10-30',
-            status: 'ativo',
-            hireDate: todayStr,
-            address: 'Av. Paulista, 900 - São Paulo/SP',
-            notes: 'Responsável pelos atendimentos corporativos.',
-            createdAt: `${todayStr} 09:00`,
-            updatedAt: `${todayStr} 09:00`
-        },
-        {
-            id: 3,
-            name: 'Carla Mendes',
-            specialty: 'Terapeuta Integrativa',
-            phone: '(11) 98765-1234',
-            email: 'carla.mendes@rokuzen.com',
-            cpf: '987.321.654-00',
-            birthDate: '1985-03-18',
-            status: 'férias',
-            hireDate: todayStr,
-            address: 'Rua do Bosque, 450 - Santo André/SP',
-            notes: 'Atualmente em férias até o próximo mês.',
-            createdAt: `${todayStr} 10:00`,
-            updatedAt: `${todayStr} 10:00`
-        }
-    ];
-
-    const clients = [
-        {
-            id: 101,
-            fullName: 'Mariana Souza',
-            cpf: '456.789.123-00',
-            birthDate: '1992-07-21',
-            phone: '(11) 95555-1111',
-            email: 'mariana.souza@email.com',
-            address: 'Rua das Acácias, 200 - São Paulo/SP',
-            status: 'ativo',
-            registrationDate: todayStr,
-            notes: 'Prefere atendimentos às terças à tarde.',
-            totalSessions: 8,
-            totalSpent: 980,
-            favoriteTherapist: 'Ana Oliveira',
-            favoriteSession: 'Massagem Relaxante',
-            lastVisit: todayStr,
-            createdAt: `${todayStr} 08:30`,
-            updatedAt: `${todayStr} 08:30`
-        },
-        {
-            id: 102,
-            fullName: 'Lucas Ferreira',
-            cpf: '654.987.321-00',
-            birthDate: '1989-12-05',
-            phone: '(11) 96666-2222',
-            email: 'lucas.ferreira@email.com',
-            address: 'Rua das Palmeiras, 550 - São Bernardo/SP',
-            status: 'ativo',
-            registrationDate: todayStr,
-            notes: 'Busca sessões semanais de reflexologia.',
-            totalSessions: 5,
-            totalSpent: 600,
-            favoriteTherapist: 'Bruno Costa',
-            favoriteSession: 'Reflexologia',
-            lastVisit: todayStr,
-            createdAt: `${todayStr} 09:30`,
-            updatedAt: `${todayStr} 09:30`
-        },
-        {
-            id: 103,
-            fullName: 'Patrícia Lima',
-            cpf: '852.741.963-00',
-            birthDate: '1995-02-14',
-            phone: '(11) 97777-3333',
-            email: 'patricia.lima@email.com',
-            address: 'Rua das Orquídeas, 45 - São Caetano/SP',
-            status: 'inativo',
-            registrationDate: todayStr,
-            notes: 'Retomar contato para campanha de reativação.',
-            totalSessions: 3,
-            totalSpent: 360,
-            favoriteTherapist: 'Ana Oliveira',
-            favoriteSession: 'Shiatsu',
-            lastVisit: todayStr,
-            createdAt: `${todayStr} 10:30`,
-            updatedAt: `${todayStr} 10:30`
-        }
-    ];
-
-    const appointments = [
-        {
-            id: 201,
-            clientId: 101,
-            therapistId: 1,
-            datetime: buildDateTime(9, 0),
-            duration: 60,
-            sessionType: 'Massagem Relaxante',
-            paymentType: 'pix',
-            paymentStatus: 'pago',
-            appointmentStatus: 'concluido',
-            value: 180,
-            notes: 'Aplicar óleo de lavanda.',
-            client: 'Mariana Souza',
-            phone: '(11) 95555-1111',
-            therapist: 'Ana Oliveira'
-        },
-        {
-            id: 202,
-            clientId: 102,
-            therapistId: 2,
-            datetime: buildDateTime(11, 0),
-            duration: 45,
-            sessionType: 'Reflexologia',
-            paymentType: 'cartao_credito',
-            paymentStatus: 'pago',
-            appointmentStatus: 'agendado',
-            value: 150,
-            notes: 'Preferência por ambiente silencioso.',
-            client: 'Lucas Ferreira',
-            phone: '(11) 96666-2222',
-            therapist: 'Bruno Costa'
-        },
-        {
-            id: 203,
-            clientId: 103,
-            therapistId: 1,
-            datetime: buildDateTime(15, 30),
-            duration: 90,
-            sessionType: 'Shiatsu',
-            paymentType: 'dinheiro',
-            paymentStatus: 'pendente',
-            appointmentStatus: 'agendado',
-            value: 220,
-            notes: 'Confirmar presença na manhã do atendimento.',
-            client: 'Patrícia Lima',
-            phone: '(11) 97777-3333',
-            therapist: 'Ana Oliveira'
-        }
-    ];
-
-    const financialRecords = [
-        {
-            id: 1,
-            type: 'entrada',
-            date: shiftDate(-2),
-            description: 'Pacote de 5 sessões - Cliente Mariana',
-            category: 'Atendimentos',
-            method: 'pix',
-            responsible: 'Bruno Costa',
-            value: 890,
-            status: 'quitado'
-        },
-        {
-            id: 2,
-            type: 'saida',
-            date: shiftDate(-1),
-            description: 'Pagamento comissão Terapeuta Ana',
-            category: 'Comissões',
-            method: 'transferencia',
-            responsible: 'Financeiro',
-            value: 260,
-            status: 'quitado'
-        },
-        {
-            id: 3,
-            type: 'entrada',
-            date: shiftDate(0),
-            description: 'Venda de gift card corporativo',
-            category: 'Produtos',
-            method: 'boleto',
-            responsible: 'Recepção',
-            value: 500,
-            status: 'agendado'
-        },
-        {
-            id: 4,
-            type: 'saida',
-            date: shiftDate(2),
-            description: 'Compra de óleos essenciais',
-            category: 'Insumos',
-            method: 'cartao',
-            responsible: 'Suprimentos',
-            value: 180,
-            status: 'pendente'
-        }
-    ];
-
-    const giftCards = [
-        {
-            id: 1,
-            code: 'ROKU-2025-001',
-            clientName: 'Laura Mendes',
-            phone: '(11) 98888-2211',
-            email: 'laura.mendes@email.com',
-            value: 400,
-            balance: 280,
-            issuedAt: shiftDate(-10),
-            expiration: shiftDate(75),
-            status: 'ativo',
-            notes: 'Presente de aniversário - Pacote bem-estar'
-        },
-        {
-            id: 2,
-            code: 'ROKU-2025-009',
-            clientName: 'Grupo TWF',
-            phone: '',
-            email: 'rh@twf.com.br',
-            value: 1500,
-            balance: 0,
-            issuedAt: shiftDate(-40),
-            expiration: shiftDate(140),
-            status: 'utilizado',
-            notes: 'Ação corporativa - 10 sessões reflexologia'
-        },
-        {
-            id: 3,
-            code: 'ROKU-2025-012',
-            clientName: 'Pedro Rocha',
-            phone: '(11) 97777-2212',
-            email: '',
-            value: 250,
-            balance: 250,
-            issuedAt: shiftDate(-5),
-            expiration: shiftDate(60),
-            status: 'ativo',
-            notes: 'Utilizar preferencialmente aos sábados'
-        },
-        {
-            id: 4,
-            code: 'ROKU-2024-220',
-            clientName: 'Empresa Zenith',
-            phone: '',
-            email: 'parcerias@zenith.com',
-            value: 2000,
-            balance: 1200,
-            issuedAt: shiftDate(-80),
-            expiration: shiftDate(10),
-            status: 'ativo',
-            notes: 'Campanha RH saudável - acompanhar relatórios mensais'
-        }
-    ];
-
-    const libraryResources = [
-        {
-            id: 1,
-            title: 'Protocolo de Atendimento Massageoterapia Relaxante',
-            type: 'protocolo',
-            author: 'Equipe Técnica Rokuzen',
-            updatedAt: shiftDate(-3),
-            url: '',
-            tags: ['terapia manual', 'protocolo', 'bem-estar'],
-            description: 'Sequência detalhada de atendimento relaxante com orientações de duração e ritmo.'
-        },
-        {
-            id: 2,
-            title: 'Guia de Orientação Pós-Sessão para Clientes',
-            type: 'documento',
-            author: 'Equipe de Recepção',
-            updatedAt: shiftDate(-15),
-            url: '',
-            tags: ['cliente', 'orientação', 'pós-atendimento'],
-            description: 'Check-list de recomendações após cada procedimento com foco em retenção e fidelização.'
-        },
-        {
-            id: 3,
-            title: 'Treinamento: Escuta Ativa no Atendimento',
-            type: 'treinamento',
-            author: 'Ana Oliveira',
-            updatedAt: shiftDate(-30),
-            url: 'https://drive.google.com/treinamento-escuta-ativa',
-            tags: ['comercial', 'treinamento'],
-            description: 'Vídeo e apresentação utilizados no onboarding de novos terapeutas e recepcionistas.'
-        },
-        {
-            id: 4,
-            title: 'Kit de Mídias Sociais - Campanha Mês da Mulher',
-            type: 'marketing',
-            author: 'Equipe Marketing',
-            updatedAt: shiftDate(-5),
-            url: '',
-            tags: ['marketing', 'campanha'],
-            description: 'Artes e roteiros de divulgação para personalização e utilização em mídias sociais.'
-        }
-    ];
-
-    const partners = [
-        {
-            id: 1,
-            name: 'Academia Corpo Zen',
-            category: 'academia',
-            contact: 'Renata Prado',
-            phone: '(11) 93456-7890',
-            email: 'renata@corpozen.fit',
-            city: 'São Paulo/SP',
-            benefit: '20% de desconto para alunos em sessões de reflexologia',
-            status: 'ativo',
-            notes: 'Enviar relatório trimestral com utilização dos alunos.'
-        },
-        {
-            id: 2,
-            name: 'Grupo Aurora',
-            category: 'empresa',
-            contact: 'Marcelo Santos',
-            phone: '(11) 95555-6655',
-            email: 'beneficios@aurora.com.br',
-            city: 'Santo André/SP',
-            benefit: 'Sessões mensais in company para colaboradores',
-            status: 'negociacao',
-            notes: 'Apresentação comercial enviada em 02/11, aguardando retorno.'
-        },
-        {
-            id: 3,
-            name: 'Clínica Nova Vida',
-            category: 'clinica',
-            contact: 'Dra. Helena Lima',
-            phone: '(11) 93333-1010',
-            email: 'helena@novavida.med',
-            city: 'São Caetano/SP',
-            benefit: 'Troca de pacientes em reabilitação e terapias complementares',
-            status: 'ativo',
-            notes: 'Avaliar possibilidade de workshops conjuntos no próximo trimestre.'
-        }
-    ];
-
-    const procedures = [
-        {
-            id: 1,
-            name: 'Massagem Relaxante Premium',
-            category: 'Terapias Corporais',
-            duration: 60,
-            price: 180,
-            difficulty: 'intermediario',
-            materials: 'Óleos essenciais relaxantes, toalhas aquecidas',
-            description: 'Sessão completa com foco em redução de estresse, alongamentos suaves e aromaterapia personalizada.',
-            care: 'Hidratar-se bem nas próximas horas e evitar esforços intensos no mesmo dia.'
-        },
-        {
-            id: 2,
-            name: 'Reflexologia Podal Terapêutica',
-            category: 'Reflexologia',
-            duration: 45,
-            price: 140,
-            difficulty: 'intermediario',
-            materials: 'Creme neutro, toalhas descartáveis, álcool 70%',
-            description: 'Estimulação de pontos reflexos nos pés para equilíbrio energético e relaxamento geral.',
-            care: 'Recomendar consumo de água e descanso de 30 minutos após a sessão.'
-        },
-        {
-            id: 3,
-            name: 'Shiatsu Revitalizante',
-            category: 'Terapias Orientais',
-            duration: 60,
-            price: 190,
-            difficulty: 'avancado',
-            materials: 'Colchonete tatame, almofadas de apoio',
-            description: 'Pressões ritmadas em meridianos energéticos com foco em alívio de tensões e melhora da circulação.',
-            care: 'Orientar respiração profunda e alongamentos leves nos dias seguintes.'
-        }
-    ];
-
-    const auditLogs = [
-        {
-            id: 1,
-            user: 'Ana Oliveira',
-            module: 'atendimentos',
-            action: 'Registrou novo atendimento para Lucas Ferreira',
-            datetime: shiftDateTime(0, 9, 15),
-            criticality: 'baixa',
-            description: 'Sessão de reflexologia marcada para as 11h com terapeuta Bruno.'
-        },
-        {
-            id: 2,
-            user: 'Bruno Costa',
-            module: 'financeiro',
-            action: 'Atualizou status de pagamento de comissão',
-            datetime: shiftDateTime(-1, 18, 30),
-            criticality: 'media',
-            description: 'Comissão da terapeuta Ana referente à semana 44 marcada como quitada.'
-        },
-        {
-            id: 3,
-            user: 'Recepção Rokuzen',
-            module: 'gift-card',
-            action: 'Emitiu gift card corporativo para Grupo TWF',
-            datetime: shiftDateTime(-5, 14, 5),
-            criticality: 'baixa',
-            description: 'Pacote corporativo com 10 sessões de reflexologia para colaboradores.'
-        }
-    ];
-
-    return {
-        overview: {
-            totalTherapists: therapists.length,
-            activeTherapists: therapists.filter(t => t.status === 'ativo').length,
-            appointmentsToday: appointments.length,
-            clientsToday: new Set(appointments.map(item => item.clientId)).size
-        },
-        therapists,
-        clients,
-        appointments,
-        financialRecords,
-        giftCards,
-        libraryResources,
-        partners,
-        procedures,
-        auditLogs
-    };
-})();
-
-const getDemoData = () => JSON.parse(JSON.stringify(DASHBOARD_DEMO_DATA));
 
 class Dashboard {
     constructor() {
         this.api = window.painelApi || new PainelApiClient();
-        this.currentSection = 'painel';
+        this.currentSection = document.body?.dataset?.page || 'painel';
         this.appointments = [];
         this.clients = [];
         this.therapists = [];
@@ -487,6 +22,8 @@ class Dashboard {
             procedure: 1,
             audit: 1
         };
+        this.apiUnavailable = false;
+        this.apiErrorNotified = false;
         this.financialRecords = [];
         this.giftCards = [];
         this.libraryResources = [];
@@ -726,7 +263,10 @@ class Dashboard {
         this.loadAuxiliaryData();
         this.setupNavigation();
         this.setupMobileMenu();
-        this.loadDashboardData();
+        this.loadSectionData(this.currentSection);
+        if (this.currentSection === 'painel') {
+            this.loadDashboardData();
+        }
         this.setupAnimations();
         this.setupRealTimeUpdates();
         this.setupAppointmentForm();
@@ -752,19 +292,18 @@ class Dashboard {
             this.loadTherapistsData();
             this.updateTherapistsStats();
             this.loadTherapistPointsTable();
+            this.apiUnavailable = false;
+            this.apiErrorNotified = false;
             await this.refreshDashboardOverview();
 
         } catch (error) {
             console.error('Erro ao inicializar dados do painel:', error);
-            this.showNotification('Não foi possível carregar os dados do painel. Verifique se a API está em execução.', 'error');
+            this.apiUnavailable = true;
+            this.notifyApiOffline();
             this.therapists = [];
             this.clients = [];
             this.appointments = [];
             this.dashboardOverview = null;
-
-            if (!this.isDemoMode) {
-                this.activateDemoMode();
-            }
 
             if (this.initialLoadRetryCount < 2) {
                 this.initialLoadRetryCount += 1;
@@ -784,41 +323,69 @@ class Dashboard {
     // Configurar navegação do menu lateral
     setupNavigation() {
         const navItems = document.querySelectorAll('.nav-item a');
-        
+        const currentPage = this.currentSection;
+
         navItems.forEach(item => {
-            item.addEventListener('click', (e) => {
-                e.preventDefault();
-                const section = item.dataset.section;
-                this.navigateToSection(section);
-            });
+            const section = item.dataset.section;
+            const navItem = item.closest('.nav-item');
+            if (!section || !navItem) {
+                return;
+            }
+
+            if (section === currentPage) {
+                navItem.classList.add('active');
+                item.setAttribute('aria-current', 'page');
+            } else {
+                navItem.classList.remove('active');
+                item.removeAttribute('aria-current');
+            }
+
+            if (!item.dataset.boundNavigation) {
+                item.dataset.boundNavigation = 'true';
+                item.addEventListener('click', (event) => {
+                    if (section === currentPage) return;
+                    const href = item.getAttribute('href');
+                    if (!href || href === '#') {
+                        event.preventDefault();
+                        this.navigateToSection(section);
+                    }
+                });
+            }
         });
     }
 
     // Navegar para uma seção específica
     navigateToSection(sectionName) {
-        // Remover classe active de todos os itens do menu
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.classList.remove('active');
-        });
+        const hasMultipleSections = document.querySelectorAll('.content-section').length > 1;
 
-        // Remover classe active de todas as seções
-        document.querySelectorAll('.content-section').forEach(section => {
-            section.classList.remove('active');
-        });
+        if (hasMultipleSections) {
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
 
-        // Adicionar classe active ao item do menu clicado
-        const activeNavItem = document.querySelector(`[data-section="${sectionName}"]`).closest('.nav-item');
-        activeNavItem.classList.add('active');
+            const activeNavItem = document.querySelector(`[data-section="${sectionName}"]`)?.closest('.nav-item');
+            if (activeNavItem) {
+                activeNavItem.classList.add('active');
+            }
 
-        // Mostrar a seção correspondente
-        const targetSection = document.getElementById(sectionName);
-        if (targetSection) {
-            targetSection.classList.add('active');
-            this.currentSection = sectionName;
-            
-            // Carregar dados específicos da seção
-            this.loadSectionData(sectionName);
+            const targetSection = document.getElementById(sectionName);
+            if (targetSection) {
+                targetSection.classList.add('active');
+                this.currentSection = sectionName;
+                this.loadSectionData(sectionName);
+            }
+            return;
         }
+
+        const currentPage = this.currentSection;
+        if (sectionName === currentPage) {
+            return;
+        }
+
+        const targetFile = sectionName === 'painel'
+            ? 'painel-painel.html'
+            : `painel-${sectionName}.html`;
+
+        window.location.href = targetFile;
     }
 
     // Carregar dados específicos de cada seção
@@ -862,57 +429,32 @@ class Dashboard {
 
     // Carregar dados do dashboard
     loadDashboardData() {
+        if (this.currentSection !== 'painel') {
+            return;
+        }
         this.updateControlPanel();
     }
 
     loadAuxiliaryData() {
-        let storedRaw = null;
-        let storedData = {};
+        this.financialRecords = [];
+        this.giftCards = [];
+        this.libraryResources = [];
+        this.partners = [];
+        this.procedures = [];
+        this.auditLogs = [];
+
         try {
-            storedRaw = window.localStorage ? window.localStorage.getItem(this.localStorageKey) : null;
-            if (storedRaw) {
-                storedData = JSON.parse(storedRaw);
+            if (window.localStorage) {
+                window.localStorage.removeItem(this.localStorageKey);
             }
         } catch (error) {
-            console.warn('Não foi possível carregar dados locais do painel:', error);
-            storedData = {};
-        }
-
-        const demo = getDemoData();
-        const fallback = (key, defaultValue) => {
-            const value = storedData && Array.isArray(storedData[key]) ? storedData[key] : defaultValue;
-            return Array.isArray(value) ? value : defaultValue;
-        };
-
-        this.financialRecords = fallback('financialRecords', demo.financialRecords);
-        this.giftCards = fallback('giftCards', demo.giftCards);
-        this.libraryResources = fallback('libraryResources', demo.libraryResources);
-        this.partners = fallback('partners', demo.partners);
-        this.procedures = fallback('procedures', demo.procedures);
-        this.auditLogs = fallback('auditLogs', demo.auditLogs);
-
-        if (!storedRaw) {
-            this.persistAuxiliaryData();
+            console.warn('Não foi possível limpar o cache local do painel:', error);
         }
     }
 
     persistAuxiliaryData() {
-        try {
-            if (!window.localStorage) {
-                return;
-            }
-            const payload = {
-                financialRecords: this.financialRecords,
-                giftCards: this.giftCards,
-                libraryResources: this.libraryResources,
-                partners: this.partners,
-                procedures: this.procedures,
-                auditLogs: this.auditLogs
-            };
-            window.localStorage.setItem(this.localStorageKey, JSON.stringify(payload));
-        } catch (error) {
-            console.warn('Não foi possível salvar os dados locais do painel:', error);
-        }
+        // Persistência local desativada até que os dados reais do back-end estejam disponíveis.
+        return;
     }
 
     // Atualizar painel de controle
@@ -924,96 +466,39 @@ class Dashboard {
     }
 
     // Ativar modo demonstração com dados fictícios
-    activateDemoMode() {
-        const demoData = getDemoData();
-        this.isDemoMode = true;
+    activateDemoMode() {}
 
-        this.therapists = demoData.therapists;
-        this.clients = demoData.clients;
-        this.appointments = demoData.appointments;
-        this.dashboardOverview = demoData.overview;
-        this.financialRecords = demoData.financialRecords;
-        this.giftCards = demoData.giftCards;
-        this.libraryResources = demoData.libraryResources;
-        this.partners = demoData.partners;
-        this.procedures = demoData.procedures;
-        this.auditLogs = demoData.auditLogs;
-
-        this.initializeDemoCounters();
-        this.recalculateClientAggregates();
-        this.updateLocalOverview();
-        this.persistAuxiliaryData();
-
-        this.populateTherapistSelect();
-        this.loadTherapistsData();
-        this.updateTherapistsStats();
-        this.populateExistingClientSelect();
-        this.renderAppointmentsTable(this.appointments);
-        this.renderClientsTable(this.clients);
-        this.updateClientsStats();
-        this.loadTherapistPointsTable();
-        this.updateDashboardStats();
-        this.updateTodayAppointmentsList();
-        this.renderFinancialTable();
-        this.updateFinancialInsights();
-        this.renderGiftCardsTable();
-        this.updateGiftCardsSummary();
-        this.renderLibrary();
-        this.renderPartnersTable();
-        this.renderProceduresBoard();
-        this.renderAuditTimeline();
-
-        this.showNotification('Modo demonstração ativado. Os dados exibidos são fictícios.', 'warning');
-    }
-
-    initializeDemoCounters() {
-        const nextValue = (items, key) => {
-            if (!items || !items.length) return 1;
-            const max = Math.max(
-                ...items
-                    .map(item => Number(item[key]) || 0)
-            );
-            return Number.isFinite(max) ? max + 1 : 1;
-        };
-
-        this.demoCounters = {
-            appointment: nextValue(this.appointments, 'id'),
-            client: nextValue(this.clients, 'id'),
-            therapist: nextValue(this.therapists, 'id'),
-            financial: nextValue(this.financialRecords, 'id'),
-            giftCard: nextValue(this.giftCards, 'id'),
-            library: nextValue(this.libraryResources, 'id'),
-            partner: nextValue(this.partners, 'id'),
-            procedure: nextValue(this.procedures, 'id'),
-            audit: nextValue(this.auditLogs, 'id')
-        };
-    }
-
-    getNextDemoId(type) {
-        if (!this.demoCounters[type]) {
-            this.demoCounters[type] = 1;
+    notifyApiOffline(customMessage) {
+        const message = customMessage || 'Não foi possível carregar os dados do painel. Verifique se a API está em execução.';
+        if (!customMessage) {
+            if (this.apiErrorNotified) {
+                return;
+            }
+            this.apiErrorNotified = true;
         }
-        const value = this.demoCounters[type];
-        this.demoCounters[type] = value + 1;
-        return value;
+        this.showNotification(message, 'warning');
     }
 
-    updateLocalOverview() {
-        if (!this.isDemoMode) {
-            return;
+    ensureApiAvailable(customMessage) {
+        if (this.isDemoMode) {
+            return true;
         }
+        if (!this.apiUnavailable) {
+            return true;
+        }
+        this.notifyApiOffline(customMessage);
+        return false;
+    }
 
-        const todaysAppointments = this.getTodaysAppointments();
-        const clientsToday = new Set(
-            todaysAppointments.map(appointment => appointment.clientId || appointment.phone)
-        ).size;
-
-        this.dashboardOverview = {
-            totalTherapists: this.therapists.length,
-            activeTherapists: this.therapists.filter(t => t.status === 'ativo').length,
-            appointmentsToday: todaysAppointments.length,
-            clientsToday
-        };
+    isNetworkError(error) {
+        if (!error) {
+            return false;
+        }
+        const message = String(error.message || error || '').toLowerCase();
+        return message.includes('failed to fetch')
+            || message.includes('networkerror')
+            || message.includes('network request failed')
+            || message.includes('load failed');
     }
 
     recalculateClientAggregates() {
@@ -1486,6 +971,11 @@ class Dashboard {
             closeModal('deleteConfirmModal');
             return;
         }
+        if (!this.isDemoMode && !this.ensureApiAvailable('API não está disponível. Inicie o servidor para excluir atendimentos.')) {
+            this.currentDeleteId = null;
+            closeModal('deleteConfirmModal');
+            return;
+        }
 
         try {
             if (this.isDemoMode) {
@@ -1495,6 +985,8 @@ class Dashboard {
             }
 
             this.showNotification('Atendimento excluído com sucesso!', 'success');
+            this.apiUnavailable = false;
+            this.apiErrorNotified = false;
             await this.refreshAppointments();
             const dateInput = document.getElementById('date-select');
             const selectedDate = dateInput ? dateInput.value : null;
@@ -1503,6 +995,10 @@ class Dashboard {
         } catch (error) {
             console.error('Erro ao excluir atendimento:', error);
             this.showNotification(error.message || 'Não foi possível excluir o atendimento.', 'error');
+            if (this.isNetworkError(error)) {
+                this.apiUnavailable = true;
+                this.notifyApiOffline();
+            }
         } finally {
             this.currentDeleteId = null;
             closeModal('deleteConfirmModal');
@@ -2016,6 +1512,10 @@ class Dashboard {
             return;
         }
 
+        if (!this.isDemoMode && !this.ensureApiAvailable('API não está disponível. Inicie o servidor para salvar atendimentos.')) {
+            return;
+        }
+
         try {
             let operation = appointmentId ? 'updated' : 'created';
 
@@ -2027,6 +1527,8 @@ class Dashboard {
                 await this.api.createAppointment(payload);
             }
 
+            this.apiUnavailable = false;
+            this.apiErrorNotified = false;
             const successMessage = operation === 'updated'
                 ? 'Atendimento atualizado com sucesso!'
                 : 'Atendimento criado com sucesso!';
@@ -2049,6 +1551,10 @@ class Dashboard {
         } catch (error) {
             console.error('Erro ao salvar atendimento:', error);
             this.showNotification(error.message || 'Não foi possível salvar o atendimento.', 'error');
+            if (this.isNetworkError(error)) {
+                this.apiUnavailable = true;
+                this.notifyApiOffline();
+            }
         }
     }
 
@@ -2089,6 +1595,10 @@ class Dashboard {
             }
         }
 
+        if (!this.isDemoMode && !this.ensureApiAvailable('API não está disponível. Inicie o servidor para salvar clientes.')) {
+            return;
+        }
+
         const payload = {
             fullName: clientData.fullName.trim(),
             cpf: this.formatCPF(clientData.cpf) || '',
@@ -2116,6 +1626,8 @@ class Dashboard {
                 ? 'Cliente atualizado com sucesso!'
                 : 'Cliente criado com sucesso!';
             this.showNotification(message, 'success');
+            this.apiUnavailable = false;
+            this.apiErrorNotified = false;
 
             closeModal('editClientModal');
             form.reset();
@@ -2124,6 +1636,10 @@ class Dashboard {
         } catch (error) {
             console.error('Erro ao salvar cliente:', error);
             this.showNotification(error.message || 'Não foi possível salvar o cliente.', 'error');
+            if (this.isNetworkError(error)) {
+                this.apiUnavailable = true;
+                this.notifyApiOffline();
+            }
         }
     }
 
@@ -2427,55 +1943,77 @@ class Dashboard {
     }
 
     async refreshDashboardOverview() {
-        try {
-            if (this.isDemoMode) {
-                this.updateLocalOverview();
-                return;
-            }
+        if (this.isDemoMode) {
+            this.updateLocalOverview();
+            return;
+        }
+        if (!this.ensureApiAvailable()) {
+            return;
+        }
 
+        try {
             this.dashboardOverview = await this.api.getDashboardOverview();
+            this.apiUnavailable = false;
+            this.apiErrorNotified = false;
             this.updateDashboardStats();
         } catch (error) {
             console.error('Erro ao atualizar overview do dashboard:', error);
+            if (this.isNetworkError(error)) {
+                this.apiUnavailable = true;
+                this.notifyApiOffline();
+            }
         }
     }
 
     async refreshTherapists() {
-        try {
-            if (this.isDemoMode) {
-                this.populateTherapistSelect();
-                this.loadTherapistsData();
-                this.updateTherapistsStats();
-                this.loadTherapistPointsTable();
-                this.updateLocalOverview();
-                return;
-            }
+        if (this.isDemoMode) {
+            this.populateTherapistSelect();
+            this.loadTherapistsData();
+            this.updateTherapistsStats();
+            this.loadTherapistPointsTable();
+            this.updateLocalOverview();
+            return;
+        }
+        if (!this.ensureApiAvailable()) {
+            return;
+        }
 
+        try {
             const therapists = await this.api.getTherapists();
             this.therapists = Array.isArray(therapists) ? therapists : [];
             this.populateTherapistSelect();
             this.loadTherapistsData();
             this.updateTherapistsStats();
+            this.apiUnavailable = false;
+            this.apiErrorNotified = false;
             await this.refreshDashboardOverview();
         } catch (error) {
             console.error('Erro ao recarregar terapeutas:', error);
-            this.showNotification('Não foi possível atualizar a lista de terapeutas.', 'error');
+            if (this.isNetworkError(error)) {
+                this.apiUnavailable = true;
+                this.notifyApiOffline();
+            } else {
+                this.showNotification('Não foi possível atualizar a lista de terapeutas.', 'error');
+            }
         }
     }
 
     async refreshClients() {
-        try {
-            if (this.isDemoMode) {
-                this.recalculateClientAggregates();
-                this.loadClientsData();
-                this.updateClientsStats();
-                this.populateExistingClientSelect();
-                if (this.appointmentFormRefs) {
-                    this.updateExistingClientDetails(this.appointmentFormRefs.clientIdHidden.value);
-                }
-                return;
+        if (this.isDemoMode) {
+            this.recalculateClientAggregates();
+            this.loadClientsData();
+            this.updateClientsStats();
+            this.populateExistingClientSelect();
+            if (this.appointmentFormRefs) {
+                this.updateExistingClientDetails(this.appointmentFormRefs.clientIdHidden.value);
             }
+            return;
+        }
+        if (!this.ensureApiAvailable()) {
+            return;
+        }
 
+        try {
             const clients = await this.api.getClients();
             this.clients = Array.isArray(clients) ? clients : [];
             this.loadClientsData();
@@ -2484,31 +2022,48 @@ class Dashboard {
             if (this.appointmentFormRefs) {
                 this.updateExistingClientDetails(this.appointmentFormRefs.clientIdHidden.value);
             }
+            this.apiUnavailable = false;
+            this.apiErrorNotified = false;
         } catch (error) {
             console.error('Erro ao recarregar clientes:', error);
-            this.showNotification('Não foi possível atualizar a lista de clientes.', 'error');
+            if (this.isNetworkError(error)) {
+                this.apiUnavailable = true;
+                this.notifyApiOffline();
+            } else {
+                this.showNotification('Não foi possível atualizar a lista de clientes.', 'error');
+            }
         }
     }
 
     async refreshAppointments() {
-        try {
-            if (this.isDemoMode) {
-                this.updateLocalOverview();
-                this.updateDashboardStats();
-                this.loadTherapistPointsTable();
-                this.updateTodayAppointmentsList();
-                return;
-            }
+        if (this.isDemoMode) {
+            this.updateLocalOverview();
+            this.updateDashboardStats();
+            this.loadTherapistPointsTable();
+            this.updateTodayAppointmentsList();
+            return;
+        }
+        if (!this.ensureApiAvailable()) {
+            return;
+        }
 
+        try {
             const appointments = await this.api.getAppointments();
             this.appointments = Array.isArray(appointments) ? appointments : [];
+            this.apiUnavailable = false;
+            this.apiErrorNotified = false;
             await this.refreshDashboardOverview();
             this.updateDashboardStats();
             this.loadTherapistPointsTable();
             this.updateTodayAppointmentsList();
         } catch (error) {
             console.error('Erro ao recarregar atendimentos:', error);
-            this.showNotification('Não foi possível atualizar os atendimentos.', 'error');
+            if (this.isNetworkError(error)) {
+                this.apiUnavailable = true;
+                this.notifyApiOffline();
+            } else {
+                this.showNotification('Não foi possível atualizar os atendimentos.', 'error');
+            }
         }
     }
 
@@ -2746,6 +2301,10 @@ class Dashboard {
             }
         }
 
+        if (!this.isDemoMode && !this.ensureApiAvailable('API não está disponível. Inicie o servidor para salvar terapeutas.')) {
+            return;
+        }
+
         const payload = {
             name: therapistData.name.trim(),
             specialty: therapistData.specialty.trim(),
@@ -2774,6 +2333,8 @@ class Dashboard {
                 ? 'Terapeuta atualizado com sucesso!'
                 : 'Terapeuta criado com sucesso!';
             this.showNotification(message, 'success');
+            this.apiUnavailable = false;
+            this.apiErrorNotified = false;
 
             closeModal('therapistModal');
             form.reset();
@@ -2781,6 +2342,10 @@ class Dashboard {
         } catch (error) {
             console.error('Erro ao salvar terapeuta:', error);
             this.showNotification(error.message || 'Não foi possível salvar o terapeuta.', 'error');
+            if (this.isNetworkError(error)) {
+                this.apiUnavailable = true;
+                this.notifyApiOffline();
+            }
         }
     }
 
@@ -2812,6 +2377,9 @@ class Dashboard {
         if (!confirm(`Tem certeza que deseja excluir o terapeuta${confirmationName}?`)) {
             return;
         }
+        if (!this.isDemoMode && !this.ensureApiAvailable('API não está disponível. Inicie o servidor para excluir terapeutas.')) {
+            return;
+        }
 
         try {
             if (this.isDemoMode) {
@@ -2839,10 +2407,16 @@ class Dashboard {
 
             await this.api.deleteTherapist(id);
             this.showNotification('Terapeuta excluído com sucesso!', 'success');
+            this.apiUnavailable = false;
+            this.apiErrorNotified = false;
             await this.refreshTherapists();
         } catch (error) {
             console.error('Erro ao excluir terapeuta:', error);
             this.showNotification(error.message || 'Não foi possível excluir o terapeuta.', 'error');
+            if (this.isNetworkError(error)) {
+                this.apiUnavailable = true;
+                this.notifyApiOffline();
+            }
         }
     }
 

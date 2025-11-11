@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROKUZEN - Painel de Atendimentos</title>
+    <link rel="stylesheet" href="painel-styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body data-page="atendimento">
+    <div class="dashboard-container">
+        <div id="dashboard-loader" class="dashboard-loader">
+            <div class="loader-spinner"></div>
+            <span>Carregando painel...</span>
+        </div>
+
+        <header class="header">
+            <div class="header-left">
+                <div class="logo">
+                    <img src="assets/img/logo-rokuzen-pequena.png" alt="ROKUZEN" class="logo-image">
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="user-profile">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+            </div>
+        </header>
+
+        <nav class="sidebar">
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="painel-painel.html" data-section="painel">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Painel</span>
+                        <i class="fas fa-chevron-right arrow"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-atendimento.html" data-section="atendimento">
+                        <i class="fas fa-calendar-check"></i>
+                        <span>Atendimento</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-clientes.html" data-section="clientes">
+                        <i class="fas fa-users"></i>
+                        <span>Clientes</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-colaboradores.html" data-section="colaboradores">
+                        <i class="fas fa-user-tie"></i>
+                        <span>Colaboradores</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-entradas-saidas.html" data-section="entradas-saidas">
+                        <i class="fas fa-exchange-alt"></i>
+                        <span>Entradas/Saídas</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-gift-card.html" data-section="gift-card">
+                        <i class="fas fa-gift"></i>
+                        <span>Gift Card</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-biblioteca.html" data-section="biblioteca">
+                        <i class="fas fa-book"></i>
+                        <span>Biblioteca</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-parceiros.html" data-section="parceiros">
+                        <i class="fas fa-handshake"></i>
+                        <span>Parceiros</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-escala-compartilhada.html" data-section="escala-compartilhada">
+                        <i class="fas fa-clock"></i>
+                        <span>Escala Compartilhada</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-procedimentos.html" data-section="procedimentos">
+                        <i class="fas fa-list-alt"></i>
+                        <span>Procedimentos</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-auditoria.html" data-section="auditoria">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Auditoria</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <section id="atendimento" class="content-section active">
+                <div class="section-header">
+                    <h2>Atendimentos</h2>
+                    <p>Gerencie os atendimentos e agendamentos</p>
+                </div>
+                
+                <div class="attendance-controls">
+                    <div class="date-filter">
+                        <label for="date-select">Data:</label>
+                        <input type="date" id="date-select" class="date-input">
+                    </div>
+                    <div class="filter-buttons">
+                        <button class="btn btn-primary" id="add-appointment">
+                            <i class="fas fa-plus"></i>
+                            Novo Atendimento
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="appointments-table">
+                        <thead>
+                            <tr>
+                                <th>Data/Hora</th>
+                                <th>Cliente</th>
+                                <th>Celular</th>
+                                <th>Terapeuta</th>
+                                <th>Duração</th>
+                                <th>Tipo Pagamento</th>
+                                <th>Status</th>
+                                <th>Valor</th>
+                                <th>Tipo de Sessão</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="appointments-tbody">
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="viewAppointmentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Detalhes do Atendimento</h3>
+                <button class="modal-close" onclick="closeModal('viewAppointmentModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="appointment-details">
+                    <div class="detail-row">
+                        <label>Cliente:</label>
+                        <span id="view-appointment-client-name">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <label>Celular:</label>
+                        <span id="view-client-phone">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <label>Data/Hora:</label>
+                        <span id="view-datetime">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <label>Terapeuta:</label>
+                        <span id="view-therapist">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <label>Duração:</label>
+                        <span id="view-duration">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <label>Tipo de Sessão:</label>
+                        <span id="view-session-type">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <label>Tipo Pagamento:</label>
+                        <span id="view-payment-type">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <label>Status:</label>
+                        <span id="view-status">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <label>Valor:</label>
+                        <span id="view-value">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <label>Observações:</label>
+                        <span id="view-notes">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="editAppointmentModal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3 id="edit-modal-title">Editar Atendimento</h3>
+                <button class="modal-close" onclick="closeModal('editAppointmentModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="appointment-form">
+                    <input type="hidden" id="appointment-id" value="">
+                    <input type="hidden" id="appointment-client-id" name="clientId" value="">
+                    
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label class="checkbox-label" for="existing-client-toggle">
+                                <input type="checkbox" id="existing-client-toggle">
+                                Cliente já cadastrado
+                            </label>
+                        </div>
+                        
+                        <div class="form-group full-width" id="existing-client-section" style="display: none;">
+                            <label for="existing-client-select">Selecionar Cliente</label>
+                            <input type="text" id="existing-client-search" placeholder="Buscar por nome ou CPF...">
+                            <select id="existing-client-select" name="existingClientId">
+                                <option value="">Selecione um cliente</option>
+                            </select>
+                            <div class="client-summary" id="existing-client-details">
+                                Selecione um cliente cadastrado para preencher automaticamente.
+                            </div>
+                        </div>
+
+                        <div class="form-group" data-role="client-name-group">
+                            <label for="client-name">Cliente *</label>
+                            <input type="text" id="client-name" name="clientName" required>
+                        </div>
+                        
+                        <div class="form-group" data-role="client-phone-group">
+                            <label for="client-phone">Celular *</label>
+                            <input type="tel" id="client-phone" name="clientPhone" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="appointment-date">Data *</label>
+                            <input type="date" id="appointment-date" name="appointmentDate" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="appointment-time">Horário *</label>
+                            <input type="time" id="appointment-time" name="appointmentTime" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="therapist-select">Terapeuta *</label>
+                            <select id="therapist-select" name="therapistId" required>
+                                <option value="">Selecione um terapeuta</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="duration-select">Duração *</label>
+                            <select id="duration-select" name="duration" required>
+                                <option value="">Selecione a duração</option>
+                                <option value="30">30 minutos</option>
+                                <option value="45">45 minutos</option>
+                                <option value="60">60 minutos</option>
+                                <option value="90">90 minutos</option>
+                                <option value="120">120 minutos</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="session-type">Tipo de Sessão *</label>
+                            <select id="session-type" name="sessionType" required>
+                                <option value="">Selecione o tipo</option>
+                                <option value="Massagem Relaxante">Massagem Relaxante</option>
+                                <option value="Terapia Corporal">Terapia Corporal</option>
+                                <option value="Reflexologia">Reflexologia</option>
+                                <option value="Massagem Desportiva">Massagem Desportiva</option>
+                                <option value="Drenagem Linfática">Drenagem Linfática</option>
+                                <option value="Shiatsu">Shiatsu</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="payment-type">Tipo de Pagamento *</label>
+                            <select id="payment-type" name="paymentType" required>
+                                <option value="">Selecione o tipo</option>
+                                <option value="dinheiro">Dinheiro</option>
+                                <option value="cartao_credito">Cartão de Crédito</option>
+                                <option value="cartao_debito">Cartão de Débito</option>
+                                <option value="pix">PIX</option>
+                                <option value="transferencia">Transferência</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="payment-status">Status do Pagamento *</label>
+                            <select id="payment-status" name="paymentStatus" required>
+                                <option value="">Selecione o status</option>
+                                <option value="pago">Pago</option>
+                                <option value="pendente">Pendente</option>
+                                <option value="parcial">Parcial</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="appointment-status">Status do Atendimento *</label>
+                            <select id="appointment-status" name="appointmentStatus" required>
+                                <option value="">Selecione o status</option>
+                                <option value="agendado">Agendado</option>
+                                <option value="em_andamento">Em Andamento</option>
+                                <option value="concluido">Concluído</option>
+                                <option value="cancelado">Cancelado</option>
+                                <option value="faltou">Faltou</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="appointment-value">Valor (R$) *</label>
+                            <input type="number" id="appointment-value" name="appointmentValue" step="0.01" min="0" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label for="appointment-notes">Observações</label>
+                        <textarea id="appointment-notes" name="appointmentNotes" rows="3" placeholder="Observações sobre o atendimento..."></textarea>
+                    </div>
+                    
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('editAppointmentModal')">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i>
+                            Salvar Atendimento
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="deleteConfirmModal" class="modal">
+        <div class="modal-content small">
+            <div class="modal-header">
+                <h3>Confirmar Exclusão</h3>
+            </div>
+            <div class="modal-body">
+                <p>Tem certeza que deseja excluir este atendimento?</p>
+                <p><strong>Esta ação não pode ser desfeita.</strong></p>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('deleteConfirmModal')">
+                    Cancelar
+                </button>
+                <button type="button" class="btn btn-danger" id="confirm-delete">
+                    <i class="fas fa-trash"></i>
+                    Excluir
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script/api-client.js"></script>
+    <script src="script/painel-script.js"></script>
+</body>
+</html>
+

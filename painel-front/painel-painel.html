@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROKUZEN - Painel de Controle</title>
+    <link rel="stylesheet" href="painel-styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body data-page="painel">
+    <div class="dashboard-container">
+        <div id="dashboard-loader" class="dashboard-loader">
+            <div class="loader-spinner"></div>
+            <span>Carregando painel...</span>
+        </div>
+
+        <header class="header">
+            <div class="header-left">
+                <div class="logo">
+                    <img src="assets/img/logo-rokuzen-pequena.png" alt="ROKUZEN" class="logo-image">
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="user-profile">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+            </div>
+        </header>
+
+        <nav class="sidebar">
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="painel-painel.html" data-section="painel">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Painel</span>
+                        <i class="fas fa-chevron-right arrow"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-atendimento.html" data-section="atendimento">
+                        <i class="fas fa-calendar-check"></i>
+                        <span>Atendimento</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-clientes.html" data-section="clientes">
+                        <i class="fas fa-users"></i>
+                        <span>Clientes</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-colaboradores.html" data-section="colaboradores">
+                        <i class="fas fa-user-tie"></i>
+                        <span>Colaboradores</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-entradas-saidas.html" data-section="entradas-saidas">
+                        <i class="fas fa-exchange-alt"></i>
+                        <span>Entradas/Saídas</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-gift-card.html" data-section="gift-card">
+                        <i class="fas fa-gift"></i>
+                        <span>Gift Card</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-biblioteca.html" data-section="biblioteca">
+                        <i class="fas fa-book"></i>
+                        <span>Biblioteca</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-parceiros.html" data-section="parceiros">
+                        <i class="fas fa-handshake"></i>
+                        <span>Parceiros</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-escala-compartilhada.html" data-section="escala-compartilhada">
+                        <i class="fas fa-clock"></i>
+                        <span>Escala Compartilhada</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-procedimentos.html" data-section="procedimentos">
+                        <i class="fas fa-list-alt"></i>
+                        <span>Procedimentos</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-auditoria.html" data-section="auditoria">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Auditoria</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <section id="painel" class="content-section active">
+                <div class="dashboard-cards">
+                    <div class="card card-purple full-width">
+                        <div class="card-header">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <h3>Painel de Controle</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="control-panel-header">
+                                <div class="points-info">
+                                    <i class="fas fa-chart-line"></i>
+                                    <span>Painel de Controle Principal - ROKUZEN</span>
+                                </div>
+                                <div class="panel-actions">
+                                    <button class="btn btn-primary" id="add-therapist-btn">
+                                        <i class="fas fa-user-plus"></i>
+                                        Adicionar Terapeuta
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="dashboard-overview">
+                                <div class="overview-stats">
+                                    <div class="stat-item">
+                                        <div class="stat-number" id="total-therapists">0</div>
+                                        <div class="stat-label">Total de Terapeutas</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-number" id="active-therapists">0</div>
+                                        <div class="stat-label">Terapeutas Ativos</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-number" id="total-appointments">0</div>
+                                        <div class="stat-label">Atendimentos Hoje</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-number" id="total-clients-today">0</div>
+                                        <div class="stat-label">Clientes Atendidos</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card card-light-half">
+                        <div class="card-header">
+                            <i class="fas fa-ranking-star"></i>
+                            <h3>Ranking de Terapeutas</h3>
+                        </div>
+                        <div class="card-content">
+                            <table class="mini-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>Sessões</th>
+                                        <th>Próximo Horário</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="therapist-points-tbody">
+                                    <tr>
+                                        <td colspan="3" class="empty-state">Carregando dados...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card card-light-half">
+                        <div class="card-header">
+                            <i class="fas fa-bell"></i>
+                            <h3>Agenda de Hoje</h3>
+                        </div>
+                        <div class="card-content">
+                            <ul id="today-appointments-list" class="simple-list">
+                                <li class="empty-state">Nenhum atendimento agendado para hoje.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="therapistModal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3 id="therapist-modal-title">Adicionar Terapeuta</h3>
+                <button class="modal-close" onclick="closeModal('therapistModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="therapist-form">
+                    <input type="hidden" id="therapist-id" name="therapistId" value="">
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="therapist-name">Nome Completo *</label>
+                            <input type="text" id="therapist-name" name="name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="therapist-specialty">Especialidade *</label>
+                            <input type="text" id="therapist-specialty" name="specialty" required placeholder="Ex: Massoterapeuta, Reflexologista">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="therapist-phone">Telefone *</label>
+                            <input type="tel" id="therapist-phone" name="phone" required maxlength="15" placeholder="(11) 99999-9999">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="therapist-email">Email</label>
+                            <input type="email" id="therapist-email" name="email">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="therapist-cpf">CPF</label>
+                            <input type="text" id="therapist-cpf" name="cpf" maxlength="14" placeholder="000.000.000-00">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="therapist-birth-date">Data de Nascimento</label>
+                            <input type="date" id="therapist-birth-date" name="birthDate">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="therapist-status">Status *</label>
+                            <select id="therapist-status" name="status" required>
+                                <option value="">Selecione o status</option>
+                                <option value="ativo">Ativo</option>
+                                <option value="inativo">Inativo</option>
+                                <option value="férias">Férias</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="therapist-hire-date">Data de Contratação</label>
+                            <input type="date" id="therapist-hire-date" name="hireDate">
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label for="therapist-address">Endereço</label>
+                            <input type="text" id="therapist-address" name="address" placeholder="Rua, número, bairro, cidade">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label for="therapist-notes">Observações</label>
+                        <textarea id="therapist-notes" name="notes" rows="3" placeholder="Observações sobre o terapeuta..."></textarea>
+                    </div>
+                    
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('therapistModal')">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i>
+                            Salvar Terapeuta
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="script/api-client.js"></script>
+    <script src="script/painel-script.js"></script>
+</body>
+</html>
+

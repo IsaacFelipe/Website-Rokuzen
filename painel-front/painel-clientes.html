@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROKUZEN - Painel de Clientes</title>
+    <link rel="stylesheet" href="painel-styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body data-page="clientes">
+    <div class="dashboard-container">
+        <div id="dashboard-loader" class="dashboard-loader">
+            <div class="loader-spinner"></div>
+            <span>Carregando painel...</span>
+        </div>
+
+        <header class="header">
+            <div class="header-left">
+                <div class="logo">
+                    <img src="assets/img/logo-rokuzen-pequena.png" alt="ROKUZEN" class="logo-image">
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="user-profile">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+            </div>
+        </header>
+
+        <nav class="sidebar">
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="painel-painel.html" data-section="painel">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Painel</span>
+                        <i class="fas fa-chevron-right arrow"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-atendimento.html" data-section="atendimento">
+                        <i class="fas fa-calendar-check"></i>
+                        <span>Atendimento</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-clientes.html" data-section="clientes">
+                        <i class="fas fa-users"></i>
+                        <span>Clientes</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-colaboradores.html" data-section="colaboradores">
+                        <i class="fas fa-user-tie"></i>
+                        <span>Colaboradores</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-entradas-saidas.html" data-section="entradas-saidas">
+                        <i class="fas fa-exchange-alt"></i>
+                        <span>Entradas/Saídas</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-gift-card.html" data-section="gift-card">
+                        <i class="fas fa-gift"></i>
+                        <span>Gift Card</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-biblioteca.html" data-section="biblioteca">
+                        <i class="fas fa-book"></i>
+                        <span>Biblioteca</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-parceiros.html" data-section="parceiros">
+                        <i class="fas fa-handshake"></i>
+                        <span>Parceiros</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-escala-compartilhada.html" data-section="escala-compartilhada">
+                        <i class="fas fa-clock"></i>
+                        <span>Escala Compartilhada</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-procedimentos.html" data-section="procedimentos">
+                        <i class="fas fa-list-alt"></i>
+                        <span>Procedimentos</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-auditoria.html" data-section="auditoria">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Auditoria</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <section id="clientes" class="content-section active">
+                <div class="section-header">
+                    <h2>Clientes</h2>
+                    <p>Gestão de clientes e histórico</p>
+                </div>
+                
+                <div class="clients-controls">
+                    <div class="search-filters">
+                        <div class="search-box">
+                            <input type="text" id="client-search" placeholder="Buscar cliente por nome, telefone ou email...">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <select id="status-filter" class="filter-select">
+                            <option value="">Todos os status</option>
+                            <option value="ativo">Ativo</option>
+                            <option value="inativo">Inativo</option>
+                            <option value="bloqueado">Bloqueado</option>
+                        </select>
+                    </div>
+                    <div class="client-actions">
+                        <button class="btn btn-primary" id="add-client">
+                            <i class="fas fa-plus"></i>
+                            Novo Cliente
+                        </button>
+                        <button class="btn btn-secondary" id="export-clients">
+                            <i class="fas fa-download"></i>
+                            Exportar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="clients-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-number" id="total-clients">0</div>
+                            <div class="stat-label">Total de Clientes</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-number" id="active-clients">0</div>
+                            <div class="stat-label">Clientes Ativos</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-number" id="new-this-month">0</div>
+                            <div class="stat-label">Novos Este Mês</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="clients-table">
+                        <thead>
+                            <tr>
+                                <th>Cliente</th>
+                                <th>Contato</th>
+                                <th>Última Visita</th>
+                                <th>Total Sessões</th>
+                                <th>Terapeuta Favorito</th>
+                                <th>Sessão Favorita</th>
+                                <th>Status</th>
+                                <th>Valor Total</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clients-tbody">
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="viewClientModal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3>Detalhes do Cliente</h3>
+                <button class="modal-close" onclick="closeModal('viewClientModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="client-profile">
+                    <div class="profile-header">
+                        <div class="profile-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="profile-info">
+                            <h4 id="view-client-name">-</h4>
+                            <p id="view-client-email">-</p>
+                            <span class="status-badge" id="view-client-status">-</span>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-tabs">
+                        <button class="tab-btn active" onclick="showClientTab('dados')">Dados Pessoais</button>
+                        <button class="tab-btn" onclick="showClientTab('historico')">Histórico</button>
+                        <button class="tab-btn" onclick="showClientTab('estatisticas')">Estatísticas</button>
+                    </div>
+                    
+                    <div class="tab-content">
+                        <div id="dados-tab" class="tab-pane active">
+                            <div class="form-grid">
+                                <div class="detail-row">
+                                    <label>Nome Completo:</label>
+                                    <span id="view-full-name">-</span>
+                                </div>
+                                <div class="detail-row">
+                                    <label>CPF:</label>
+                                    <span id="view-cpf">-</span>
+                                </div>
+                                <div class="detail-row">
+                                    <label>Data de Nascimento:</label>
+                                    <span id="view-birth-date">-</span>
+                                </div>
+                                <div class="detail-row">
+                                    <label>Telefone:</label>
+                                    <span id="view-phone">-</span>
+                                </div>
+                                <div class="detail-row">
+                                    <label>Email:</label>
+                                    <span id="view-email">-</span>
+                                </div>
+                                <div class="detail-row">
+                                    <label>Endereço:</label>
+                                    <span id="view-address">-</span>
+                                </div>
+                                <div class="detail-row">
+                                    <label>Data de Cadastro:</label>
+                                    <span id="view-registration-date">-</span>
+                                </div>
+                                <div class="detail-row">
+                                    <label>Observações:</label>
+                                    <span id="view-client-notes">-</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="historico-tab" class="tab-pane">
+                            <div class="appointments-history">
+                                <table class="history-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Data</th>
+                                            <th>Terapeuta</th>
+                                            <th>Sessão</th>
+                                            <th>Valor</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="client-history-tbody">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div id="estatisticas-tab" class="tab-pane">
+                            <div class="client-stats-grid">
+                                <div class="stat-item">
+                                    <div class="stat-value" id="view-total-sessions">0</div>
+                                    <div class="stat-label">Total de Sessões</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" id="view-total-spent">R$ 0,00</div>
+                                    <div class="stat-label">Valor Total Gasto</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" id="view-favorite-therapist">-</div>
+                                    <div class="stat-label">Terapeuta Favorito</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" id="view-favorite-session">-</div>
+                                    <div class="stat-label">Sessão Favorita</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" id="view-last-visit">-</div>
+                                    <div class="stat-label">Última Visita</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" id="view-average-session">R$ 0,00</div>
+                                    <div class="stat-label">Valor Médio por Sessão</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('viewClientModal')">
+                    Fechar
+                </button>
+                <button type="button" class="btn btn-primary" onclick="editClientFromView()">
+                    <i class="fas fa-edit"></i>
+                    Editar Cliente
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="editClientModal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3 id="edit-client-modal-title">Editar Cliente</h3>
+                <button class="modal-close" onclick="closeModal('editClientModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="client-form">
+                    <input type="hidden" id="client-id" value="">
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="client-full-name">Nome Completo *</label>
+                            <input type="text" id="client-full-name" name="fullName" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="client-cpf">CPF</label>
+                            <input type="text" id="client-cpf" name="cpf" maxlength="14" placeholder="000.000.000-00">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="client-email-edit">Email</label>
+                            <input type="email" id="client-email-edit" name="email" placeholder="cliente@email.com">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="client-phone-edit">Telefone *</label>
+                            <input type="tel" id="client-phone-edit" name="phone" required placeholder="(11) 99999-9999">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="client-birth-date">Data de Nascimento</label>
+                            <input type="date" id="client-birth-date" name="birthDate">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Status atual</label>
+                            <div id="client-status-display" class="client-status-display">Ativo</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="client-address">Endereço</label>
+                            <input type="text" id="client-address" name="address" placeholder="Rua, número, bairro, cidade">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="client-notes-edit">Observações</label>
+                            <textarea id="client-notes-edit" name="notes" rows="3" placeholder="Observações sobre o cliente..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('editClientModal')">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i>
+                            Salvar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="script/api-client.js"></script>
+    <script src="script/painel-script.js"></script>
+</body>
+</html>
+

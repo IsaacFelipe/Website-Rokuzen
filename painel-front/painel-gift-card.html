@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROKUZEN - Gift Cards</title>
+    <link rel="stylesheet" href="painel-styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body data-page="gift-card">
+    <div class="dashboard-container">
+        <div id="dashboard-loader" class="dashboard-loader">
+            <div class="loader-spinner"></div>
+            <span>Carregando painel...</span>
+        </div>
+
+        <header class="header">
+            <div class="header-left">
+                <div class="logo">
+                    <img src="assets/img/logo-rokuzen-pequena.png" alt="ROKUZEN" class="logo-image">
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="user-profile">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+            </div>
+        </header>
+
+        <nav class="sidebar">
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="painel-painel.html" data-section="painel">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Painel</span>
+                        <i class="fas fa-chevron-right arrow"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-atendimento.html" data-section="atendimento">
+                        <i class="fas fa-calendar-check"></i>
+                        <span>Atendimento</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-clientes.html" data-section="clientes">
+                        <i class="fas fa-users"></i>
+                        <span>Clientes</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-colaboradores.html" data-section="colaboradores">
+                        <i class="fas fa-user-tie"></i>
+                        <span>Colaboradores</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-entradas-saidas.html" data-section="entradas-saidas">
+                        <i class="fas fa-exchange-alt"></i>
+                        <span>Entradas/Saídas</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-gift-card.html" data-section="gift-card">
+                        <i class="fas fa-gift"></i>
+                        <span>Gift Card</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-biblioteca.html" data-section="biblioteca">
+                        <i class="fas fa-book"></i>
+                        <span>Biblioteca</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-parceiros.html" data-section="parceiros">
+                        <i class="fas fa-handshake"></i>
+                        <span>Parceiros</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-escala-compartilhada.html" data-section="escala-compartilhada">
+                        <i class="fas fa-clock"></i>
+                        <span>Escala Compartilhada</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-procedimentos.html" data-section="procedimentos">
+                        <i class="fas fa-list-alt"></i>
+                        <span>Procedimentos</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-auditoria.html" data-section="auditoria">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Auditoria</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <section id="gift-card" class="content-section active">
+                <div class="section-header">
+                    <h2>Gift Card</h2>
+                    <p>Gestão de cartões presente</p>
+                </div>
+                <div class="section-actions">
+                    <div class="filters">
+                        <div class="filter-group">
+                            <label for="gift-status-filter">Status</label>
+                            <select id="gift-status-filter">
+                                <option value="">Todos</option>
+                                <option value="ativo">Ativo</option>
+                                <option value="utilizado">Utilizado</option>
+                                <option value="expirado">Expirado</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="gift-search">Buscar</label>
+                            <input type="text" id="gift-search" placeholder="Nome ou código do gift card">
+                        </div>
+                    </div>
+                    <div class="actions">
+                        <button class="btn btn-secondary" id="gift-export">
+                            <i class="fas fa-download"></i>
+                            Exportar Relatório
+                        </button>
+                        <button class="btn btn-primary" id="gift-add">
+                            <i class="fas fa-gift"></i>
+                            Criar Gift Card
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gift-summary">
+                    <div class="gift-card-widget ativo">
+                        <span class="label">Saldo Total ativo</span>
+                        <strong id="gift-total-active">R$ 0,00</strong>
+                        <small id="gift-count-active">0 cartões</small>
+                    </div>
+                    <div class="gift-card-widget utilizado">
+                        <span class="label">Utilizados no mês</span>
+                        <strong id="gift-total-redeemed">R$ 0,00</strong>
+                        <small id="gift-count-redeemed">0 resgates</small>
+                    </div>
+                    <div class="gift-card-widget expirando">
+                        <span class="label">Expiram em breve</span>
+                        <strong id="gift-expiring-count">0</strong>
+                        <small id="gift-expiring-detail">Nenhum gift card próximo do vencimento</small>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Cliente</th>
+                                <th>Valor</th>
+                                <th>Saldo</th>
+                                <th>Emitido em</th>
+                                <th>Expira em</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="gift-cards-tbody">
+                            <tr>
+                                <td colspan="8" class="empty-state">Nenhum gift card cadastrado ainda.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="giftCardModal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3 id="gift-modal-title">Criar Gift Card</h3>
+                <button class="modal-close" onclick="closeModal('giftCardModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="gift-card-form">
+                    <input type="hidden" id="gift-card-id">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="gift-code">Código *</label>
+                            <input type="text" id="gift-code" name="code" required placeholder="Ex.: ROKU-2025-001">
+                        </div>
+                        <div class="form-group">
+                            <label for="gift-client-name">Cliente *</label>
+                            <input type="text" id="gift-client-name" name="clientName" required placeholder="Nome do cliente">
+                        </div>
+                        <div class="form-group">
+                            <label for="gift-phone">Telefone</label>
+                            <input type="tel" id="gift-phone" name="phone" placeholder="(11) 99999-9999">
+                        </div>
+                        <div class="form-group">
+                            <label for="gift-email">Email</label>
+                            <input type="email" id="gift-email" name="email" placeholder="cliente@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="gift-value">Valor (R$) *</label>
+                            <input type="number" step="0.01" min="0" id="gift-value" name="value" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="gift-balance">Saldo (R$)</label>
+                            <input type="number" step="0.01" min="0" id="gift-balance" name="balance">
+                        </div>
+                        <div class="form-group">
+                            <label for="gift-issued-at">Data emissão *</label>
+                            <input type="date" id="gift-issued-at" name="issuedAt" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="gift-expiration">Data expiração *</label>
+                            <input type="date" id="gift-expiration" name="expiration" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="gift-status">Status *</label>
+                            <select id="gift-status" name="status" required>
+                                <option value="ativo">Ativo</option>
+                                <option value="utilizado">Utilizado</option>
+                                <option value="expirado">Expirado</option>
+                                <option value="cancelado">Cancelado</option>
+                            </select>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="gift-notes">Observações</label>
+                            <textarea id="gift-notes" name="notes" rows="2" placeholder="Informações adicionais, condições especiais..."></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('giftCardModal')">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i>
+                            Salvar gift card
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="script/api-client.js"></script>
+    <script src="script/painel-script.js"></script>
+</body>
+</html>
+

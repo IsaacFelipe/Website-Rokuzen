@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROKUZEN - Entradas e Saídas</title>
+    <link rel="stylesheet" href="painel-styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body data-page="entradas-saidas">
+    <div class="dashboard-container">
+        <div id="dashboard-loader" class="dashboard-loader">
+            <div class="loader-spinner"></div>
+            <span>Carregando painel...</span>
+        </div>
+
+        <header class="header">
+            <div class="header-left">
+                <div class="logo">
+                    <img src="assets/img/logo-rokuzen-pequena.png" alt="ROKUZEN" class="logo-image">
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="user-profile">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+            </div>
+        </header>
+
+        <nav class="sidebar">
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="painel-painel.html" data-section="painel">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Painel</span>
+                        <i class="fas fa-chevron-right arrow"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-atendimento.html" data-section="atendimento">
+                        <i class="fas fa-calendar-check"></i>
+                        <span>Atendimento</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-clientes.html" data-section="clientes">
+                        <i class="fas fa-users"></i>
+                        <span>Clientes</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-colaboradores.html" data-section="colaboradores">
+                        <i class="fas fa-user-tie"></i>
+                        <span>Colaboradores</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-entradas-saidas.html" data-section="entradas-saidas">
+                        <i class="fas fa-exchange-alt"></i>
+                        <span>Entradas/Saídas</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-gift-card.html" data-section="gift-card">
+                        <i class="fas fa-gift"></i>
+                        <span>Gift Card</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-biblioteca.html" data-section="biblioteca">
+                        <i class="fas fa-book"></i>
+                        <span>Biblioteca</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-parceiros.html" data-section="parceiros">
+                        <i class="fas fa-handshake"></i>
+                        <span>Parceiros</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-escala-compartilhada.html" data-section="escala-compartilhada">
+                        <i class="fas fa-clock"></i>
+                        <span>Escala Compartilhada</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-procedimentos.html" data-section="procedimentos">
+                        <i class="fas fa-list-alt"></i>
+                        <span>Procedimentos</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-auditoria.html" data-section="auditoria">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Auditoria</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <section id="entradas-saidas" class="content-section active">
+                <div class="section-header">
+                    <h2>Entradas/Saídas</h2>
+                    <p>Controle financeiro e movimentações</p>
+                </div>
+
+                <div class="section-actions">
+                    <div class="filters">
+                        <div class="filter-group">
+                            <label for="financial-period">Período</label>
+                            <select id="financial-period">
+                                <option value="30">Últimos 30 dias</option>
+                                <option value="7">Últimos 7 dias</option>
+                                <option value="90">Últimos 90 dias</option>
+                                <option value="365">Último ano</option>
+                                <option value="custom">Personalizado</option>
+                            </select>
+                        </div>
+                        <div class="filter-group" id="financial-custom-range" style="display: none;">
+                            <label for="financial-start">De</label>
+                            <input type="date" id="financial-start">
+                            <label for="financial-end">Até</label>
+                            <input type="date" id="financial-end">
+                            <button class="btn btn-secondary" id="financial-apply-range"><i class="fas fa-filter"></i> Aplicar</button>
+                        </div>
+                        <div class="filter-group">
+                            <label for="financial-type">Tipo</label>
+                            <select id="financial-type">
+                                <option value="">Todos</option>
+                                <option value="entrada">Entrada</option>
+                                <option value="saida">Saída</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="financial-method">Meio</label>
+                            <select id="financial-method">
+                                <option value="">Todos</option>
+                                <option value="dinheiro">Dinheiro</option>
+                                <option value="cartao">Cartão</option>
+                                <option value="pix">PIX</option>
+                                <option value="boleto">Boleto</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="actions">
+                        <button class="btn btn-secondary" id="financial-export">
+                            <i class="fas fa-file-export"></i>
+                            Exportar
+                        </button>
+                        <button class="btn btn-primary" id="financial-add">
+                            <i class="fas fa-plus-circle"></i>
+                            Registrar Movimento
+                        </button>
+                    </div>
+                </div>
+
+                <div class="insight-cards">
+                    <div class="insight-card entrada">
+                        <span class="label">Entradas</span>
+                        <strong id="financial-total-in">R$ 0,00</strong>
+                        <small id="financial-total-in-count">0 transações</small>
+                    </div>
+                    <div class="insight-card saida">
+                        <span class="label">Saídas</span>
+                        <strong id="financial-total-out">R$ 0,00</strong>
+                        <small id="financial-total-out-count">0 transações</small>
+                    </div>
+                    <div class="insight-card saldo">
+                        <span class="label">Saldo do período</span>
+                        <strong id="financial-balance">R$ 0,00</strong>
+                        <small id="financial-balance-trend">Estável</small>
+                    </div>
+                    <div class="insight-card abrir">
+                        <span class="label">Próximos vencimentos</span>
+                        <strong id="financial-next-due">0</strong>
+                        <small id="financial-next-due-detail">Nenhum lançamento pendente</small>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Descrição</th>
+                                <th>Categoria</th>
+                                <th>Meio</th>
+                                <th>Responsável</th>
+                                <th>Valor</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="financial-tbody">
+                            <tr>
+                                <td colspan="8" class="empty-state">Nenhum lançamento cadastrado ainda.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="financialModal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3 id="financial-modal-title">Registrar Movimento</h3>
+                <button class="modal-close" onclick="closeModal('financialModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="financial-form">
+                    <input type="hidden" id="financial-id">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="financial-type-input">Tipo *</label>
+                            <select id="financial-type-input" name="type" required>
+                                <option value="">Selecione</option>
+                                <option value="entrada">Entrada</option>
+                                <option value="saida">Saída</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="financial-date">Data *</label>
+                            <input type="date" id="financial-date" name="date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="financial-category">Categoria *</label>
+                            <input type="text" id="financial-category" name="category" placeholder="Ex.: Sessões, Produtos, Comissão" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="financial-method-input">Forma de pagamento *</label>
+                            <select id="financial-method-input" name="method" required>
+                                <option value="">Selecione</option>
+                                <option value="dinheiro">Dinheiro</option>
+                                <option value="cartao">Cartão</option>
+                                <option value="pix">PIX</option>
+                                <option value="boleto">Boleto</option>
+                                <option value="transferencia">Transferência</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="financial-value">Valor (R$) *</label>
+                            <input type="number" step="0.01" min="0" id="financial-value" name="value" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="financial-responsible">Responsável</label>
+                            <input type="text" id="financial-responsible" name="responsible" placeholder="Quem registrou a movimentação">
+                        </div>
+                        <div class="form-group">
+                            <label for="financial-status">Status *</label>
+                            <select id="financial-status" name="status" required>
+                                <option value="quitado">Quitado</option>
+                                <option value="pendente">Pendente</option>
+                                <option value="agendado">Agendado</option>
+                            </select>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="financial-description">Descrição *</label>
+                            <textarea id="financial-description" name="description" rows="2" placeholder="Detalhes da movimentação" required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('financialModal')">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i>
+                            Salvar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="script/api-client.js"></script>
+    <script src="script/painel-script.js"></script>
+</body>
+</html>
+

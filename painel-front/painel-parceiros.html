@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROKUZEN - Parceiros</title>
+    <link rel="stylesheet" href="painel-styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body data-page="parceiros">
+    <div class="dashboard-container">
+        <div id="dashboard-loader" class="dashboard-loader">
+            <div class="loader-spinner"></div>
+            <span>Carregando painel...</span>
+        </div>
+
+        <header class="header">
+            <div class="header-left">
+                <div class="logo">
+                    <img src="assets/img/logo-rokuzen-pequena.png" alt="ROKUZEN" class="logo-image">
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="user-profile">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+            </div>
+        </header>
+
+        <nav class="sidebar">
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="painel-painel.html" data-section="painel">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Painel</span>
+                        <i class="fas fa-chevron-right arrow"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-atendimento.html" data-section="atendimento">
+                        <i class="fas fa-calendar-check"></i>
+                        <span>Atendimento</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-clientes.html" data-section="clientes">
+                        <i class="fas fa-users"></i>
+                        <span>Clientes</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-colaboradores.html" data-section="colaboradores">
+                        <i class="fas fa-user-tie"></i>
+                        <span>Colaboradores</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-entradas-saidas.html" data-section="entradas-saidas">
+                        <i class="fas fa-exchange-alt"></i>
+                        <span>Entradas/Saídas</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-gift-card.html" data-section="gift-card">
+                        <i class="fas fa-gift"></i>
+                        <span>Gift Card</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-biblioteca.html" data-section="biblioteca">
+                        <i class="fas fa-book"></i>
+                        <span>Biblioteca</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-parceiros.html" data-section="parceiros">
+                        <i class="fas fa-handshake"></i>
+                        <span>Parceiros</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-escala-compartilhada.html" data-section="escala-compartilhada">
+                        <i class="fas fa-clock"></i>
+                        <span>Escala Compartilhada</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-procedimentos.html" data-section="procedimentos">
+                        <i class="fas fa-list-alt"></i>
+                        <span>Procedimentos</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="painel-auditoria.html" data-section="auditoria">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Auditoria</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <section id="parceiros" class="content-section active">
+                <div class="section-header">
+                    <h2>Parceiros</h2>
+                    <p>Rede de parceiros e colaboradores externos</p>
+                </div>
+                <div class="section-actions">
+                    <div class="filters">
+                        <div class="filter-group">
+                            <label for="partners-search">Buscar parceiro</label>
+                            <input type="text" id="partners-search" placeholder="Nome, cidade ou tipo de parceria">
+                        </div>
+                        <div class="filter-group">
+                            <label for="partners-type">Categoria</label>
+                            <select id="partners-type">
+                                <option value="">Todas</option>
+                                <option value="academia">Academia</option>
+                                <option value="empresa">Empresa</option>
+                                <option value="clinica">Clínica</option>
+                                <option value="fornecedor">Fornecedor</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="actions">
+                        <button class="btn btn-secondary" id="partners-export">
+                            <i class="fas fa-file-download"></i>
+                            Exportar contatos
+                        </button>
+                        <button class="btn btn-primary" id="partner-add">
+                            <i class="fas fa-user-plus"></i>
+                            Novo parceiro
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Parceiro</th>
+                                <th>Categoria</th>
+                                <th>Contato</th>
+                                <th>Localidade</th>
+                                <th>Benefício</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="partners-tbody">
+                            <tr>
+                                <td colspan="7" class="empty-state">Nenhum parceiro cadastrado ainda.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="partnerModal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3 id="partner-modal-title">Novo parceiro</h3>
+                <button class="modal-close" onclick="closeModal('partnerModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="partner-form">
+                    <input type="hidden" id="partner-id">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="partner-name">Nome *</label>
+                            <input type="text" id="partner-name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="partner-category">Categoria *</label>
+                            <select id="partner-category" name="category" required>
+                                <option value="academia">Academia</option>
+                                <option value="empresa">Empresa</option>
+                                <option value="clinica">Clínica</option>
+                                <option value="fornecedor">Fornecedor</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="partner-contact">Contato principal *</label>
+                            <input type="text" id="partner-contact" name="contact" required placeholder="Nome do contato responsável">
+                        </div>
+                        <div class="form-group">
+                            <label for="partner-phone">Telefone</label>
+                            <input type="tel" id="partner-phone" name="phone" placeholder="(11) 99999-9999">
+                        </div>
+                        <div class="form-group">
+                            <label for="partner-email">Email</label>
+                            <input type="email" id="partner-email" name="email" placeholder="contato@empresa.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="partner-city">Cidade/UF</label>
+                            <input type="text" id="partner-city" name="city" placeholder="São Paulo/SP">
+                        </div>
+                        <div class="form-group">
+                            <label for="partner-benefit">Benefício oferecido *</label>
+                            <input type="text" id="partner-benefit" name="benefit" required placeholder="Ex.: 10% de desconto em sessões">
+                        </div>
+                        <div class="form-group">
+                            <label for="partner-status">Status *</label>
+                            <select id="partner-status" name="status" required>
+                                <option value="ativo">Ativo</option>
+                                <option value="negociacao">Em negociação</option>
+                                <option value="pausado">Pausado</option>
+                            </select>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="partner-notes">Observações</label>
+                            <textarea id="partner-notes" name="notes" rows="3" placeholder="Metas, contrapartidas e próximas ações"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('partnerModal')">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i>
+                            Salvar parceiro
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="script/api-client.js"></script>
+    <script src="script/painel-script.js"></script>
+</body>
+</html>
+
