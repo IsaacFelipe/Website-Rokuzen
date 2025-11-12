@@ -1,10 +1,9 @@
-// Arquivo: agendamento.js (CORRIGIDO com regex flexível)
+// Arquivo: agendamento.js (ATUALIZADO PARA PAGAMENTO)
 
 // --- 0. (Função decodeJWT - permanece a mesma) ---
 document.addEventListener('DOMContentLoaded', function() {
 
     function decodeJWT(token) {
-        // ... (seu código decodeJWT) ...
         try {
             const base64Url = token.split('.')[1];
             const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -29,7 +28,8 @@ document.addEventListener('DOMContentLoaded', function() {
         duracao: null,
         clienteId: null,
         guestNome: null,
-        guestEmail: null
+        guestEmail: null,
+        tipoPagamento: null // <-- NOVO CAMPO
     };
     
     let mapeamentoHorarios = new Map();
@@ -43,11 +43,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const secaoHorariosContainer = document.querySelector('#secao-data-horario .row.g-2');
     const secaoProfissionais = document.getElementById('secao-profissionais');
     const secaoProfissionaisContainer = document.querySelector('#secao-profissionais .row.g-4'); 
+    const secaoPagamento = document.getElementById('secao-pagamento'); // <-- NOVO SELETOR
     const seletorData = document.getElementById('data-agendamento'); 
     const secaoConfirmar = document.getElementById('secao-confirmar');
     const btnAgendar = document.getElementById('btn-agendar'); 
 
-    // --- 2. VERIFICA O LOGIN E DECIDE O FLUXO (Correto) ---
+    // --- 2. VERIFICA O LOGIN E DECIDE O FLUXO ---
     const token = localStorage.getItem('token');
     if (token) {
         const user = decodeJWT(token);
@@ -63,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
         secaoUnidades.classList.add('oculto'); 
     }
 
-    // --- 4. LÓGICA DO FORMULÁRIO DE CONVIDADO (Correto) ---
+    // --- 4. LÓGICA DO FORMULÁRIO DE CONVIDADO ---
     guestForm.addEventListener('submit', function(evento) {
         evento.preventDefault();
         const nome = document.getElementById('guestNome').value;
@@ -80,9 +81,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // --- 5. LÓGICA DE SELEÇÃO DE DATA (Correto) ---
+    // --- 5. LÓGICA DE SELEÇÃO DE DATA ---
     seletorData.addEventListener('change', async function() {
-        // ... (Esta função está 100% correta, não mude nada) ...
         const dataSelecionada = seletorData.value; 
         const { unidadeId, servicoId } = agendamentoEmProgresso;
 
@@ -102,7 +102,8 @@ document.addEventListener('DOMContentLoaded', function() {
         secaoHorariosContainer.innerHTML = '<p class="text-secondary">Buscando horários...</p>';
         secaoProfissionaisContainer.innerHTML = ''; 
         secaoProfissionais.classList.add('oculto'); 
-        secaoConfirmar.classList.add('oculto'); 
+        secaoPagamento.classList.add('oculto'); // Esconde pagamento ao trocar de data
+        secaoConfirmar.classList.add('oculto'); // Esconde botão ao trocar de data
 
         try {
             const url = `http://localhost:3001/api/horarios-disponiveis?data=${dataSelecionada}&unidade_id=${unidadeId}&servico_id=${servicoId}`;
@@ -157,7 +158,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // --- 6. LÓGICA PARA SELEÇÃO INTERATIVA (MUDANÇA AQUI) ---
+    // --- 6. LÓGICA PARA SELEÇÃO INTERATIVA (ATUALIZADA) ---
     function gerenciarSelecao(seletor) {
         const elementos = document.querySelectorAll(seletor);
 
@@ -175,7 +176,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 const idSelecionado = this.dataset.id; 
 
                 if (seletor === '.card-unidade') {
-                    // ... (lógica da unidade - sem mudança) ...
                     agendamentoEmProgresso.unidadeId = idSelecionado;
                     secaoServicos.classList.remove('oculto');
                     secaoServicos.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -184,11 +184,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     agendamentoEmProgresso.servicoId = idSelecionado;
                     
                     const texto = this.querySelector('.text-end').textContent.trim(); 
-                    
-                    // --- MUDANÇA AQUI ---
-                    // Regex mais flexível (ignora múltiplos espaços)
                     const regex = /(\d+)\s*min\s*-\s*R\$\s*([\d,]+)/;
-                    
                     const match = texto.match(regex);
                     
                     if (match) {
@@ -202,10 +198,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     secaoDataHorario.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 
                 } else if (seletor === '.btn-horario') {
-                    // ... (lógica do horário - sem mudança) ...
                     agendamentoEmProgresso.horario = this.textContent; 
+                    
                     const idsDisponiveis = mapeamentoHorarios.get(agendamentoEmProgresso.horario);
                     const todasColunasTerapeutas = document.querySelectorAll('#secao-profissionais .col-12');
+
                     todasColunasTerapeutas.forEach(coluna => {
                         const card = coluna.querySelector('.card-profissional');
                         const cardId = card ? parseInt(card.dataset.id) : null;
@@ -219,6 +216,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 } else if (seletor === '.card-profissional') {
                     agendamentoEmProgresso.colaboradorId = this.dataset.id;
+                
+                } else if (seletor === '.card-pagamento') { // <-- NOVO ELSE IF
+                    agendamentoEmProgresso.tipoPagamento = idSelecionado; // Salva 1 ou 2
                 }
                 
                 verificarAgendamentoCompleto();
@@ -226,17 +226,29 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // --- 7. Função verificarAgendamentoCompleto (Correto) ---
+    // --- 7. Função verificarAgendamentoCompleto (ATUALIZADA) ---
     function verificarAgendamentoCompleto() {
-        // ... (Esta função está 100% correta, não mude nada) ...
         const { unidadeId, servicoId, data, horario } = agendamentoEmProgresso;
         const isAutenticado = agendamentoEmProgresso.clienteId || agendamentoEmProgresso.guestNome;
+        
+        // Seleciona os cartões ativos
+        const profissionalAtivo = document.querySelector('.card-profissional.ativo');
+        const pagamentoAtivo = document.querySelector('.card-pagamento.ativo'); // <-- NOVO
+
+        // 1. Mostra Profissionais (quando horário é clicado)
         if (data && horario && isAutenticado) {
             secaoProfissionais.classList.remove('oculto');
             secaoProfissionais.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
-        const profissionalAtivo = document.querySelector('.card-profissional.ativo');
-        if (unidadeId && servicoId && data && horario && profissionalAtivo && isAutenticado) {
+
+        // 2. Mostra Pagamento (quando profissional é clicado)
+        if (profissionalAtivo) {
+            secaoPagamento.classList.remove('oculto');
+            secaoPagamento.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // 3. Mostra Botão Confirmar (quando pagamento é clicado)
+        if (unidadeId && servicoId && data && horario && profissionalAtivo && pagamentoAtivo && isAutenticado) {
             secaoConfirmar.classList.remove('oculto');
             secaoConfirmar.scrollIntoView({ behavior: 'smooth', block: 'start' });
         } else {
@@ -244,30 +256,36 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // --- 8. APLICA A LÓGICA DE SELEÇÃO (Correto) ---
+    // --- 8. APLICA A LÓGICA DE SELEÇÃO (ATUALIZADA) ---
     gerenciarSelecao('.card-unidade');
     gerenciarSelecao('.item-servico');
     gerenciarSelecao('.card-profissional');
+    gerenciarSelecao('.card-pagamento'); // <-- NOVO
 
-    // --- 9. LÓGICA DO BOTÃO FINAL DE AGENDAR (Correto) ---
+    // --- 9. LÓGICA DO BOTÃO FINAL DE AGENDAR (ATUALIZADA) ---
     btnAgendar.addEventListener('click', async function() {
-        // ... (Esta função está 100% correta, não mude nada) ...
+        
         const isAutenticado = agendamentoEmProgresso.clienteId || agendamentoEmProgresso.guestNome;
         if (!isAutenticado) {
             alert("Você precisa estar logado ou preencher seus dados como convidado.");
             return;
         }
         
-        const profissionalAtivo = document.querySelector('.card-profissional.ativo');
-        agendamentoEmProgresso.colaboradorId = profissionalAtivo ? profissionalAtivo.dataset.id : null;
+        // Pega os IDs dos cartões ativos no momento do clique
+        agendamentoEmProgresso.colaboradorId = document.querySelector('.card-profissional.ativo')?.dataset.id;
+        agendamentoEmProgresso.tipoPagamento = document.querySelector('.card-pagamento.ativo')?.dataset.id;
 
-        if (!agendamentoEmProgresso.unidadeId || !agendamentoEmProgresso.servicoId || !agendamentoEmProgresso.data || !agendamentoEmProgresso.horario || !agendamentoEmProgresso.colaboradorId) {
-            alert("Por favor, selecione todas as etapas: Unidade, Serviço, Data, Horário e Profissional.");
+        // Validação final agora inclui tipoPagamento
+        if (!agendamentoEmProgresso.unidadeId || 
+            !agendamentoEmProgresso.servicoId || 
+            !agendamentoEmProgresso.data || 
+            !agendamentoEmProgresso.horario || 
+            !agendamentoEmProgresso.colaboradorId ||
+            !agendamentoEmProgresso.tipoPagamento) { // <-- NOVO
+            alert("Por favor, selecione todas as etapas: Unidade, Serviço, Data, Horário, Profissional e Pagamento.");
             return;
         }
         
-        // --- LOG DE DEPURAÇÃO ---
-        // Abra o console (F12) e veja se o 'valor' está correto aqui
         console.log("Enviando para o back-end:", agendamentoEmProgresso);
 
         try {
@@ -276,7 +294,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(agendamentoEmProgresso), 
+                body: JSON.stringify(agendamentoEmProgresso), // Envia o objeto completo
             });
 
             const resultado = await response.json();

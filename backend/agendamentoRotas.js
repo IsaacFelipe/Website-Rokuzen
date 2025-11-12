@@ -1,11 +1,10 @@
-// Arquivo: agendamentoRotas.js (LÓGICA DE STATUS REMOVIDA)
+// Arquivo: agendamentoRotas.js (ATUALIZADO PARA PAGAMENTO)
 
 const express = require('express');
 const router = express.Router();
 const db = require('./db.js'); 
 
 function formatMySQLDateTime(date) {
-    // ... (Sua função formatMySQLDateTime - NÃO MUDA) ...
     const Y = date.getFullYear();
     const M = String(date.getMonth() + 1).padStart(2, '0');
     const D = String(date.getDate()).padStart(2, '0');
@@ -15,31 +14,35 @@ function formatMySQLDateTime(date) {
     return `${Y}-${M}-${D} ${H}:${Min}:${S}`;
 }
 
+// =================================================================
+// ROTA POST /api/agendar (ATUALIZADA)
+// =================================================================
 router.post('/api/agendar', (req, res) => {
-    // ... (Sua rota POST /api/agendar - NÃO MUDA) ...
+    
+    // 1. RECEBEMOS OS DADOS
     const { 
         unidadeId, servicoId, colaboradorId, valor, 
         clienteId, guestNome, guestEmail,
-        data, horario    
+        data, horario, tipoPagamento // <-- NOVO
     } = req.body;
 
-    // Validação correta
-    if (!unidadeId || !servicoId || !colaboradorId || !valor || !data || !horario) {
+    // 2. VALIDAÇÃO ATUALIZADA
+    // (Validação do clienteId foi movida para dentro da lógica)
+    if (!unidadeId || !servicoId || !colaboradorId || !valor || !data || !horario || !tipoPagamento) { // <-- NOVO
         return res.status(400).json({ success: false, message: 'Dados incompletos para o agendamento.' });
     }
-    if (!clienteId && (!guestNome || !guestEmail)) {
-         return res.status(400).json({ success: false, message: 'Usuário não identificado. Faça login ou preencha os dados de convidado.' });
-    }
-    
-    // Lógica de usuário (logado vs. convidado)
+
+    // 3. Lógica de usuário (logado vs. convidado)
     if (clienteId) {
+        // --- CENÁRIO 1: USUÁRIO LOGADO ---
         console.log(`Iniciando agendamento para cliente LOGADO: ${clienteId}`);
         salvarAgendamento(clienteId, req.body, res);
 
     } else if (guestNome && guestEmail) {
+        // --- CENÁRIO 2: USUÁRIO CONVIDADO ---
         console.log(`Iniciando agendamento para CONVIDADO: ${guestEmail}`);
-        const sqlCheckEmail = "SELECT cliente_id, tipo_cliente FROM clientes WHERE email_cliente = ?";
         
+        const sqlCheckEmail = "SELECT cliente_id, tipo_cliente FROM clientes WHERE email_cliente = ?";
         db.query(sqlCheckEmail, [guestEmail], (err, results) => {
             if (err) {
                 console.error(err);
@@ -53,6 +56,7 @@ router.post('/api/agendar', (req, res) => {
                 console.log(`Convidado ${guestEmail} já existia. Reutilizando ID: ${clienteExistente.cliente_id}`);
                 salvarAgendamento(clienteExistente.cliente_id, req.body, res);
             } else {
+                // Criar novo cliente convidado
                 const sqlInsertCliente = "INSERT INTO clientes (nome_cliente, email_cliente, tipo_cliente) VALUES (?, ?, ?)";
                 db.query(sqlInsertCliente, [guestNome, guestEmail, 2], (err, insertResult) => {
                     if (err) {
@@ -65,17 +69,22 @@ router.post('/api/agendar', (req, res) => {
                 });
             }
         });
-    } 
+
+    } else {
+        // Se não tiver nem clienteId nem dados de convidado
+         return res.status(400).json({ success: false, message: 'Usuário não identificado. Faça login ou preencha os dados de convidado.' });
+    }
 });
 
 
 /**
  * =================================================================
- * FUNÇÃO HELPER: salvarAgendamento (LÓGICA DE STATUS REMOVIDA)
+ * FUNÇÃO HELPER: salvarAgendamento (ATUALIZADA)
  * =================================================================
  */
 function salvarAgendamento(clienteId, body, res) {
-    const { unidadeId, servicoId, colaboradorId, valor, data, horario } = body;
+    // Pega todos os dados do body, incluindo o novo
+    const { unidadeId, servicoId, colaboradorId, valor, data, horario, tipoPagamento } = body; // <-- NOVO
 
     // --- ETAPA 1: Descobrir duração E os tipos de posto permitidos ---
     const sqlGetServico = "SELECT duracao_padrao, tipos_permitidos FROM servicos WHERE servico_id = ?";
@@ -93,9 +102,9 @@ function salvarAgendamento(clienteId, body, res) {
             return res.status(500).json({ success: false, message: `Serviço (ID ${servicoId}) não tem 'tipos_permitidos' configurado.` });
         }
 
-        const tiposArray = tiposPermitidosString.split(','); // Ex: ['maca', 'poltrona']
+        const tiposArray = tiposPermitidosString.split(','); 
 
-        // --- ETAPA 2: Encontrar um posto que corresponda (sem checar status) ---
+        // --- ETAPA 2: Encontrar um posto que corresponda ---
         const sqlFindPosto = `
             SELECT posto_id, tipo_posto FROM postos 
             WHERE 
@@ -103,7 +112,7 @@ function salvarAgendamento(clienteId, body, res) {
                 AND tipo_posto IN (?)
                 AND ativo = 1 
             LIMIT 1 
-        `; // <-- "status = 'Livre'" FOI REMOVIDO
+        `; 
 
         db.query(sqlFindPosto, [unidadeId, tiposArray], (err, postoResult) => {
             if (err) {
@@ -118,7 +127,7 @@ function salvarAgendamento(clienteId, body, res) {
             const postoId = postoResult[0].posto_id;
             console.log(`Posto ID ${postoId} (tipo ${postoResult[0].tipo_posto}) alocado para este agendamento.`);
 
-            // --- ETAPA 3: Salvar o agendamento (Etapa de Ocupar foi removida) ---
+            // --- ETAPA 3: Salvar o agendamento (Query atualizada) ---
             const horaFormatada = horario.replace('h', ':') + ':00';
             const inicio_atendimento = `${data} ${horaFormatada}`;
             const dataInicio = new Date(inicio_atendimento);
@@ -129,14 +138,16 @@ function salvarAgendamento(clienteId, body, res) {
                 INSERT INTO atendimentos (
                     unidade_id, cliente_id, servico_id, colaborador_id, posto_id,
                     duracao_real, valor_servico, foi_marcado_online, status,
-                    inicio_atendimento, fim_atendimento
+                    inicio_atendimento, fim_atendimento,
+                    tipo_pagamento -- <-- NOVO
                 ) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) -- <-- NOVO
             `;
             const valores = [
-                unidadeId, clienteId, servicoId, colaboradorId, postoId, // postoId foi adicionado
+                unidadeId, clienteId, servicoId, colaboradorId, postoId,
                 duracao, valor, 1, 'Agendado',
-                inicio_atendimento, fim_atendimento 
+                inicio_atendimento, fim_atendimento,
+                tipoPagamento // <-- NOVO
             ];
 
             db.query(sqlInsertAtendimento, valores, (err, result) => {
@@ -157,14 +168,17 @@ function salvarAgendamento(clienteId, body, res) {
 // ROTA GET /api/horarios-disponiveis (NÃO MUDA)
 // =================================================================
 router.get('/api/horarios-disponiveis', (req, res) => {
-    // ... (O resto do seu arquivo, incluindo 'calcularSlots', está perfeito e não precisa mudar) ...
+    
     const { data, unidade_id, servico_id } = req.query;
     if (!data || !unidade_id || !servico_id) {
         return res.status(400).json({ message: 'Dados incompletos (data, unidade, serviço).' });
     }
+
     const dataObj = new Date(data + 'T12:00:00'); 
     const dia_semana = dataObj.getDay();
+
     console.log(`\n--- BUSCA DE HORÁRIOS: U:${unidade_id}, S:${servico_id}, Dia:${dia_semana}`);
+
     db.query('SELECT duracao_padrao FROM servicos WHERE servico_id = ?', [servico_id], (err, servicoResult) => { 
         if (err || servicoResult.length === 0) {
             console.error("Erro ao buscar duracao_padrao:", err);
@@ -172,45 +186,54 @@ router.get('/api/horarios-disponiveis', (req, res) => {
         }
         const duracaoServico = servicoResult[0].duracao_padrao; 
         console.log(`--- Duração: ${duracaoServico} min.`);
+
         const queryJornadas = `
             SELECT E.colaborador_id, E.hora_inicio, E.hora_fim
             FROM escalas_semanais AS E
             JOIN colaboradores_servicos AS CS ON E.colaborador_id = CS.colaborador_id
             WHERE E.unidade_id = ? AND CS.servico_id = ? AND E.dia_semana = ?
         `;
+        
         db.query(queryJornadas, [unidade_id, servico_id, dia_semana], (err, jornadas) => {
             if (err) {
                 console.error("Erro ao buscar jornadas:", err);
                 return res.status(500).json({ message: 'Erro ao buscar jornadas.' });
             }
             console.log(`--- Jornadas encontradas: ${jornadas.length}`);
+            
             if (jornadas.length === 0) {
                 return res.json({ mapeamento: {}, terapeutas: [] }); 
             }
+
             const idsTerapeutas = [...new Set(jornadas.map(j => j.colaborador_id))]; 
             const queryOcupados = `
                 SELECT colaborador_id, inicio_atendimento, fim_atendimento 
                 FROM atendimentos
                 WHERE DATE(inicio_atendimento) = ? AND colaborador_id IN (?) AND status != 'Cancelado'
             `;
+
             db.query(queryOcupados, [data, idsTerapeutas], (err, ocupados) => {
                 if (err) {
                     console.error("Erro ao buscar agendamentos ocupados:", err);
                     return res.status(500).json({ message: 'Erro ao buscar agendamentos.' });
                 }
                 console.log(`--- Ocupados: ${ocupados.length}`);
+
                 const queryTerapeutas = `
                     SELECT colaborador_id, nome_colaborador, foto_url 
                     FROM colaboradores 
                     WHERE colaborador_id IN (?)
                 `;
+                
                 db.query(queryTerapeutas, [idsTerapeutas], (err, terapeutas) => {
                     if (err) {
                         console.error("Erro ao buscar nomes de terapeutas:", err);
                         return res.status(500).json({ message: 'Erro ao buscar nomes de terapeutas.' });
                     }
+
                     const mapeamento = calcularSlots(jornadas, ocupados, duracaoServico, data); 
                     console.log(`--- Mapeamento calculado. \n`);
+                    
                     res.json({
                         mapeamento: mapeamento,
                         terapeutas: terapeutas
@@ -221,54 +244,66 @@ router.get('/api/horarios-disponiveis', (req, res) => {
     });
 });
 
+
 /**
  * Função que gera os slots de horário (NÃO MUDA)
  */
 function calcularSlots(jornadas, ocupados, duracaoServico, data) { 
-    // ... (Esta função está 100% correta, não mude nada) ...
     const slotsMap = new Map(); 
     const dataAgendamento = data; 
+    
     const slotsOcupados = ocupados.map(o => ({
         id: o.colaborador_id,
         inicio: o.inicio_atendimento ? new Date(o.inicio_atendimento).getTime() : 0,
         fim: o.fim_atendimento ? new Date(o.fim_atendimento).getTime() : 0
     }));
+
     jornadas.forEach(jornada => {
         const { colaborador_id, hora_inicio, hora_fim } = jornada;
         const [inicioH, inicioM] = hora_inicio.split(':').map(Number);
         const [fimH, fimM] = hora_fim.split(':').map(Number);
+
         let dataSlotAtual = new Date(dataAgendamento + 'T00:00:00'); 
         dataSlotAtual.setHours(inicioH, inicioM, 0, 0); 
         let dataSlotFim = new Date(dataAgendamento + 'T00:00:00');
         dataSlotFim.setHours(fimH, fimM, 0, 0); 
+
         while (true) {
             let dataFimSlotAtual = new Date(dataSlotAtual.getTime() + duracaoServico * 60000); 
+
             if (dataFimSlotAtual.getTime() > dataSlotFim.getTime()) {
                 break;
             }
+
             let estaOcupado = false;
             const slotInicio = dataSlotAtual.getTime();
             const slotFim = dataFimSlotAtual.getTime();
+
             for (const ocupado of slotsOcupados) {
                 if (ocupado.id !== colaborador_id) continue; 
                 if (ocupado.inicio === 0) continue; 
+
                 if (slotInicio < ocupado.fim && slotFim > ocupado.inicio) {
                     estaOcupado = true;
                     break;
                 }
             }
+
             if (!estaOcupado) {
                 const hora = String(dataSlotAtual.getHours()).padStart(2, '0');
                 const min = String(dataSlotAtual.getMinutes()).padStart(2, '0');
                 const horaString = `${hora}h${min}`;
+                
                 if (!slotsMap.has(horaString)) {
                     slotsMap.set(horaString, new Set());
                 }
                 slotsMap.get(horaString).add(colaborador_id);
             }
+
             dataSlotAtual.setTime(dataSlotAtual.getTime() + 30 * 60000); 
         }
     });
+
     const objParaJson = {};
     slotsMap.forEach((idsSet, hora) => {
         objParaJson[hora] = Array.from(idsSet);
