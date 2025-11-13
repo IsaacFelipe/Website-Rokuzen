@@ -1,16 +1,15 @@
-// Arquivo: backend.js (ATUALIZADO PARA USAR AMBAS AS ROTAS)
-
 // 1. Importações das bibliotecas principais
 const express = require('express');
 const cors = require('cors');
 
 // Importa a conexão
-require('./db.js'); 
+require('./db.js');
 
 // Importa os arquivos de rotas
 const loginRotas = require('./loginRotas.js');
 const agendamentoRotas = require('./agendamentoRotas.js');
-const terapeutaRotas = require('./terapeutaRotas.js'); // <-- LINHA ADICIONADA
+const terapeutaRotas = require('./terapeutaRotas.js');
+const atendimentoRotas = require('./atendimentoRotas.js'); // <-- ADICIONE ESTA LINHA
 
 // 2. Configurações Iniciais do Servidor
 const app = express();
@@ -20,7 +19,8 @@ app.use(express.json());
 // 3. Gerenciamento de Rotas
 app.use('/', loginRotas);
 app.use('/', agendamentoRotas);
-app.use('/', terapeutaRotas); // <-- LINHA ADICIONADA
+app.use('/', terapeutaRotas);
+app.use('/', atendimentoRotas); // <-- ADICIONE ESTA LINHA
 
 // 4. Inicia o Servidor
 const PORT = 3001;
