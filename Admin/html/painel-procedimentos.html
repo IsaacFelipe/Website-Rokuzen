@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROKUZEN - Painel de Procedimentos</title>
+    <link rel="stylesheet" href="../css/painel-atendimento.css">
+    <link rel="stylesheet" href="../css/painel-procedimentos.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body data-page="procedimentos">
+    <div class="dashboard-container">
+        <div id="dashboard-loader" class="dashboard-loader">
+            <div class="loader-spinner"></div>
+            <span>Carregando...</span>
+        </div>
+
+        <header class="header">
+            <div class="header-left">
+                <div class="logo">
+                    <img src="../../frontend/img/logo.png" alt="ROKUZEN" class="logo-image">
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="user-profile">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+            </div>
+        </header>
+
+        <div class="dashboard-body">
+            <nav class="sidebar">
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="../../frontend/html/Admin.html">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="painel-atendimento.html">
+                            <i class="fas fa-calendar-check"></i>
+                            <span>Atendimentos</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="painel-clientes.html">
+                            <i class="fas fa-user-friends"></i>
+                            <span>Clientes</span>
+                        </a>
+                    </li>
+                    <li class="nav-item active">
+                        <a href="painel-procedimentos.html">
+                            <i class="fas fa-spa"></i>
+                            <span>Procedimentos</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="../../frontend/html/Terapeuta.html">
+                            <i class="fas fa-users-cog"></i>
+                            <span>Colaboradores</span>
+                        </a>
+                    </li>
+                </ul>
+                <div class="logout">
+                    <a href="#" id="logout-button">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Sair</span>
+                    </a>
+                </div>
+            </nav>
+
+            <main class="main-content">
+                <div class="content-header">
+                    <h1>Gerenciamento de Procedimentos</h1>
+                </div>
+
+                <div class="filters-and-actions cartao">
+                    <div class="filter-group">
+                        <label for="filter-unidade">Filtrar por Unidade:</label>
+                        <select id="filter-unidade" class="form-control">
+                            <option value="">Todas as Unidades</option>
+                        </select>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn btn-primario" id="btn-add-proc">
+                            <i class="fas fa-plus"></i> Novo Serviço
+                        </button>
+                        <button class="btn btn-secondary" id="btn-refresh">
+                            <i class="fas fa-sync-alt"></i> Atualizar
+                        </button>
+                    </div>
+                </div>
+
+                <div id="procedimentos-container" class="cards-grid">
+                </div>
+
+                <div id="no-data-message" class="no-data-message"
+                    style="display:none; text-align:center; margin-top:2rem;">
+                    Nenhum procedimento encontrado.
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <div id="procModal" class="modal">
+        <div class="modal-content cartao">
+            <div class="modal-header">
+                <h3 id="modal-title">Novo Procedimento</h3>
+                <span class="close-button" onclick="closeModal('procModal')">&times;</span>
+            </div>
+            <form id="proc-form">
+                <input type="hidden" id="proc-id">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Nome do Serviço:</label>
+                        <input type="text" id="proc-nome" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Descrição:</label>
+                        <textarea id="proc-descricao" class="form-control" rows="2"></textarea>
+                    </div>
+
+                    <div class="form-group-row">
+                        <div class="form-group">
+                            <label>Unidade:</label>
+                            <select id="proc-unidade" class="form-control" required>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Valor Base (R$):</label>
+                            <input type="number" id="proc-valor" class="form-control" step="0.01" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group-row">
+                        <div class="form-group">
+                            <label>Duração (minutos):</label>
+                            <input type="number" id="proc-duracao" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Posto Obrigatório:</label>
+                            <select id="proc-posto-req" class="form-control">
+                                <option value="">Nenhum (Flexível)</option>
+                                <option value="maca">Maca</option>
+                                <option value="poltrona">Poltrona</option>
+                                <option value="cadeira">Cadeira</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tipos de Posto Permitidos:</label>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" name="tipos_permitidos" value="maca"> Maca</label>
+                            <label><input type="checkbox" name="tipos_permitidos" value="poltrona"> Poltrona</label>
+                            <label><input type="checkbox" name="tipos_permitidos" value="cadeira"> Cadeira</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('procModal')">Cancelar</button>
+                    <button type="submit" class="btn btn-primario">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../../frontend/script/auth.js"></script>
+    <script src="../script/painel-procedimentos.js"></script>
+</body>
+
+</html>
