@@ -150,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     redirectUrl = 'terapeuta.html';
                 } else if (user.subtipo === 'Administrador') {
                     // REGRA 1A: Terapeuta SEMPRE vai para terapeuta.html
-                    redirectUrl = 'painel-atendimento.html';
+                    redirectUrl = '../../Admin/html/painel-atendimento.html';
                 }else {
                     // REGRA 1B: Outros colaboradores (Admin, etc.) vão para o index
                     redirectUrl = 'index.html';
