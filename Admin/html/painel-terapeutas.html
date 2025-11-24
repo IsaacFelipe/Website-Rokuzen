@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROKUZEN - Painel de Clientes</title>
-    <link rel="stylesheet" href="../css/painel-atendimento.css">
+    <title>ROKUZEN - Painel de Colaboradores</title>
+    <link rel="stylesheet" href="../css/painel-atendimento.css"> 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-
 <body>
     <div class="dashboard-container">
         <div id="dashboard-loader" class="dashboard-loader">
@@ -51,14 +49,14 @@
                             <span>Procedimentos</span>
                         </a>
                     </li>
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a href="painel-clientes.html">
                             <i class="fas fa-user-friends"></i>
                             <span>Clientes</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href="./painel-terapeutas.html">
+                    <li class="nav-item active">
+                        <a href="painel-terapeutas.html">
                             <i class="fas fa-users-cog"></i>
                             <span>Colaboradores</span>
                         </a>
@@ -74,18 +72,18 @@
 
             <main class="main-content">
                 <div class="content-header">
-                    <h1>Gerenciamento de Clientes</h1>
+                    <h1>Gerenciamento de Colaboradores</h1>
                 </div>
 
                 <div class="filters-and-actions cartao">
                     <div class="filter-group">
-                        <label for="search-client">Buscar:</label>
-                        <input type="text" id="search-client" class="form-control" placeholder="Nome ou Email...">
+                        <label for="search-colab">Buscar:</label>
+                        <input type="text" id="search-colab" class="form-control" placeholder="Nome...">
                     </div>
 
                     <div class="action-buttons">
-                        <button class="btn btn-primario" id="btn-add-client">
-                            <i class="fas fa-plus"></i> Novo Cliente
+                        <button class="btn btn-primario" id="btn-add-colab">
+                            <i class="fas fa-plus"></i> Novo Colaborador
                         </button>
                         <button class="btn btn-secondary" id="btn-refresh">
                             <i class="fas fa-sync-alt"></i> Atualizar
@@ -94,35 +92,35 @@
                 </div>
 
                 <div class="data-table-container cartao">
-                    <table class="table" id="clientes-table">
+                    <table class="table" id="colab-table">
                         <thead>
                             <tr>
                                 <th>ID</th>
                                 <th>Nome</th>
                                 <th>Email</th>
-                                <th>Telefone</th>
-                                <th>Tipo de Cadastro</th>
+                                <th>Celular</th>
+                                <th>Função</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
-                        <tbody id="clientes-body">
-                        </tbody>
+                        <tbody id="colab-body">
+                            </tbody>
                     </table>
                     <div id="no-data-message" class="no-data-message" style="display:none;">
-                        Nenhum cliente encontrado.
+                        Nenhum colaborador encontrado.
                     </div>
                 </div>
             </main>
         </div>
     </div>
 
-    <div id="addClientModal" class="modal">
+    <div id="addColabModal" class="modal">
         <div class="modal-content small cartao">
             <div class="modal-header">
-                <h3>Novo Cliente</h3>
-                <span class="close-button" onclick="closeModal('addClientModal')">&times;</span>
+                <h3>Novo Colaborador</h3>
+                <span class="close-button" onclick="closeModal('addColabModal')">&times;</span>
             </div>
-            <form id="add-client-form">
+            <form id="add-colab-form">
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Nome Completo:</label>
@@ -133,33 +131,33 @@
                         <input type="email" id="add-email" class="form-control">
                     </div>
                     <div class="form-group">
-                        <label>Telefone/Celular:</label>
+                        <label>Celular:</label>
                         <input type="text" id="add-celular" class="form-control">
                     </div>
                     <div class="form-group">
-                        <label>Tipo de Cadastro:</label>
+                        <label>Função:</label>
                         <select id="add-tipo" class="form-control" required>
-                            <option value="2">Cadastrado na Unidade</option>
-                            <option value="1">Cadastrado no Site</option>
+                            <option value="terapeuta">Terapeuta</option>
+                            <option value="recepcao">Recepção</option>
+                            <option value="admin">Administrador</option>
                         </select>
                     </div>
                 </div>
                 <div class="modal-actions">
-                    <button type="button" class="btn btn-secondary"
-                        onclick="closeModal('addClientModal')">Cancelar</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('addColabModal')">Cancelar</button>
                     <button type="submit" class="btn btn-primario">Salvar</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <div id="editClientModal" class="modal">
+    <div id="editColabModal" class="modal">
         <div class="modal-content small cartao">
             <div class="modal-header">
-                <h3>Editar Cliente #<span id="edit-id-display"></span></h3>
-                <span class="close-button" onclick="closeModal('editClientModal')">&times;</span>
+                <h3>Editar Colaborador #<span id="edit-id-display"></span></h3>
+                <span class="close-button" onclick="closeModal('editColabModal')">&times;</span>
             </div>
-            <form id="edit-client-form">
+            <form id="edit-colab-form">
                 <input type="hidden" id="edit-id">
                 <div class="modal-body">
                     <div class="form-group">
@@ -171,20 +169,20 @@
                         <input type="email" id="edit-email" class="form-control">
                     </div>
                     <div class="form-group">
-                        <label>Telefone/Celular:</label>
+                        <label>Celular:</label>
                         <input type="text" id="edit-celular" class="form-control">
                     </div>
                     <div class="form-group">
-                        <label>Tipo de Cadastro:</label>
+                        <label>Função:</label>
                         <select id="edit-tipo" class="form-control" required>
-                            <option value="2">Cadastrado na Unidade</option>
-                            <option value="1">Cadastrado no Site</option>
+                            <option value="terapeuta">Terapeuta</option>
+                            <option value="recepcao">Recepção</option>
+                            <option value="admin">Administrador</option>
                         </select>
                     </div>
                 </div>
                 <div class="modal-actions">
-                    <button type="button" class="btn btn-secondary"
-                        onclick="closeModal('editClientModal')">Cancelar</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('editColabModal')">Cancelar</button>
                     <button type="submit" class="btn btn-primario">Atualizar</button>
                 </div>
             </form>
@@ -197,21 +195,19 @@
                 <h3>Confirmar Exclusão</h3>
             </div>
             <div class="modal-body">
-                <p>Tem certeza que deseja excluir este cliente?</p>
+                <p>Tem certeza que deseja excluir este colaborador?</p>
                 <p style="font-size: 0.85rem; color: var(--status-cancelado);">
-                    Atenção: Se ele tiver agendamentos, a exclusão pode falhar.
+                    Atenção: Se ele tiver atendimentos realizados, a exclusão falhará.
                 </p>
             </div>
             <div class="modal-actions">
-                <button type="button" class="btn btn-secondary"
-                    onclick="closeModal('deleteConfirmModal')">Cancelar</button>
+                <button type="button" class="btn btn-secondary" onclick="closeModal('deleteConfirmModal')">Cancelar</button>
                 <button type="button" class="btn btn-danger" id="confirm-delete">Excluir</button>
             </div>
         </div>
     </div>
 
     <script src="../../frontend/script/auth.js"></script>
-    <script src="../script/painel-clientes.js"></script>
+    <script src="../script/painel-terapeutas.js"></script>
 </body>
-
 </html>

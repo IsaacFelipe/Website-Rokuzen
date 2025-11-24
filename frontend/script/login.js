@@ -148,12 +148,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (user.subtipo === 'Terapeuta') {
                     // REGRA 1A: Terapeuta SEMPRE vai para terapeuta.html
                     redirectUrl = 'terapeuta.html';
-                } else {
+                } else if (user.subtipo === 'Administrador') {
+                    // REGRA 1A: Terapeuta SEMPRE vai para terapeuta.html
+                    redirectUrl = 'painel-atendimento.html';
+                }else {
                     // REGRA 1B: Outros colaboradores (Admin, etc.) vão para o index
                     redirectUrl = 'index.html';
                 }
             
-            // REGRA 2: Se não for colaborador, checa se é Cliente
+            // REGRA 3: Se não for colaborador, checa se é Cliente
             } else if (user && user.tipo === 'cliente') {
                 
                 // Tenta pegar a URL da página anterior

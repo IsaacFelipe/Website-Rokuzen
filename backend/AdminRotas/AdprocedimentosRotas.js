@@ -2,7 +2,7 @@
 
 const express = require('express');
 const router = express.Router();
-const db = require('./db'); // ajuste o caminho se necessário
+const db = require('../db'); // ajuste o caminho se necessário
 
 // === LISTAR TODOS OS PROCEDIMENTOS ===
 router.get('/procedimentos/listar', async (req, res) => {
