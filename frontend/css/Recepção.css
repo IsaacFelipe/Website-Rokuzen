@@ -14,76 +14,38 @@
     --font-menu: 'League Spartan', sans-serif;
     --font-body: 'Montserrat', sans-serif;
 
-    /* Cores Padronizadas (Da versão anterior) */
-    --primary: #9ab946;
-    /* Verde (Disponível) */
-    --text-dark: #694300;
-    /* Marrom (Texto principal) */
-    --bg-page: #fcfbf2;
-    /* Off-white (Fundo da página) */
-    --bg-card: #ffffff;
-    /* Branco (Fundo dos cards) */
-    --black: #000000;
-    /* Preto (Raramente usado) */
+    /* Cores Padronizadas */
+    --primary: #9ab946; /* Verde */
+    --text-dark: #694300; /* Marrom */
+    --bg-page: #fcfbf2; /* Off-white */
+    --bg-card: #ffffff; /* Branco */
+    
+    /* Cores de Status */
+    --status-sessao: #4A6A8A; /* Azul-ardósia */
+    --status-intervalo: #CB8A02; /* Âmbar */
+    --status-disponivel: #9ab946; /* Verde */
+    --danger: #D9534F; /* Vermelho */
 
-    /* Cores de Status (Padronizadas) */
-    --status-sessao: #4A6A8A;
-    /* Azul-ardósia (Ocupado/Sessão) */
-    --status-intervalo: #CB8A02;
-    /* Âmbar/Dourado (Intervalo) */
-    --status-disponivel: #9ab946;
-    /* Verde (Disponível) */
-    --danger: #D9534F;
-    /* Vermelho (Remover) */
+    /* Cores Derivadas */
+    --text-light: #8a7352; /* Marrom claro */
+    --border: #EAE5DB; /* Borda */
+    --secondary-bg: #F9F9F9;
 
-    /* Cores Derivadas (Padronizadas) */
-    --text-light: #8a7352;
-    /* Marrom claro (Subtextos) */
-    --border: #EAE5DB;
-    /* Borda (Baseado no Fundo) */
-
-    /* Fundos de caixas de informação (Padronizados) */
-    --bg-sessao-light: #F0F4F7;
-    /* Azul claro (Ocupado) */
-    --bg-intervalo-light: #FFFBF0;
-    /* Dourado claro (Intervalo) */
-    --bg-disponivel-light: #F5F8EF;
-    /* Verde claro (Disponível) */
-    --bg-proximo-light: #F9F7F4;
-    /* Neutro (Próximo) */
-
-    /* Variáveis para "vida" (Gradientes e animações) */
+    /* Efeitos */
     --gradient-primary: linear-gradient(135deg, var(--primary), #7ea83b);
     --gradient-hover: linear-gradient(135deg, var(--primary), #8bb73a);
     --shadow-light: 0 4px 12px rgba(105, 67, 0, 0.05);
     --shadow-hover: 0 8px 24px rgba(105, 67, 0, 0.1);
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-    /* Mapeamentos adicionais para compatibilidade com o layout original */
-    --secondary-bg: #F9F9F9;
-    --secondary-border: #EAE5DB;
-    --secondary-text: #8a7352;
-    --white: #ffffff;
-    --status-ocupado: #F0F4F7;
-    /* Mapeado para sessão */
-    --status-manutencao: #FFFBF0;
-    /* Mapeado para intervalo com opacidade */
-    --c-hover: #FF66C4;
-    /* Mantido o rosa do original para hover, se necessário */
 }
 
 /* =========================================
-   3. RESET E ESTILOS GLOBAIS (Padronizado com vida)
+   3. RESET E ESTILOS GLOBAIS
    ========================================= */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
     font-family: var(--font-body);
-    /* Montserrat (Padronizado) */
     background: var(--bg-page);
     color: var(--text-dark);
     font-size: 14px;
@@ -93,19 +55,12 @@ body {
 }
 
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 /* =========================================
-   4. CABEÇALHO SUPERIOR (Padronizado com transições)
+   4. CABEÇALHO
    ========================================= */
 .main-header {
     display: flex;
@@ -114,93 +69,17 @@ body {
     padding: 1rem 1.5rem;
     background-color: var(--bg-card);
     border-bottom: 1px solid var(--border);
-    transition: var(--transition);
     box-shadow: var(--shadow-light);
 }
-
-.main-header:hover {
-    box-shadow: var(--shadow-hover);
-    transform: translateY(-1px);
-}
-
 .header-title {
     color: var(--primary);
-    /* Título Principal Verde */
     font-size: 1.5rem;
     font-weight: 700;
     font-family: var(--font-heading);
-    /* Cinzel para títulos */
-    transition: var(--transition);
 }
-
-.header-title:hover {
-    color: var(--gradient-hover);
-    text-shadow: 0 1px 2px rgba(154, 185, 70, 0.2);
-}
-
-.header-info {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-}
-
-.info-block {
-    font-size: 0.8rem;
-    font-family: var(--font-body);
-}
-
-.info-block span {
-    display: block;
-    font-weight: 500;
-}
-
-.info-block strong {
-    color: var(--status-sessao);
-    /* Destaque Azul (mapeado do roxo) */
-    font-size: 1rem;
-    transition: var(--transition);
-}
-
-.info-block strong:hover {
-    color: var(--primary);
-}
-
-.user-actions {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-}
-
-.notification-bell {
-    font-size: 1.5rem;
-    cursor: pointer;
-    position: relative;
-    transition: var(--transition);
-}
-
-.notification-bell:hover {
-    transform: scale(1.1);
-}
-
-.notification-bell::after {
-    content: '3';
-    /* Exemplo de notificação */
-    position: absolute;
-    top: -5px;
-    right: -8px;
-    background-color: var(--status-sessao);
-    /* Usando azul para alerta */
-    color: var(--bg-card);
-    font-size: 0.7rem;
-    border-radius: 50%;
-    width: 16px;
-    height: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    box-shadow: var(--shadow-light);
-}
+.header-info { display: flex; align-items: center; gap: 1.5rem; }
+.info-block { font-size: 0.8rem; font-family: var(--font-body); }
+.user-actions { display: flex; align-items: center; gap: 1.5rem; }
 
 .logout-btn {
     background: var(--gradient-primary);
@@ -210,30 +89,21 @@ body {
     border-radius: 6px;
     font-weight: 700;
     font-family: var(--font-menu);
-    /* League Spartan */
     cursor: pointer;
     transition: var(--transition);
 }
-
-.logout-btn:hover {
-    background: var(--gradient-hover);
-    transform: scale(1.05);
-    box-shadow: var(--shadow-hover);
-}
+.logout-btn:hover { background: var(--gradient-hover); transform: scale(1.05); }
 
 /* =========================================
-   5. NAVEGAÇÃO POR ABAS (Padronizado com underline só no hover)
+   5. NAVEGAÇÃO
    ========================================= */
 .main-nav {
     display: flex;
     gap: 1rem;
     padding: 0 1.5rem;
-    background-color: var(--bg-disponivel-light);
+    background-color: #F5F8EF; /* --bg-disponivel-light */
     border-bottom: 2px solid var(--text-light);
-    /* Divisor Marrom claro */
-    transition: var(--transition);
 }
-
 .nav-tab {
     padding: 1rem 0.5rem;
     font-weight: 700;
@@ -241,178 +111,41 @@ body {
     cursor: pointer;
     transition: var(--transition);
     font-family: var(--font-menu);
-    /* League Spartan */
-    font-size: 0.95rem;
-    position: relative;
     color: var(--text-light);
 }
-
-.nav-tab::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 0;
-    height: 3px;
-    background: var(--gradient-primary);
-    transition: var(--transition);
-}
-
-.nav-tab:hover {
+.nav-tab:hover, .nav-tab.active {
     color: var(--primary);
-    /* Hover Verde */
-    transform: translateY(-1px);
 }
-
-.nav-tab:hover::after {
-    width: 100%;
-}
-
 .nav-tab.active {
+    border-bottom-color: var(--primary);
     color: var(--text-dark);
-    /* Sem underline fixo — só no hover */
 }
 
 /* =========================================
-   6. CONTEÚDO PRINCIPAL E LAYOUT (Padronizado)
+   6. LAYOUT PRINCIPAL
    ========================================= */
-.tab-content {
-    display: none;
-    /* O JS vai mostrar o ativo */
-}
+.tab-content { display: none; }
+.tab-content.active { display: block; animation: fadeIn 0.6s ease-out; }
 
-.tab-content.active {
-    display: block;
-    animation: fadeIn 0.6s ease-out;
-}
-
-.dashboard-layout {
-    display: flex;
-    padding: 1.5rem;
-    gap: 1.5rem;
-}
-
-.main-column {
-    flex: 3;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-.sidebar-column {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    min-width: 300px;
-}
+.dashboard-layout { display: flex; padding: 1.5rem; gap: 1.5rem; }
+.main-column { flex: 3; display: flex; flex-direction: column; gap: 1.5rem; }
+.sidebar-column { flex: 1; display: flex; flex-direction: column; gap: 1.5rem; min-width: 300px; }
 
 /* =========================================
-   7. CONTEÚDO PRINCIPAL (Visão Geral) (Padronizado com vida)
+   7. CARDS DE ESTAÇÃO (O CORAÇÃO DO VISUAL)
    ========================================= */
-.section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-    transition: var(--transition);
-}
+.section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+.section-title { font-size: 1.25rem; color: var(--primary); font-family: var(--font-heading); font-weight: 700; }
 
-.section-header:hover {
-    transform: translateY(-1px);
-}
+.legend { display: flex; gap: 1rem; font-size: 0.8rem; }
+.legend-item { display: flex; align-items: center; gap: 0.3rem; }
+.legend-item::before { content: ''; width: 12px; height: 12px; border-radius: 50%; }
+.legend-item.livre::before { background-color: var(--status-disponivel); }
+.legend-item.ocupado::before { background-color: var(--status-sessao); }
+.legend-item.intervalo::before { background-color: var(--status-intervalo); }
 
-.section-title {
-    font-size: 1.25rem;
-    color: var(--primary);
-    /* Título Principal Verde */
-    font-weight: 700;
-    font-family: var(--font-heading);
-    /* Cinzel */
-    transition: var(--transition);
-    text-shadow: 0 1px 2px rgba(105, 67, 0, 0.1);
-}
-
-.section-title:hover {
-    color: var(--gradient-hover);
-    text-shadow: 0 2px 4px rgba(154, 185, 70, 0.2);
-}
-
-.legend {
-    display: flex;
-    gap: 1rem;
-    font-size: 0.8rem;
-    font-family: var(--font-body);
-}
-
-.legend-item {
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-    transition: var(--transition);
-}
-
-.legend-item:hover {
-    transform: scale(1.05);
-}
-
-.legend-item::before {
-    content: '';
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    animation: gentlePulse 1.5s infinite ease-in-out;
-}
-
-@keyframes gentlePulse {
-
-    0%,
-    100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-
-    50% {
-        opacity: 0.7;
-        transform: scale(1.2);
-    }
-}
-
-.legend-item.livre::before {
-    background-color: var(--status-disponivel);
-}
-
-.legend-item.ocupado::before {
-    background-color: var(--status-sessao);
-}
-
-.legend-item.intervalo::before {
-    background-color: var(--status-intervalo);
-}
-
-.legend-item.manutencao::before {
-    background-color: var(--status-intervalo);
-    opacity: 0.6;
-}
-
-.station-group {
-    margin-bottom: 1.5rem;
-}
-
-.group-title {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--status-sessao);
-    /* Subtítulo Azul (mapeado do roxo) */
-    margin-bottom: 0.75rem;
-    font-family: var(--font-menu);
-    /* League Spartan */
-    transition: var(--transition);
-}
-
-.group-title:hover {
-    color: var(--primary);
-}
+.station-group { margin-bottom: 1.5rem; }
+.group-title { font-size: 1rem; font-weight: 600; color: var(--status-sessao); margin-bottom: 0.75rem; font-family: var(--font-menu); }
 
 .station-grid {
     display: grid;
@@ -422,7 +155,6 @@ body {
 
 .station-card {
     background-color: var(--bg-card);
-    /* Fundo Branco */
     border: 1px solid var(--border);
     border-radius: 8px;
     padding: 1rem;
@@ -430,371 +162,78 @@ body {
     position: relative;
     transition: var(--transition);
     box-shadow: var(--shadow-light);
+    min-height: 140px; /* Garante altura uniforme */
 }
-
-.station-card:hover {
-    box-shadow: var(--shadow-hover);
-    transform: translateY(-2px);
-}
+.station-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
 
 .status-dot {
     position: absolute;
-    top: 1rem;
-    right: 1rem;
-    width: 12px;
-    height: 12px;
+    top: 1rem; right: 1rem;
+    width: 12px; height: 12px;
     border-radius: 50%;
-    animation: gentlePulse 1.5s infinite ease-in-out;
 }
 
 .card-header {
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--status-sessao);
-    /* Subtítulo Azul */
-    margin-bottom: 0.5rem;
-    font-family: var(--font-menu);
+    font-size: 1rem; font-weight: 700; color: var(--status-sessao);
+    margin-bottom: 0.5rem; font-family: var(--font-menu);
 }
 
 .card-content p {
-    font-size: 0.85rem;
-    line-height: 1.4;
-    margin-bottom: 0.25rem;
-    font-family: var(--font-body);
+    font-size: 0.85rem; line-height: 1.4; margin-bottom: 0.25rem; font-family: var(--font-body);
 }
 
+/* Barra de Progresso dentro do Card */
 .progress-bar {
-    width: 100%;
-    background-color: var(--secondary-bg);
-    border-radius: 4px;
-    height: 6px;
-    margin-top: 0.75rem;
-    transition: var(--transition);
+    width: 100%; background-color: var(--secondary-bg);
+    border-radius: 4px; height: 6px; margin-top: 0.75rem;
 }
-
-.progress-bar-inner {
-    height: 100%;
-    border-radius: 4px;
-    transition: width var(--transition);
-}
+.progress-bar-inner { height: 100%; border-radius: 4px; }
 
 .status-warning {
-    font-size: 0.8rem;
-    font-weight: 600;
-    margin-top: 0.5rem;
-    color: var(--status-sessao);
-    /* Alerta Azul */
+    font-size: 0.8rem; font-weight: 600; margin-top: 0.5rem; color: var(--status-sessao);
 }
 
-/* -- Estilos de Status (Padronizados) -- */
-/* LIVRE */
-.station-card.status-livre {
-    border-left-color: var(--status-disponivel);
-}
+/* ESTADOS DOS CARDS */
+/* Livre */
+.station-card.status-livre { border-left-color: var(--status-disponivel); }
+.station-card.status-livre .status-dot { background-color: var(--status-disponivel); }
+.station-card.status-livre .card-header { color: var(--status-disponivel); }
 
-.station-card.status-livre .status-dot {
-    background-color: var(--status-disponivel);
-}
+/* Ocupado */
+.station-card.status-ocupado { border-left-color: var(--status-sessao); }
+.station-card.status-ocupado .status-dot { background-color: var(--status-sessao); }
+.station-card.status-ocupado .card-header { color: var(--status-sessao); }
+.station-card.status-ocupado .progress-bar-inner { background-color: var(--status-sessao); }
+.station-card.status-ocupado .status-warning { color: var(--status-sessao); }
 
-.station-card.status-livre .card-header {
-    color: var(--status-disponivel);
-}
-
-/* OCUPADO */
-.station-card.status-ocupado {
-    border-left-color: var(--status-sessao);
-}
-
-.station-card.status-ocupado .status-dot {
-    background-color: var(--status-sessao);
-}
-
-.station-card.status-ocupado .card-header {
-    color: var(--status-sessao);
-}
-
-.station-card.status-ocupado .progress-bar-inner {
-    background-color: var(--status-sessao);
-}
-
-.station-card.status-ocupado .status-warning {
-    color: var(--status-sessao);
-}
-
-/* INTERVALO */
-.station-card.status-intervalo {
-    border-left-color: var(--status-intervalo);
-}
-
-.station-card.status-intervalo .status-dot {
-    background-color: var(--status-intervalo);
-}
-
-.station-card.status-intervalo .card-header {
-    color: var(--status-intervalo);
-}
-
-/* MANUTENÇÃO */
-.station-card.status-manutencao {
-    border-left-color: var(--status-intervalo);
-    border-style: dashed;
-    opacity: 0.8;
-}
-
-.station-card.status-manutencao .status-dot {
-    background-color: var(--status-intervalo);
-}
-
-.station-card.status-manutencao .card-header {
-    color: var(--status-intervalo);
-}
+/* Atrasado (Customização extra) */
+.station-card.status-atrasado { border-left-color: var(--danger); }
+.station-card.status-atrasado .status-dot { background-color: var(--danger); }
+.station-card.status-atrasado .progress-bar-inner { background-color: var(--danger); }
+.station-card.status-atrasado .status-warning { color: var(--danger); }
 
 /* =========================================
-   8. SIDEBAR (Pontuação e Sessões) (Padronizado)
+   8. SIDEBAR
    ========================================= */
 .sidebar-widget {
     background-color: var(--bg-card);
-    /* Fundo Branco */
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    padding: 1.5rem;
-    transition: var(--transition);
+    border-radius: 8px; border: 1px solid var(--border);
+    padding: 1.5rem; margin-bottom: 1.5rem;
     box-shadow: var(--shadow-light);
 }
+.widget-title { font-size: 1.1rem; font-weight: 700; color: var(--primary); margin-bottom: 1rem; font-family: var(--font-heading); }
 
-.sidebar-widget:hover {
-    box-shadow: var(--shadow-hover);
-    transform: translateY(-2px);
-}
+.score-card { background-color: #F9F7F4; padding: 1.5rem; text-align: center; border-radius: 6px; }
+.score-title { font-size: 0.9rem; font-weight: 600; color: var(--status-sessao); }
+.score-value { font-size: 2.5rem; font-weight: 700; color: var(--status-sessao); font-family: var(--font-menu); }
+.score-detail { font-size: 0.9rem; font-weight: 500; }
 
-.widget-title {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--primary);
-    /* Título Principal Verde */
-    margin-bottom: 1rem;
-    font-family: var(--font-heading);
-    /* Cinzel */
-    transition: var(--transition);
-}
+.score-list { margin-top: 1rem; font-size: 0.9rem; }
+.score-list-item { display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px dashed var(--text-light); }
+.warning-box { background-color: var(--bg-card); border-left: 4px solid var(--text-light); padding: 1rem; margin-top: 1rem; font-size: 0.85rem; font-style: italic; }
 
-.widget-title:hover {
-    color: var(--gradient-hover);
-}
-
-.score-card {
-    background-color: var(--bg-proximo-light);
-    /* Fundo Neutro */
-    padding: 1.5rem;
-    text-align: center;
-    border-radius: 6px;
-    transition: var(--transition);
-}
-
-.score-card:hover {
-    background: linear-gradient(135deg, var(--bg-proximo-light), #f5f2ed);
-}
-
-.score-title {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--status-sessao);
-    /* Subtítulo Azul */
-    margin-bottom: 0.5rem;
-    font-family: var(--font-body);
-}
-
-.score-value {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: var(--status-sessao);
-    /* Subtítulo Azul */
-    font-family: var(--font-menu);
-}
-
-.score-detail {
-    font-size: 0.9rem;
-    font-weight: 500;
-    margin-top: 0.25rem;
-    font-family: var(--font-body);
-}
-
-.score-list {
-    margin-top: 1rem;
-    font-size: 0.9rem;
-}
-
-.score-list-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 0.75rem 0;
-    border-bottom: 1px dashed var(--text-light);
-    /* Divisor Marrom claro */
-    transition: var(--transition);
-}
-
-.score-list-item:hover {
-    background: rgba(154, 185, 70, 0.05);
-    transform: translateX(2px);
-}
-
-.score-list-item span:first-child {
-    font-weight: 500;
-    font-family: var(--font-body);
-}
-
-.score-list-item span:last-child {
-    font-weight: 700;
-    font-family: var(--font-menu);
-}
-
-/* Cor de Destaque para pontos pendentes */
-.score-list-item.pending span:last-child {
-    color: var(--status-sessao);
-}
-
-.warning-box {
-    background-color: var(--bg-card);
-    border-left: 4px solid var(--text-light);
-    /* Marrom claro */
-    padding: 1rem;
-    margin-top: 1rem;
-    font-size: 0.85rem;
-    font-style: italic;
-    border-radius: 6px;
-    transition: var(--transition);
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
-}
-
-.warning-box:hover {
-    background: linear-gradient(135deg, var(--bg-card), #f9f9f9);
-    transform: scale(1.02);
-}
-
-.warning-box strong {
-    display: block;
-    font-style: normal;
-    font-weight: 700;
-    color: var(--text-light);
-    font-family: var(--font-body);
-}
-
-.sidebar-divider {
-    height: 1px;
-    background-color: var(--text-light);
-    /* Divisor Marrom claro */
-    margin: 1.5rem 0;
-    opacity: 0.5;
-}
-
-/* Cartões de Sessão em Andamento */
-.session-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.session-card {
-    background-color: var(--bg-card);
-    border-radius: 6px;
-    padding: 1rem;
-    border: 1px solid var(--border);
-    transition: var(--transition);
-    box-shadow: var(--shadow-light);
-}
-
-.session-card:hover {
-    box-shadow: var(--shadow-hover);
-    transform: translateY(-2px);
-}
-
-.session-card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.75rem;
-}
-
-.session-client {
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--status-sessao);
-    /* Subtítulo Azul */
-    font-family: var(--font-menu);
-}
-
-.session-location {
-    font-size: 0.8rem;
-    font-weight: 600;
-    background-color: var(--status-sessao);
-    /* Azul */
-    color: var(--bg-card);
-    padding: 0.2rem 0.5rem;
-    border-radius: 4px;
-    transition: var(--transition);
-}
-
-.session-location:hover {
-    background: var(--primary);
-}
-
-.session-card-body p {
-    font-size: 0.85rem;
-    margin-bottom: 0.25rem;
-    font-family: var(--font-body);
-}
-
-.session-card-body .progress-bar {
-    background-color: var(--bg-disponivel-light);
-    /* Verde claro */
-}
-
-.session-card-body .progress-bar-inner {
-    background-color: var(--status-sessao);
-    /* Azul */
-}
-
-.session-tag {
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: var(--text-dark);
-    border: 1px solid var(--text-light);
-    /* Marrom claro */
-    border-radius: 12px;
-    padding: 0.2rem 0.6rem;
-    display: inline-block;
-    margin-top: 0.75rem;
-    font-family: var(--font-body);
-    transition: var(--transition);
-}
-
-.session-tag:hover {
-    border-color: var(--primary);
-    background: rgba(154, 185, 70, 0.1);
-    transform: scale(1.05);
-}
-
-/* =========================================
-   9. RESPONSIVIDADE (Padronizado)
-   ========================================= */
+/* Responsividade */
 @media (max-width: 900px) {
-    .dashboard-layout {
-        flex-direction: column;
-    }
-
-    .sidebar-column {
-        min-width: auto;
-    }
-
-    .main-nav {
-        flex-wrap: wrap;
-    }
-
-    /* Reduzir animações em mobile para performance */
-    .station-card,
-    .session-card,
-    .nav-tab,
-    .sidebar-widget {
-        transition: all 0.2s ease;
-    }
+    .dashboard-layout { flex-direction: column; }
+    .sidebar-column { min-width: auto; }
 }

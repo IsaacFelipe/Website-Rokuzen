@@ -83,7 +83,8 @@ router.post('/login', (req, res) => {
                     id: colaborador.colaborador_id,
                     nome: colaborador.nome_colaborador,
                     tipo: 'colaborador',
-                    subtipo: colaborador.tipo_colaborador
+                    subtipo: colaborador.tipo_colaborador,
+                    unidadeId: colaborador.unidade_id
                 },
                 JWT_SECRET,
                 { expiresIn: '1h' }

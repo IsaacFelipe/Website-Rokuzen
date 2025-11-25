@@ -151,7 +151,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else if (user.subtipo === 'Administrador') {
                     // REGRA 1A: Terapeuta SEMPRE vai para terapeuta.html
                     redirectUrl = '../../Admin/html/dashboard.html';
-                }else {
+                } else if (user.subtipo === 'Recepcionista') {
+                    // REGRA 1A: Terapeuta SEMPRE vai para terapeuta.html
+                    redirectUrl = 'Recepção.html';
+                }
+                else {
                     // REGRA 1B: Outros colaboradores (Admin, etc.) vão para o index
                     redirectUrl = 'index.html';
                 }
