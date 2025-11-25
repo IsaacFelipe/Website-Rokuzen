@@ -302,4 +302,39 @@ router.get('/api/recepcao/terapeutas', authenticateToken, async (req, res) => {
     }
 });
 
+// =================================================================
+// NOVA ROTA: GET /api/recepcao/vendas
+// Lista de Vendas (Atendimentos Concluídos)
+// =================================================================
+router.get('/api/recepcao/vendas', authenticateToken, async (req, res) => {
+    const { unidadeId } = req.colaboradorData;
+
+    if (!unidadeId) {
+        return res.status(400).json({ success: false, message: 'Unidade não identificada.' });
+    }
+
+    const sql = `
+        SELECT 
+            A.atendimento_id,
+            A.inicio_real AS data_venda,  -- Data da compra solicitada
+            A.valor_servico,
+            S.nome_servico,
+            C.nome_cliente
+        FROM atendimentos A
+        JOIN servicos S ON A.servico_id = S.servico_id
+        JOIN clientes C ON A.cliente_id = C.cliente_id
+        WHERE A.unidade_id = ?
+          AND A.status = 'Concluído'
+        ORDER BY A.inicio_real DESC
+    `;
+    
+    try {
+        const [results] = await db.promise().query(sql, [unidadeId]);
+        res.json({ success: true, data: results });
+    } catch (error) {
+        console.error('Erro ao buscar vendas:', error);
+        res.status(500).json({ success: false, message: 'Erro ao buscar vendas.' });
+    }
+});
+
 module.exports = router;

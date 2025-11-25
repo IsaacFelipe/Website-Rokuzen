@@ -37,7 +37,7 @@
     <nav class="main-nav">
         <div class="nav-tab active" data-tab="visao-geral">Visão Geral</div>
         <div class="nav-tab" data-tab="agendamentos">Agendamentos</div>
-        <div class="nav-tab" data-tab="vendas">Vendas</div>
+        <div class="nav-tab" data-tab="vendas">Vendas Realizadas</div>
         <div class="nav-tab" data-tab="terapeutas">Terapeutas</div>
     </nav>
 
@@ -58,20 +58,17 @@
 
                     <div class="station-group">
                         <h3 class="group-title">Salas de Maca</h3>
-                        <div class="station-grid" id="container-maca">
-                            </div>
+                        <div class="station-grid" id="container-maca"></div>
                     </div>
 
                     <div class="station-group">
                         <h3 class="group-title">Cadeiras Quick Massage</h3>
-                        <div class="station-grid" id="container-cadeira">
-                             </div>
+                        <div class="station-grid" id="container-cadeira"></div>
                     </div>
 
                     <div class="station-group">
                         <h3 class="group-title">Poltronas</h3>
-                        <div class="station-grid" id="container-poltrona">
-                             </div>
+                        <div class="station-grid" id="container-poltrona"></div>
                     </div>
 
                 </section>
@@ -95,8 +92,7 @@
                     </div>
 
                     <div class="warning-box">
-                        <strong>Cálculo:</strong>
-                        (Soma dos serviços concluídos) ÷ 52.
+                        <strong>Cálculo:</strong> (Soma dos serviços concluídos) ÷ 52.
                     </div>
                 </section>
             </aside>
@@ -107,9 +103,7 @@
         <div class="dashboard-layout" style="display: block;">
             <div class="section-header">
                 <h2 class="section-title">Lista de Agendamentos</h2>
-                <button class="logout-btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;" onclick="fetchListaAgendamentos()">
-                    Atualizar Lista
-                </button>
+                <button class="logout-btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;" onclick="fetchListaAgendamentos()">Atualizar Lista</button>
             </div>
     
             <div class="table-container" style="background: #fff; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); overflow-x: auto;">
@@ -125,28 +119,42 @@
                             <th style="padding: 1rem; color: #694300; font-family: 'League Spartan', sans-serif;">Valor</th>
                         </tr>
                     </thead>
-                    <tbody id="tabela-agendamentos-body">
-                        </tbody>
+                    <tbody id="tabela-agendamentos-body"></tbody>
                 </table>
-                <div id="msg-sem-agendamentos" style="display: none; padding: 2rem; text-align: center; color: #8a7352;">
-                    Nenhum agendamento encontrado nesta unidade.
-                </div>
+                <div id="msg-sem-agendamentos" style="display: none; padding: 2rem; text-align: center; color: #8a7352;">Nenhum agendamento encontrado.</div>
             </div>
         </div>
     </div>
 
-    <div id="vendas" class="tab-content" style="padding: 2rem;">
-        <h2>Vendas</h2>
-        <p>Funcionalidade em desenvolvimento.</p>
+    <div id="vendas" class="tab-content">
+        <div class="dashboard-layout" style="display: block;">
+            <div class="section-header">
+                <h2 class="section-title">Vendas Realizadas (Concluídas)</h2>
+                <button class="logout-btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;" onclick="fetchListaVendas()">Atualizar Vendas</button>
+            </div>
+    
+            <div class="table-container" style="background: #fff; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; min-width: 600px;">
+                    <thead>
+                        <tr style="background-color: #F5F8EF; text-align: left; border-bottom: 2px solid #EAE5DB;">
+                            <th style="padding: 1rem; color: #694300; font-family: 'League Spartan', sans-serif;">Data da Compra</th>
+                            <th style="padding: 1rem; color: #694300; font-family: 'League Spartan', sans-serif;">Cliente</th>
+                            <th style="padding: 1rem; color: #694300; font-family: 'League Spartan', sans-serif;">Serviço</th>
+                            <th style="padding: 1rem; color: #694300; font-family: 'League Spartan', sans-serif;">Valor (R$)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabela-vendas-body"></tbody>
+                </table>
+                <div id="msg-sem-vendas" style="display: none; padding: 2rem; text-align: center; color: #8a7352;">Nenhuma venda registrada nesta unidade.</div>
+            </div>
+        </div>
     </div>
 
     <div id="terapeutas" class="tab-content">
         <div class="dashboard-layout" style="display: block;">
             <div class="section-header">
                 <h2 class="section-title">Equipe de Terapeutas</h2>
-                <button class="logout-btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;" onclick="fetchListaTerapeutas()">
-                    Atualizar Lista
-                </button>
+                <button class="logout-btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;" onclick="fetchListaTerapeutas()">Atualizar Lista</button>
             </div>
     
             <div class="table-container" style="background: #fff; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); overflow-x: auto;">
@@ -158,12 +166,9 @@
                             <th style="padding: 1rem; color: #694300; font-family: 'League Spartan', sans-serif;">Telefone</th>
                         </tr>
                     </thead>
-                    <tbody id="tabela-terapeutas-body">
-                        </tbody>
+                    <tbody id="tabela-terapeutas-body"></tbody>
                 </table>
-                <div id="msg-sem-terapeutas" style="display: none; padding: 2rem; text-align: center; color: #8a7352;">
-                    Nenhum terapeuta encontrado nesta unidade.
-                </div>
+                <div id="msg-sem-terapeutas" style="display: none; padding: 2rem; text-align: center; color: #8a7352;">Nenhum terapeuta encontrado.</div>
             </div>
         </div>
     </div>

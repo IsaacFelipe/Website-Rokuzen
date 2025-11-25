@@ -167,8 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 let urlAnterior = document.referrer;
                 
                 // Verifica se a URL anterior é válida (não é o próprio login ou cadastro)
-                const isPaginaDeAuth = urlAnterior.includes('login.html') || 
-                                      urlAnterior.includes('cadastro.html') || 
+                const isPaginaDeAuth =urlAnterior.includes('cadastro.html') || 
                                       urlAnterior.includes('esqueci-senha.html');
 
                 if (urlAnterior && !isPaginaDeAuth) {

@@ -46,6 +46,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 fetchPontuacao();
             } else if (tabId === 'agendamentos') {
                 fetchListaAgendamentos();
+            } else if (tabId === 'vendas') {
+                fetchListaVendas(); // <--- NOVA CHAMADA
             } else if (tabId === 'terapeutas') {
                 fetchListaTerapeutas();
             }
@@ -76,10 +78,10 @@ document.addEventListener('DOMContentLoaded', function () {
             // Verifica status (Atrasado vs Normal)
             let warningHTML = '';
             if (at.status_atendimento === 'Atrasado') {
-                cssClass = 'status-ocupado status-atrasado'; // Classe CSS para vermelho
+                cssClass = 'status-ocupado status-atrasado'; 
                 warningHTML = `<div class="status-warning" style="color: var(--danger)">▲ Atrasado</div>`;
             } else {
-                cssClass = 'status-ocupado'; // Classe CSS para azul
+                cssClass = 'status-ocupado'; 
                 warningHTML = `<div class="status-warning">Dentro do horário</div>`;
             }
 
@@ -97,7 +99,6 @@ document.addEventListener('DOMContentLoaded', function () {
             `;
         }
 
-        // Retorna o HTML completo do Card
         return `
             <article class="station-card ${cssClass}">
                 <span class="status-dot"></span>
@@ -137,30 +138,21 @@ document.addEventListener('DOMContentLoaded', function () {
             const result = await response.json();
 
             if (result.success) {
-                // Limpa os containers antes de preencher
                 if (containerMaca) containerMaca.innerHTML = '';
                 if (containerCadeira) containerCadeira.innerHTML = '';
                 if (containerPoltrona) containerPoltrona.innerHTML = '';
 
-                // Distribui os cards nos containers corretos
                 result.data.forEach(posto => {
                     const cardHTML = createPostoCard(posto);
                     const tipo = posto.tipo_posto ? posto.tipo_posto.toLowerCase() : '';
 
-                    if (tipo.includes('maca') && containerMaca) {
-                        containerMaca.innerHTML += cardHTML;
-                    } else if (tipo.includes('cadeira') && containerCadeira) {
-                        containerCadeira.innerHTML += cardHTML;
-                    } else if (tipo.includes('poltrona') && containerPoltrona) {
-                        containerPoltrona.innerHTML += cardHTML;
-                    }
+                    if (tipo.includes('maca') && containerMaca) containerMaca.innerHTML += cardHTML;
+                    else if (tipo.includes('cadeira') && containerCadeira) containerCadeira.innerHTML += cardHTML;
+                    else if (tipo.includes('poltrona') && containerPoltrona) containerPoltrona.innerHTML += cardHTML;
                 });
-            } else {
-                console.error("Erro dados:", result.message);
             }
-
         } catch (error) {
-            console.error('Erro de rede ao buscar postos:', error);
+            console.error('Erro postos:', error);
         } finally {
             if(loadingOverlay) loadingOverlay.style.display = 'none';
         }
@@ -192,27 +184,21 @@ document.addEventListener('DOMContentLoaded', function () {
                 let textoLegenda = 'pontos hoje';
                 if (filtro === 'mes') textoLegenda = 'pontos este mês';
                 if (filtro === 'ano') textoLegenda = 'pontos este ano';
-                
                 if (labelPontos) labelPontos.textContent = textoLegenda;
             }
 
         } catch (error) {
-            console.error('Erro ao buscar pontuação:', error);
+            console.error('Erro pontuação:', error);
             if (displayPontos) displayPontos.textContent = '-';
         }
     }
 
-    if (selectFiltro) {
-        selectFiltro.addEventListener('change', fetchPontuacao);
-    }
+    if (selectFiltro) selectFiltro.addEventListener('change', fetchPontuacao);
 
 
     // =======================================================
-    // 5. LÓGICA DA ABA AGENDAMENTOS
+    // 5. FUNÇÕES UTILITÁRIAS COMUNS
     // =======================================================
-    const tabelaAgendamentosBody = document.getElementById('tabela-agendamentos-body');
-    const msgSemAgendamentos = document.getElementById('msg-sem-agendamentos');
-
     function formatarDataHora(dataString) {
         if (!dataString) return '--';
         const data = new Date(dataString);
@@ -221,17 +207,21 @@ document.addEventListener('DOMContentLoaded', function () {
             hour: '2-digit', minute: '2-digit' 
         });
     }
+
+
+    // =======================================================
+    // 6. LÓGICA DA ABA AGENDAMENTOS
+    // =======================================================
+    const tabelaAgendamentosBody = document.getElementById('tabela-agendamentos-body');
+    const msgSemAgendamentos = document.getElementById('msg-sem-agendamentos');
     
     function getStatusBadge(status) {
         const s = status ? status.toLowerCase() : '';
-        let color = '#ccc';
-        let bg = '#f0f0f0';
-        
+        let color = '#ccc', bg = '#f0f0f0';
         if(s === 'agendado') { color = '#CB8A02'; bg = '#FFFBF0'; }
         else if(s === 'em andamento') { color = '#4A6A8A'; bg = '#F0F4F7'; }
         else if(s === 'concluído') { color = '#9ab946'; bg = '#F5F8EF'; }
         else if(s === 'cancelado') { color = '#D9534F'; bg = '#FFF5F5'; }
-
         return `<span style="color: ${color}; background: ${bg}; padding: 4px 8px; border-radius: 12px; font-weight: 600; font-size: 0.85rem;">${status}</span>`;
     }
 
@@ -244,25 +234,21 @@ document.addEventListener('DOMContentLoaded', function () {
                 method: 'GET',
                 headers: { 'Authorization': `Bearer ${token}` }
             });
-
             const result = await response.json();
 
             if (result.success) {
                 tabelaAgendamentosBody.innerHTML = ''; 
-
                 if (result.data.length === 0) {
                     msgSemAgendamentos.style.display = 'block';
                 } else {
                     msgSemAgendamentos.style.display = 'none';
-                    
                     result.data.forEach(item => {
                         const valorFormatado = parseFloat(item.valor_servico).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
                         const horarioInicio = formatarDataHora(item.inicio_atendimento);
                         
                         let horarioFim = '';
                         if(item.fim_atendimento) {
-                            const dataFim = new Date(item.fim_atendimento);
-                            horarioFim = dataFim.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                            horarioFim = new Date(item.fim_atendimento).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
                         }
 
                         const row = `
@@ -284,22 +270,20 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
         } catch (error) {
-            console.error('Erro ao listar agendamentos:', error);
-            if(tabelaAgendamentosBody) tabelaAgendamentosBody.innerHTML = '<tr><td colspan="7" style="color: red; text-align: center; padding: 1rem;">Erro ao carregar dados.</td></tr>';
+            console.error('Erro agendamentos:', error);
+            if(tabelaAgendamentosBody) tabelaAgendamentosBody.innerHTML = '<tr><td colspan="7" style="color: red; text-align: center;">Erro ao carregar.</td></tr>';
         }
     };
 
 
     // =======================================================
-    // 6. LÓGICA DA ABA TERAPEUTAS (ATUALIZADA)
+    // 7. LÓGICA DA ABA TERAPEUTAS
     // =======================================================
     const tabelaTerapeutasBody = document.getElementById('tabela-terapeutas-body');
     const msgSemTerapeutas = document.getElementById('msg-sem-terapeutas');
 
     window.fetchListaTerapeutas = async function() {
         if (!document.getElementById('terapeutas').classList.contains('active')) return;
-        
-        // Ajustado para 3 colunas (sem ações)
         if(tabelaTerapeutasBody) tabelaTerapeutasBody.innerHTML = '<tr><td colspan="3" style="padding: 2rem; text-align: center;">Carregando equipe...</td></tr>';
 
         try {
@@ -307,19 +291,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 method: 'GET',
                 headers: { 'Authorization': `Bearer ${token}` }
             });
-
             const result = await response.json();
 
             if (result.success) {
                 tabelaTerapeutasBody.innerHTML = ''; 
-
                 if (result.data.length === 0) {
                     msgSemTerapeutas.style.display = 'block';
                 } else {
                     msgSemTerapeutas.style.display = 'none';
-                    
                     result.data.forEach(t => {
-                        // Linha renderizada sem o botão de Ações
                         const row = `
                             <tr style="border-bottom: 1px solid #eee; font-family: 'Montserrat', sans-serif; font-size: 0.9rem;">
                                 <td style="padding: 1rem; font-weight: 600; color: #694300;">
@@ -335,14 +315,63 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
         } catch (error) {
-            console.error('Erro ao listar terapeutas:', error);
-            if(tabelaTerapeutasBody) tabelaTerapeutasBody.innerHTML = '<tr><td colspan="3" style="color: red; text-align: center; padding: 1rem;">Erro ao carregar dados.</td></tr>';
+            console.error('Erro terapeutas:', error);
+            if(tabelaTerapeutasBody) tabelaTerapeutasBody.innerHTML = '<tr><td colspan="3" style="color: red; text-align: center;">Erro ao carregar.</td></tr>';
         }
     };
 
 
     // =======================================================
-    // 7. INICIALIZAÇÃO
+    // 8. LÓGICA DA ABA VENDAS (NOVO)
+    // =======================================================
+    const tabelaVendasBody = document.getElementById('tabela-vendas-body');
+    const msgSemVendas = document.getElementById('msg-sem-vendas');
+
+    window.fetchListaVendas = async function() {
+        // Só executa se a aba estiver ativa
+        if (!document.getElementById('vendas').classList.contains('active')) return;
+
+        // Loading
+        if(tabelaVendasBody) tabelaVendasBody.innerHTML = '<tr><td colspan="4" style="padding: 2rem; text-align: center;">Carregando vendas...</td></tr>';
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/recepcao/vendas`, {
+                method: 'GET',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const result = await response.json();
+
+            if (result.success) {
+                tabelaVendasBody.innerHTML = ''; 
+                if (result.data.length === 0) {
+                    msgSemVendas.style.display = 'block';
+                } else {
+                    msgSemVendas.style.display = 'none';
+                    result.data.forEach(v => {
+                        const valorFormatado = parseFloat(v.valor_servico).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+                        const dataVenda = formatarDataHora(v.data_venda);
+
+                        const row = `
+                            <tr style="border-bottom: 1px solid #eee; font-family: 'Montserrat', sans-serif; font-size: 0.9rem;">
+                                <td style="padding: 1rem; font-weight: 600;">${dataVenda}</td>
+                                <td style="padding: 1rem;">${v.nome_cliente || 'Anônimo'}</td>
+                                <td style="padding: 1rem;">${v.nome_servico || '-'}</td>
+                                <td style="padding: 1rem; font-weight: 600; color: #9ab946;">${valorFormatado}</td>
+                            </tr>
+                        `;
+                        tabelaVendasBody.innerHTML += row;
+                    });
+                }
+            }
+        } catch (error) {
+            console.error('Erro vendas:', error);
+            if(tabelaVendasBody) tabelaVendasBody.innerHTML = '<tr><td colspan="4" style="color: red; text-align: center;">Erro ao carregar vendas.</td></tr>';
+        }
+    };
+
+
+    // =======================================================
+    // 9. INICIALIZAÇÃO E LOOP
     // =======================================================
     const btnLogout = document.querySelector('.logout-btn');
     if (btnLogout) {
@@ -356,7 +385,7 @@ document.addEventListener('DOMContentLoaded', function () {
     fetchPostosStatus();
     fetchPontuacao();
 
-    // Loop de atualização automática (apenas Visão Geral e Pontuação)
+    // Loop de atualização automática
     setInterval(() => {
         if (document.getElementById('visao-geral').classList.contains('active')) {
             fetchPostosStatus();
