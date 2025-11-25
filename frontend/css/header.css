@@ -1,20 +1,14 @@
-/* 0. CONFIGURAÇÕES GLOBAIS / UTILS     */
-
-
-/* Importação das Fontes */
+/* 0. CONFIGURAÇÕES GLOBAIS / UTILS */
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Cinzel&family=League+Spartan:wght@100..900&display=swap');
 
 :root {
-    /* Cores */
-    --cor-primaria: #9AB946; /* Verde principal */
-    --cor-primaria-escuro: #689F38; /* Verde mais escuro para hover */
-    --cor-texto-escuro: #333; /* Cor escura padrão para links/texto */
+    --cor-primaria: #9AB946;
+    --cor-primaria-escuro: #689F38;
+    --cor-texto-escuro: #333;
     --cor-texto-claro: #fff;
     --cor-texto-cinza: #555;
     --cor-borda: #ddd;
-
-    /* Fontes */
     --fonte-titulo: "Cinzel", serif;
     --fonte-corpo: "League Spartan", sans-serif;
 }
@@ -28,12 +22,12 @@
 body {
     background-color: var(--cor-texto-claro);
     color: var(--cor-texto-escuro);
-    font-family: var(--fonte-corpo); /* Usando a variável */
-    line-height: 1.6; /* Melhoria de legibilidade */
+    font-family: var(--fonte-corpo);
+    line-height: 1.6;
 }
 
 /* Estilo para Links e Botões */
-.btn-primario { /* Login/Padrão */
+.btn-primario {
     background-color: var(--cor-primaria);
     color: var(--cor-texto-claro);
     border: none;
@@ -44,10 +38,10 @@ body {
     font-weight: bold;
     display: inline-block;
 }
+
 .btn-primario:hover {
     background-color: var(--cor-primaria-escuro);
 }
-
 
 /* ==================================== */
 /* 1. CABEÇALHO E NAVEGAÇÃO (header)    */
@@ -55,9 +49,10 @@ body {
 
 header {
     width: 100%;
+    position: relative;
 }
 
-#barra-navegacao { /* Era #navbar */
+#barra-navegacao {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -67,14 +62,16 @@ header {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.container-nav { /* Era .nav-container */
+/* Container da Logo e Links */
+.container-nav {
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
+    /* Centraliza no Desktop */
     position: relative;
     max-width: calc(100% - 100px);
-} 
+}
 
 .logo {
     position: absolute;
@@ -87,7 +84,7 @@ header {
     width: auto;
 }
 
-.lista-nav { /* Era .nav-list */
+.lista-nav {
     display: flex;
     list-style: none;
     gap: 3rem;
@@ -95,7 +92,7 @@ header {
     padding: 0;
 }
 
-.item-nav a { /* Era .nav-item a */
+.item-nav a {
     text-decoration: none;
     color: var(--cor-texto-escuro);
     font-weight: 500;
@@ -103,17 +100,28 @@ header {
 }
 
 .item-nav a:hover,
-.pagina-atual a { /* Estilo para a página atual (opcional) */
+.pagina-atual a {
     color: var(--cor-primaria);
 }
 
-.btn-primario { /* Reaproveitando a classe .btn-primario */
-    margin-left: 1rem; 
+/* --- LOGICA DOS BOTOES DE LOGIN --- */
+
+/* Desktop: Mostra container desktop */
+#auth-container-desktop {
+    display: flex;
+    align-items: center;
+    margin-left: 1rem;
     margin-right: 2rem;
     flex-shrink: 0;
 }
 
-#btn-mobile { 
+/* Mobile: Escondido por padrão */
+#auth-container-mobile {
+    display: none;
+}
+
+/* Botão Hamburger */
+#btn-mobile {
     display: none;
     background: none;
     border: none;
@@ -123,108 +131,142 @@ header {
     color: var(--cor-texto-escuro);
 }
 
-.menu-mobile { 
+.menu-mobile {
     display: none;
 }
 
-
-
-/* Para telas menores que 1170px (Mobile) */
+/* --- MEDIA QUERY (MOBILE - Telas < 1170px) --- */
 @media (max-width: 1170px) {
-    /* Esconde o menu de desktop e mostra o botão mobile */
+
+    /* 1. Esconde APENAS os links e o login de desktop */
     .lista-nav,
-    .container-nav { 
-        display: none;
+    #auth-container-desktop {
+        display: none !important;
     }
 
-    /* O botão mobile é ativado */
+    /* 2. Mantém a logo visível e ajusta o container */
+    .container-nav {
+        display: block !important;
+        flex: 0;
+        /* Não ocupa espaço extra */
+        width: auto;
+        max-width: none;
+        position: static;
+        /* Remove restrições de posicionamento */
+    }
+
+    /* Ajuste da logo para mobile */
+    .logo {
+        position: static;
+        /* Volta ao fluxo normal */
+        display: block;
+        padding-left: 0;
+    }
+
+    .logo img {
+        vertical-align: middle;
+    }
+
+    /* 3. Mostra o botão Menu */
     #btn-mobile {
         display: block;
         margin-right: 0;
     }
 
-    /* O botão Login/Primário no Header */
-    .btn-primario {
-        margin-left: auto; /* Empurra para a direita */
-        margin-right: 1rem; /* Dá um espaço da borda */
-    }
-
-    /* O container da navegação principal muda */
+    /* 4. Ajustes do Pai */
     #barra-navegacao {
-        justify-content: space-around;
-        padding: 1rem 1rem;
-    }
-    
-    .logo {
-        position: static; /* Remove o posicionamento absoluto */
-        left: auto;
+        justify-content: space-between;
+        padding: 1rem 1.5rem;
     }
 
-    /* Layout do menu mobile (se estiver ativo/aberto) */
-    .menu-mobile.aberto { /* Exemplo de como você ativaria o menu com JS */
+    /* 5. Menu Aberto */
+    .menu-mobile.aberto {
         display: flex;
         flex-direction: column;
         width: 100%;
         position: absolute;
-        top: 60px; /* Abaixo do header */
+        top: 100%;
+        left: 0;
         background-color: var(--cor-texto-claro);
         box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
         z-index: 999;
         padding: 20px;
     }
 
-    .lista-nav-mobile { /* Era .mbile-nav-list */
+    .lista-nav-mobile {
         list-style: none;
         padding: 0;
+        text-align: center;
     }
 
     .lista-nav-mobile .item-nav {
-        text-align: center;
         margin-bottom: 15px;
+    }
+
+    /* Mostra login no menu mobile */
+    #auth-container-mobile {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+        width: 100%;
+        border-top: 1px solid #eee;
+        padding-top: 20px;
+    }
+
+    #auth-container-mobile .btn-primario {
+        width: 80%;
+        text-align: center;
+        margin: 0;
+    }
+
+    /* Centraliza dropdown no mobile */
+    .profile-menu-content {
+        right: auto;
+        left: 50%;
+        transform: translateX(-50%);
     }
 }
 
-/* Para telas muito pequenas (Ex: celulares) */
-@media (max-width: 600px) {
-    /* ... media queries das outras seções ... */
-}
-
-/* Estilos para o Dropdown de Perfil */
-
-/* O container principal */
+/* --- DROPDOWN DE PERFIL --- */
 .profile-dropdown {
     position: relative;
     display: inline-block;
 }
 
-/* O botão do ícone de perfil */
 .btn-profile {
-    background-color: #A68668; /* Cor do seu .btn-primario */
+    background-color: #A68668;
     color: white;
-    padding: 10px 15px;
+    padding: 8px 12px;
     font-size: 16px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .btn-profile:hover {
-    background-color: #8f6e53; /* Um pouco mais escuro no hover */
+    background-color: #8f6e53;
 }
 
-/* O conteúdo do menu (escondido por padrão) */
+.btn-profile img {
+    width: 24px;
+    height: 24px;
+}
+
 .profile-menu-content {
-    display: none; /* Escondido por padrão */
+    display: none;
     position: absolute;
     background-color: #f9f9f9;
     min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     border-radius: 5px;
     z-index: 100;
-    right: 0; /* Alinha o menu à direita do botão */
+    right: 0;
 }
 
-/* Links dentro do menu */
 .profile-menu-content a {
     color: black;
     padding: 12px 16px;
@@ -233,18 +275,10 @@ header {
     font-size: 14px;
 }
 
-/* Hover dos links */
 .profile-menu-content a:hover {
     background-color: #ddd;
 }
 
-/* Classe 'show' que o JavaScript vai adicionar para exibir o menu */
 .profile-menu-content.show {
     display: block;
-}
-
-.btn-profile img {
-    vertical-align: middle; /* Ajuda a centralizar verticalmente */
-    width: 24px; /* Garante o tamanho */
-    height: 24px; /* Garante o tamanho */
 }

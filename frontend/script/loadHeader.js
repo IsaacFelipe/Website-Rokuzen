@@ -1,9 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
     const headerPlaceholder = document.getElementById('header-placeholder');
     if (headerPlaceholder) {
-        
-        // Mude de ../reutilizaveis/header.html PARA /reutilizaveis/header.html
-        fetch('/components/header.html') 
+
+        // Carrega o HTML do header
+        fetch('/components/header.html')
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Não foi possível carregar o header.');
@@ -13,14 +13,16 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(data => {
                 headerPlaceholder.innerHTML = data;
 
+                // 1. Carrega script de autenticação
                 const authScript = document.createElement('script');
-                
-                // Mude de ../script/auth.js PARA /script/auth.js
-                // Este é o erro 404 que você está vendo!
-                authScript.src = '/frontend/script/auth.js'; 
-                
+                authScript.src = '/frontend/script/auth.js';
                 document.body.appendChild(authScript);
+
+                // 2. Destaca a página atual no menu
                 highlightCurrentPage();
+
+                // 3. Inicializa o Menu Mobile (IMPORTANTE: Só funciona depois que o HTML é inserido)
+                initMobileMenu();
             })
             .catch(error => {
                 console.error('Erro ao carregar o header:', error);
@@ -29,14 +31,34 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function highlightCurrentPage() {
-    // Pega o caminho da URL atual (ex: "/html/sobrenos.html")
-    const currentPath = window.location.pathname; 
-    const navLinks = document.querySelectorAll('#header-placeholder .lista-nav a, #header-placeholder .lista-nav-mobile a');
+    const currentPath = window.location.pathname;
+    // Tenta pegar links do desktop e do mobile
+    const navLinks = document.querySelectorAll('.lista-nav a, .lista-nav-mobile a');
 
     navLinks.forEach(link => {
-        // Compara o href absoluto (ex: /html/index.html)
-        if (link.getAttribute('href') === currentPath) {
+        // Verifica se o href corresponde ao caminho atual
+        // Dica: includes ajuda se houver parâmetros na URL ou caminhos relativos complexos
+        if (link.getAttribute('href') === currentPath || (currentPath === '/' && link.getAttribute('href').includes('index.html'))) {
             link.closest('.item-nav').classList.add('pagina-atual');
         }
     });
+}
+
+function initMobileMenu() {
+    const btnMobile = document.getElementById('btn-mobile');
+
+    if (btnMobile) {
+        btnMobile.addEventListener('click', function () {
+            const menu = document.querySelector('.menu-mobile');
+            menu.classList.toggle('aberto');
+
+            // Altera o ícone do botão
+            const icon = this.querySelector('i');
+            if (menu.classList.contains('aberto')) {
+                icon.className = 'fa-solid fa-xmark';
+            } else {
+                icon.className = 'fa-solid fa-bars';
+            }
+        });
+    }
 }
