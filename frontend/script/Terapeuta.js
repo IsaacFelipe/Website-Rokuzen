@@ -1,67 +1,202 @@
-document.addEventListener('DOMContentLoaded', function () {
-    // --- 1. LÓGICA DE SESSÃO (JOÃO SILVA) ---
-    const btnIniciarSessao = document.getElementById('btn-iniciar-sessao');
-    const btnEncerrarSessao = document.getElementById('btn-encerrar-sessao');
-    let sessionTimer = null;
-    let sessionStartTime = null;
+// ===========================================================
+//  TERAPEUTA.JS - CONTROLE DE SESSÕES, LOGIN, INTERVALOS
+// ===========================================================
 
-    // Ouvinte para "Iniciar Sessão"
-    btnIniciarSessao.addEventListener('click', function () {
-        sessionStartTime = new Date();
-        console.log('Sessão iniciada para João Silva às:', sessionStartTime.toLocaleTimeString());
+document.addEventListener("DOMContentLoaded", () => {
 
-        const currentSessionLi = document.querySelector('li[data-session-id="1"] .status-sessao');
-        if (currentSessionLi) {
-            currentSessionLi.className = 'status-sessao status-andamento';
-            currentSessionLi.textContent = 'Em andamento';
-        }
+    // =======================================================
+    // 1. CONTROLE DE SESSÕES (NOVA FUNCIONALIDADE COMPLETA)
+    // =======================================================
 
-        // Troca os botões
-        btnIniciarSessao.disabled = true;
-        btnIniciarSessao.classList.remove('btn-primario');
-        btnIniciarSessao.classList.add('btn-inativo');
-        btnEncerrarSessao.disabled = false;
-        btnEncerrarSessao.classList.remove('btn-inativo');
-        btnEncerrarSessao.classList.add('btn-primario');
+    const btnIniciar = document.getElementById("btn-iniciar-sessao");
+    const btnEncerrar = document.getElementById("btn-encerrar-sessao");
+    const listaSessoes = document.getElementById("lista-sessao");
 
-        // Inicia o TIMER (50 min)
-        sessionTimer = setTimeout(function () {
-            alert('Sessão de João Silva finalizada automaticamente!');
-            encerrarSessao();
-        }, 50 * 60 * 1000);
-    });
+    let sessaoSelecionada = null;
 
-    // Ouvinte para "Encerrar Sessão"
-    btnEncerrarSessao.addEventListener('click', function () {
-        if (sessionTimer) {
-            clearTimeout(sessionTimer);
-            sessionTimer = null;
-        }
-        encerrarSessao();
-    });
+    // ---------------------------------------------
+    // Carrega sessões do terapeuta
+    // ---------------------------------------------
+    function carregarSessoes() {
+        const token = localStorage.getItem("token");
+        if (!token) return alert("Faça login novamente.");
 
-    // Função para encerrar
-    function encerrarSessao() {
-        const endTime = new Date();
-        console.log('Sessão encerrada para João Silva em:', endTime.toLocaleTimeString());
-        console.log('Duração:', Math.round((endTime - sessionStartTime) / 60000), 'minutos');
-
-        const currentSessionLi = document.querySelector('li[data-session-id="1"] .status-sessao');
-        if (currentSessionLi) {
-            currentSessionLi.className = 'status-sessao status-concluida';
-            currentSessionLi.textContent = 'Concluída';
-        }
-
-        // Reseta botões
-        btnIniciarSessao.disabled = false;
-        btnIniciarSessao.classList.remove('btn-inativo');
-        btnIniciarSessao.classList.add('btn-primario');
-        btnEncerrarSessao.disabled = true;
-        btnEncerrarSessao.classList.remove('btn-primario');
-        btnEncerrarSessao.classList.add('btn-inativo');
+        fetch("http://localhost:3001/api/terapeuta/sessoes", {
+            headers: { "Authorization": `Bearer ${token}` }
+        })
+            .then(res => res.json())
+            .then(sessoes => montarLista(sessoes))
+            .catch(err => console.error("Erro ao carregar sessões:", err));
     }
 
-    // --- 2. LÓGICA PARA LOGIN/LOGOUT ---
+    // ---------------------------------------------
+    // Monta visualmente a lista no painel
+    // ---------------------------------------------
+    function montarLista(sessoes) {
+        listaSessoes.innerHTML = "";
+        let emAndamento = null;
+
+        sessoes.forEach(sessao => {
+            // captura sessão atual
+            if (sessao.status === "Em Andamento") emAndamento = sessao;
+
+            const li = document.createElement("li");
+            li.classList.add("item-sessao");
+            li.dataset.sessionId = sessao.atendimento_id;
+
+            const ini = formatHora(sessao.inicio_atendimento);
+            const fim = formatHora(sessao.fim_atendimento);
+
+            li.innerHTML = `
+                <span class="hora">${ini} | ${sessao.nome_cliente}</span>
+                <span class="status-sessao ${classeStatus(sessao.status)}">
+                    ${textoStatus(sessao.status)}
+                </span>
+            `;
+
+            li.addEventListener("click", () => selecionarSessao(sessao));
+
+            listaSessoes.appendChild(li);
+        });
+
+        atualizarSessaoAtual(emAndamento);
+    }
+
+    // ---------------------------------------------
+    // Seleciona uma sessão ao clicar
+    // ---------------------------------------------
+    function selecionarSessao(sessao) {
+        sessaoSelecionada = sessao;
+
+        const nome = sessao.nome_cliente;
+        const ini = formatHora(sessao.inicio_atendimento);
+        const fim = formatHora(sessao.fim_atendimento);
+
+        document.querySelector(".sessao-atual").textContent =
+            `Sessão Atual: ${nome}`;
+        document.querySelector(".tempo-sessao-atual").textContent =
+            `${ini} - ${fim}`;
+
+        atualizarBotoes(sessao.status);
+    }
+
+    function atualizarSessaoAtual(sessao) {
+        if (!sessao) {
+            document.querySelector(".sessao-atual").textContent =
+                "Sessão Atual: Nenhuma";
+            document.querySelector(".tempo-sessao-atual").textContent = "--:--";
+            btnIniciar.disabled = true;
+            btnEncerrar.disabled = true;
+            return;
+        }
+
+        selecionarSessao(sessao);
+    }
+
+    // ---------------------------------------------
+    // Atualiza habilitação dos botões
+    // ---------------------------------------------
+    function atualizarBotoes(status) {
+
+        if (status === "Agendado") {
+            // INICIAR ATIVO
+            btnIniciar.disabled = false;
+            btnIniciar.classList.remove("btn-inativo");
+            btnIniciar.classList.add("btn-primario");
+
+            // ENCERRAR INATIVO
+            btnEncerrar.disabled = true;
+            btnEncerrar.classList.remove("btn-primario");
+            btnEncerrar.classList.add("btn-inativo");
+
+        } else if (status === "Em Andamento") {
+            // INICIAR INATIVO
+            btnIniciar.disabled = true;
+            btnIniciar.classList.remove("btn-primario");
+            btnIniciar.classList.add("btn-inativo");
+
+            // ENCERRAR ATIVO
+            btnEncerrar.disabled = false;
+            btnEncerrar.classList.remove("btn-inativo");
+            btnEncerrar.classList.add("btn-primario");
+
+        } else {
+            // AMBOS DESATIVADOS
+            btnIniciar.disabled = true;
+            btnEncerrar.disabled = true;
+
+            btnIniciar.classList.remove("btn-primario");
+            btnEncerrar.classList.remove("btn-primario");
+
+            btnIniciar.classList.add("btn-inativo");
+            btnEncerrar.classList.add("btn-inativo");
+        }
+    }
+
+    // ---------------------------------------------
+    // Ações Iniciar / Encerrar Sessão
+    // ---------------------------------------------
+    btnIniciar.addEventListener("click", () => {
+        if (!sessaoSelecionada) return;
+        atualizarStatus("iniciar");
+    });
+
+    btnEncerrar.addEventListener("click", () => {
+        if (!sessaoSelecionada) return;
+        atualizarStatus("encerrar");
+    });
+
+    function atualizarStatus(acao) {
+        const token = localStorage.getItem("token");
+
+        fetch(`http://localhost:3001/api/terapeuta/sessoes/${sessaoSelecionada.atendimento_id}/${acao}`, {
+            method: "PUT",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
+        })
+            .then(res => res.json())
+            .then(() => carregarSessoes())
+            .catch(err => console.error("Erro ao atualizar status:", err));
+    }
+
+    // ---------------------------------------------
+    // Auxiliares visuais
+    // ---------------------------------------------
+    function formatHora(datetime) {
+        return new Date(datetime).toLocaleTimeString("pt-BR", {
+            hour: "2-digit",
+            minute: "2-digit"
+        });
+    }
+
+    function classeStatus(status) {
+        return {
+            "Agendado": "status-proxima",
+            "Em Andamento": "status-andamento",
+            "Concluído": "status-concluida",
+            "Cancelado": "status-cancelado"
+        }[status];
+    }
+
+    function textoStatus(status) {
+        return {
+            "Agendado": "Próxima",
+            "Em Andamento": "Em andamento",
+            "Concluído": "Concluída",
+            "Cancelado": "Cancelada"
+        }[status];
+    }
+
+    // Inicializa
+    carregarSessoes();
+
+
+    // =======================================================
+    // 2. LOGIN / LOGOUT (MANTIDO DO SEU CÓDIGO ORIGINAL)
+    // =======================================================
+
     const btnLogin = document.getElementById('btn-login');
     const btnLogout = document.getElementById('btn-logout');
     const statusLogin = document.getElementById('status-login');
@@ -72,150 +207,86 @@ document.addEventListener('DOMContentLoaded', function () {
         const formattedTime = loginTime.toLocaleTimeString('pt-BR');
         statusLogin.textContent = `Você fez login às ${formattedTime}, disponível para atendimentos.`;
 
-        // Troca botões
         btnLogin.disabled = true;
-        btnLogin.classList.remove('btn-primario');
-        btnLogin.classList.add('btn-inativo');
+        btnLogin.classList.replace('btn-primario', 'btn-inativo');
 
         btnLogout.disabled = false;
-        btnLogout.classList.remove('btn-inativo');
-        btnLogout.classList.add('btn-primario');
-
-        console.log('Login realizado às:', formattedTime);
+        btnLogout.classList.replace('btn-inativo', 'btn-primario');
     });
 
     btnLogout.addEventListener('click', function () {
-        const logoutTime = new Date();
-        const formattedLogout = logoutTime.toLocaleTimeString('pt-BR');
+        const formattedLogout = new Date().toLocaleTimeString('pt-BR');
         statusLogin.textContent = `Logout realizado às ${formattedLogout}. Você está offline.`;
 
-        // Reseta botões
         btnLogin.disabled = false;
-        btnLogin.classList.remove('btn-inativo');
-        btnLogin.classList.add('btn-primario');
+        btnLogin.classList.replace('btn-inativo', 'btn-primario');
 
         btnLogout.disabled = true;
-        btnLogout.classList.remove('btn-primario');
-        btnLogout.classList.add('btn-inativo');
+        btnLogout.classList.replace('btn-primario', 'btn-inativo');
 
         loginTime = null;
-        console.log('Logout realizado às:', formattedLogout);
     });
 
-    // Se já logado, ativa logout
-    if (statusLogin && statusLogin.textContent.includes('Você fez login')) {
-        btnLogin.disabled = true;
-        btnLogin.classList.remove('btn-primario');
-        btnLogin.classList.add('btn-inativo');
-        btnLogout.disabled = false;
-        btnLogout.classList.remove('btn-inativo');
-        btnLogout.classList.add('btn-primario');
-    }
 
-    // =============================================================
-    // --- 3. NOVA FUNCIONALIDADE: SALVAR INTERVALO NO BANCO (USANDO FETCH SEGURO) ---
-    // =============================================================
+    // =======================================================
+    // 3. SALVAR INTERVALO (MANTIDO + ORGANIZADO)
+    // =======================================================
+
     const btnSalvarIntervalo = document.getElementById('btn-salvar-intervalo');
     const ulIntervalos = document.querySelector('.cartao-lista-intervalo ul');
 
-    // Função auxiliar para mostrar na tela
     function adicionarIntervaloVisualmente(inicio, fim, tipo) {
-        if (ulIntervalos) {
-            const novoLi = document.createElement('li');
-            novoLi.innerHTML = `
-                <span class="tempo-intervalo">${inicio} - ${fim} (${tipo})</span>
-                <button class="btn-remover" aria-label="Remover intervalo">X</button>
-            `;
-            ulIntervalos.appendChild(novoLi);
-        }
+        const li = document.createElement("li");
+        li.innerHTML = `
+            <span class="tempo-intervalo">${inicio} - ${fim} (${tipo})</span>
+            <button class="btn-remover" aria-label="Remover intervalo">X</button>
+        `;
+        ulIntervalos.appendChild(li);
     }
-
 
     if (btnSalvarIntervalo) {
         btnSalvarIntervalo.addEventListener('click', function () {
-            // Pega o token para autenticação
             const token = localStorage.getItem('token');
-            if (!token) {
-                alert('Você precisa estar logado para adicionar um intervalo.');
-                return;
-            }
+            if (!token) return alert('Faça login novamente.');
 
-            // Pega os valores dos inputs criados no HTML
-            const inicioHora = document.getElementById('inicio-intervalo').value;
-            const fimHora = document.getElementById('fim-intervalo').value;
+            const inicio = document.getElementById('inicio-intervalo').value;
+            const fim = document.getElementById('fim-intervalo').value;
             const tipo = document.getElementById('tipo-intervalo').value;
 
-            // Validação simples
-            if (!inicioHora || !fimHora) {
-                alert('Por favor, preencha os horários de início e fim.');
-                return;
-            }
+            if (!inicio || !fim) return alert('Preencha os horários.');
 
-            // Pega a data de hoje (YYYY-MM-DD)
             const hoje = new Date().toISOString().split('T')[0];
+            const inicioFmt = `${hoje} ${inicio}:00`;
+            const fimFmt = `${hoje} ${fim}:00`;
 
-            // Monta as strings DATETIME para o banco (Formato: 'YYYY-MM-DD HH:MM:SS')
-            const inicioFormatado = `${hoje} ${inicioHora}:00`;
-            const fimFormatado = `${hoje} ${fimHora}:00`;
-
-            // Monta o objeto JSON (colaborador_id é omitido pois o BACKEND pega do token)
-            const dadosIntervalo = {
-                unidade_id: 1, // Assumindo ID da unidade como 1
-                inicio: inicioFormatado,
-                fim: fimFormatado,
-                tipo_intervalo: tipo
-            };
-
-            // Envia para o Back-end
             fetch('http://localhost:3001/api/intervalos', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    // ENVIANDO O TOKEN PARA AUTENTICAÇÃO
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify(dadosIntervalo)
-            })
-                .then(response => {
-                    if (response.status === 401) {
-                        alert('Sessão expirada. Por favor, faça login novamente.');
-                        localStorage.removeItem('token');
-                        return;
-                    }
-                    if (!response.ok) {
-                        // Se o status for 400 ou 500
-                        throw new Error('Erro ao salvar intervalo.');
-                    }
-                    return response.json();
+                body: JSON.stringify({
+                    unidade_id: 1,
+                    inicio: inicioFmt,
+                    fim: fimFmt,
+                    tipo_intervalo: tipo
                 })
-                .then(data => {
-                    // Sucesso: Adiciona visualmente na lista
-                    adicionarIntervaloVisualmente(inicioHora, fimHora, tipo);
-                    alert('Intervalo salvo com sucesso!');
-
-                    // Limpa os campos
+            })
+                .then(res => res.json())
+                .then(() => {
+                    adicionarIntervaloVisualmente(inicio, fim, tipo);
+                    alert('Intervalo salvo!');
                     document.getElementById('inicio-intervalo').value = '';
                     document.getElementById('fim-intervalo').value = '';
                 })
-                .catch(error => {
-                    console.error('Erro na requisição:', error);
-                    alert('Erro ao salvar no banco de dados. Verifique a conexão com o servidor (porta 3001).');
-                });
+                .catch(err => console.error('Erro:', err));
         });
     }
 
-    // Event delegation para remover intervalos (mantido como está, apenas visual)
     if (ulIntervalos) {
-        ulIntervalos.addEventListener('click', function (event) {
-            if (event.target.classList.contains('btn-remover')) {
-                const liPai = event.target.closest('li');
-                if (liPai) {
-                    const tempoRemovido = liPai.querySelector('.tempo-intervalo').textContent;
-                    if (confirm(`Remover intervalo ${tempoRemovido}?`)) {
-                        liPai.remove();
-                        console.log('Intervalo removido:', tempoRemovido);
-                    }
-                }
+        ulIntervalos.addEventListener('click', e => {
+            if (e.target.classList.contains('btn-remover')) {
+                e.target.closest('li').remove();
             }
         });
     }

@@ -1,7 +1,7 @@
 // Arquivo: agendamento.js (ATUALIZADO PARA PAGAMENTO)
 
 // --- 0. (Função decodeJWT - permanece a mesma) ---
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
 
     function decodeJWT(token) {
         try {
@@ -21,8 +21,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const agendamentoEmProgresso = {
         unidadeId: null,
         servicoId: null,
-        data: null, 
-        horario: null, 
+        data: null,
+        horario: null,
         colaboradorId: null,
         valor: null,
         duracao: null,
@@ -31,41 +31,41 @@ document.addEventListener('DOMContentLoaded', function() {
         guestEmail: null,
         tipoPagamento: null // <-- NOVO CAMPO
     };
-    
+
     let mapeamentoHorarios = new Map();
 
     // --- 3. Seleciona todas as seções ---
-    const secaoGuestLogin = document.getElementById('secao-guest-login'); 
-    const guestForm = document.getElementById('guestForm'); 
-    const secaoUnidades = document.getElementById('secao-unidades'); 
+    const secaoGuestLogin = document.getElementById('secao-guest-login');
+    const guestForm = document.getElementById('guestForm');
+    const secaoUnidades = document.getElementById('secao-unidades');
     const secaoServicos = document.getElementById('secao-servicos');
     const secaoDataHorario = document.getElementById('secao-data-horario');
     const secaoHorariosContainer = document.querySelector('#secao-data-horario .row.g-2');
     const secaoProfissionais = document.getElementById('secao-profissionais');
-    const secaoProfissionaisContainer = document.querySelector('#secao-profissionais .row.g-4'); 
+    const secaoProfissionaisContainer = document.querySelector('#secao-profissionais .row.g-4');
     const secaoPagamento = document.getElementById('secao-pagamento'); // <-- NOVO SELETOR
-    const seletorData = document.getElementById('data-agendamento'); 
+    const seletorData = document.getElementById('data-agendamento');
     const secaoConfirmar = document.getElementById('secao-confirmar');
-    const btnAgendar = document.getElementById('btn-agendar'); 
+    const btnAgendar = document.getElementById('btn-agendar');
 
     // --- 2. VERIFICA O LOGIN E DECIDE O FLUXO ---
     const token = localStorage.getItem('token');
     if (token) {
         const user = decodeJWT(token);
         if (user && user.tipo === 'cliente') {
-            agendamentoEmProgresso.clienteId = user.id; 
+            agendamentoEmProgresso.clienteId = user.id;
             console.log('Cliente ID logado:', user.id);
-            secaoGuestLogin.style.display = 'none'; 
-            secaoUnidades.classList.remove('oculto'); 
+            secaoGuestLogin.style.display = 'none';
+            secaoUnidades.classList.remove('oculto');
         }
     } else {
         console.log('Nenhum cliente logado. Mostrando formulário de convidado.');
-        secaoGuestLogin.style.display = 'block'; 
-        secaoUnidades.classList.add('oculto'); 
+        secaoGuestLogin.style.display = 'block';
+        secaoUnidades.classList.add('oculto');
     }
 
     // --- 4. LÓGICA DO FORMULÁRIO DE CONVIDADO ---
-    guestForm.addEventListener('submit', function(evento) {
+    guestForm.addEventListener('submit', function (evento) {
         evento.preventDefault();
         const nome = document.getElementById('guestNome').value;
         const email = document.getElementById('guestEmail').value;
@@ -75,15 +75,15 @@ document.addEventListener('DOMContentLoaded', function() {
             agendamentoEmProgresso.guestEmail = email;
             console.log('Convidado "autenticado":', agendamentoEmProgresso);
 
-            secaoGuestLogin.style.display = 'none'; 
-            secaoUnidades.classList.remove('oculto'); 
+            secaoGuestLogin.style.display = 'none';
+            secaoUnidades.classList.remove('oculto');
             secaoUnidades.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     });
 
     // --- 5. LÓGICA DE SELEÇÃO DE DATA ---
-    seletorData.addEventListener('change', async function() {
-        const dataSelecionada = seletorData.value; 
+    seletorData.addEventListener('change', async function () {
+        const dataSelecionada = seletorData.value;
         const { unidadeId, servicoId } = agendamentoEmProgresso;
 
         if (!dataSelecionada) {
@@ -93,15 +93,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (!unidadeId || !servicoId) {
             alert("Por favor, selecione a Unidade e o Serviço antes de escolher a data.");
-            seletorData.value = ''; 
+            seletorData.value = '';
             return;
         }
 
-        agendamentoEmProgresso.data = dataSelecionada; 
+        agendamentoEmProgresso.data = dataSelecionada;
 
         secaoHorariosContainer.innerHTML = '<p class="text-secondary">Buscando horários...</p>';
-        secaoProfissionaisContainer.innerHTML = ''; 
-        secaoProfissionais.classList.add('oculto'); 
+        secaoProfissionaisContainer.innerHTML = '';
+        secaoProfissionais.classList.add('oculto');
         secaoPagamento.classList.add('oculto'); // Esconde pagamento ao trocar de data
         secaoConfirmar.classList.add('oculto'); // Esconde botão ao trocar de data
 
@@ -113,11 +113,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 throw new Error('Falha ao buscar horários.');
             }
 
-            const data = await response.json(); 
+            const data = await response.json();
 
             secaoHorariosContainer.innerHTML = '';
             const horarios = Object.keys(data.mapeamento).sort();
-            mapeamentoHorarios = new Map(Object.entries(data.mapeamento)); 
+            mapeamentoHorarios = new Map(Object.entries(data.mapeamento));
 
             if (horarios.length === 0) {
                 secaoHorariosContainer.innerHTML = '<p class="text-danger">Nenhum horário disponível para esta data.</p>';
@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 `;
                 secaoHorariosContainer.innerHTML += btnHtml;
             });
-            gerenciarSelecao('.btn-horario'); 
+            gerenciarSelecao('.btn-horario');
 
             if (data.terapeutas.length > 0) {
                 data.terapeutas.forEach(terapeuta => {
@@ -149,9 +149,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     `;
                     secaoProfissionaisContainer.innerHTML += terapeutaHtml;
                 });
-                gerenciarSelecao('.card-profissional'); 
+                gerenciarSelecao('.card-profissional');
             }
-            
+
         } catch (error) {
             console.error('Erro ao buscar horários:', error);
             secaoHorariosContainer.innerHTML = '<p class="text-danger">Erro ao buscar horários. Tente novamente.</p>';
@@ -167,26 +167,26 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
-            elemento.addEventListener('click', function(evento) {
+            elemento.addEventListener('click', function (evento) {
                 evento.preventDefault();
-                
+
                 elementos.forEach(el => el.classList.remove('ativo'));
                 this.classList.add('ativo');
 
-                const idSelecionado = this.dataset.id; 
+                const idSelecionado = this.dataset.id;
 
                 if (seletor === '.card-unidade') {
                     agendamentoEmProgresso.unidadeId = idSelecionado;
                     secaoServicos.classList.remove('oculto');
                     secaoServicos.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                
+
                 } else if (seletor === '.item-servico') {
                     agendamentoEmProgresso.servicoId = idSelecionado;
-                    
-                    const texto = this.querySelector('.text-end').textContent.trim(); 
+
+                    const texto = this.querySelector('.text-end').textContent.trim();
                     const regex = /(\d+)\s*min\s*-\s*R\$\s*([\d,]+)/;
                     const match = texto.match(regex);
-                    
+
                     if (match) {
                         agendamentoEmProgresso.duracao = parseInt(match[1]);
                         agendamentoEmProgresso.valor = parseFloat(match[2].replace(',', '.'));
@@ -196,31 +196,31 @@ document.addEventListener('DOMContentLoaded', function() {
 
                     secaoDataHorario.classList.remove('oculto');
                     secaoDataHorario.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                
+
                 } else if (seletor === '.btn-horario') {
-                    agendamentoEmProgresso.horario = this.textContent; 
-                    
+                    agendamentoEmProgresso.horario = this.textContent;
+
                     const idsDisponiveis = mapeamentoHorarios.get(agendamentoEmProgresso.horario);
                     const todasColunasTerapeutas = document.querySelectorAll('#secao-profissionais .col-12');
 
                     todasColunasTerapeutas.forEach(coluna => {
                         const card = coluna.querySelector('.card-profissional');
                         const cardId = card ? parseInt(card.dataset.id) : null;
-                        
+
                         if (cardId && idsDisponiveis.includes(cardId)) {
-                            coluna.style.display = 'block'; 
+                            coluna.style.display = 'block';
                         } else {
-                            coluna.style.display = 'none'; 
+                            coluna.style.display = 'none';
                         }
                     });
-                
+
                 } else if (seletor === '.card-profissional') {
                     agendamentoEmProgresso.colaboradorId = this.dataset.id;
-                
+
                 } else if (seletor === '.card-pagamento') { // <-- NOVO ELSE IF
                     agendamentoEmProgresso.tipoPagamento = idSelecionado; // Salva 1 ou 2
                 }
-                
+
                 verificarAgendamentoCompleto();
             });
         });
@@ -230,7 +230,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function verificarAgendamentoCompleto() {
         const { unidadeId, servicoId, data, horario } = agendamentoEmProgresso;
         const isAutenticado = agendamentoEmProgresso.clienteId || agendamentoEmProgresso.guestNome;
-        
+
         // Seleciona os cartões ativos
         const profissionalAtivo = document.querySelector('.card-profissional.ativo');
         const pagamentoAtivo = document.querySelector('.card-pagamento.ativo'); // <-- NOVO
@@ -262,30 +262,30 @@ document.addEventListener('DOMContentLoaded', function() {
     gerenciarSelecao('.card-profissional');
     gerenciarSelecao('.card-pagamento'); // <-- NOVO
 
-    // --- 9. LÓGICA DO BOTÃO FINAL DE AGENDAR (ATUALIZADA) ---
-    btnAgendar.addEventListener('click', async function() {
-        
+    // --- 9. LÓGICA DO BOTÃO FINAL DE AGENDAR (CORRIGIDA) ---
+    btnAgendar.addEventListener('click', async function () {
+
         const isAutenticado = agendamentoEmProgresso.clienteId || agendamentoEmProgresso.guestNome;
         if (!isAutenticado) {
             alert("Você precisa estar logado ou preencher seus dados como convidado.");
             return;
         }
-        
+
         // Pega os IDs dos cartões ativos no momento do clique
         agendamentoEmProgresso.colaboradorId = document.querySelector('.card-profissional.ativo')?.dataset.id;
         agendamentoEmProgresso.tipoPagamento = document.querySelector('.card-pagamento.ativo')?.dataset.id;
 
         // Validação final agora inclui tipoPagamento
-        if (!agendamentoEmProgresso.unidadeId || 
-            !agendamentoEmProgresso.servicoId || 
-            !agendamentoEmProgresso.data || 
-            !agendamentoEmProgresso.horario || 
+        if (!agendamentoEmProgresso.unidadeId ||
+            !agendamentoEmProgresso.servicoId ||
+            !agendamentoEmProgresso.data ||
+            !agendamentoEmProgresso.horario ||
             !agendamentoEmProgresso.colaboradorId ||
-            !agendamentoEmProgresso.tipoPagamento) { // <-- NOVO
+            !agendamentoEmProgresso.tipoPagamento) {
             alert("Por favor, selecione todas as etapas: Unidade, Serviço, Data, Horário, Profissional e Pagamento.");
             return;
         }
-        
+
         console.log("Enviando para o back-end:", agendamentoEmProgresso);
 
         try {
@@ -294,14 +294,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(agendamentoEmProgresso), // Envia o objeto completo
+                body: JSON.stringify(agendamentoEmProgresso),
             });
 
             const resultado = await response.json();
 
             if (resultado.success) {
                 alert(resultado.message);
-                window.location.reload(); 
+                window.location.href = "../html/index.html";
             } else {
                 alert('Houve um erro: ' + resultado.message);
             }
@@ -311,4 +311,5 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Não foi possível conectar ao servidor. Tente novamente.');
         }
     });
+
 });

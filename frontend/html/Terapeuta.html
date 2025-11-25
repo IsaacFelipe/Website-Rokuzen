@@ -32,27 +32,16 @@
                 <section class="modulo">
                     <h2 class="titulo-modulo">Controle de sessões</h2>
                     <div class="cartao controle-sessao">
-                        <h3 class="sessao-atual">Sessão Atual: João Silva</h3>
-                        <p class="tempo-sessao-atual">09:00 - 09:50</p>
+                        <h3 class="sessao-atual">Sessão Atual: Nenhuma sessão em andamento</h3>
+                        <p class="tempo-sessao-atual">--:--</p>
 
                         <div class="grupo-botoes">
-                            <button class="btn btn-primario" id="btn-iniciar-sessao">Iniciar Sessão</button>
+                            <button class="btn btn-primario" id="btn-iniciar-sessao" disabled>Iniciar Sessão</button>
                             <button class="btn btn-inativo" id="btn-encerrar-sessao" disabled>Encerrar Sessão</button>
                         </div>
 
                         <ul class="lista-sessao" id="lista-sessao">
-                            <li>
-                                <span class="hora">08h00 | Maria Souza</span>
-                                <span class="status-sessao status-concluida">Concluída</span>
-                            </li>
-                            <li data-session-id="1" data-name="João Silva" data-time="09:00 - 09:50">
-                                <span class="hora">09h00 | João Silva</span>
-                                <span class="status-sessao status-andamento">Em andamento</span>
-                            </li>
-                            <li data-session-id="2" data-name="Ana Lima" data-time="10:00 - 10:50">
-                                <span class="hora">10h00 | Ana Lima</span>
-                                <span class="status-sessao status-proxima">Próxima cons.</span>
-                            </li>
+                            <!-- Lista preenchida automaticamente pelo JS -->
                         </ul>
                     </div>
                 </section>
