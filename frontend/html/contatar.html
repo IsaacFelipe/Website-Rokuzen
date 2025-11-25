@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,51 +8,19 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="../css/contatar.css">
     <link rel="stylesheet" href="../css/header.css">
-    
 </head>
+
 <body>
 
-    <header>
-        <nav id="barra-navegacao" class="navegacao-principal">
-            <div class="container-nav">
-                <div class="logo">
-                    <img src="../img/logo.png" alt="Logo Rokuzen">
-                </div>
-
-                <ul class="lista-nav">
-                    <li class="item-nav"><a href="../html/index.html">Home</a></li>
-                    <li class="item-nav"><a href="../html/sobrenos.html">Sobre nós</a></li>
-                    <li class="item-nav pagina-atual"><a href="../html/contatar.html">Unidades</a></li>
-                    <li class="item-nav"><a href="#">Serviços</a></li>
-                    <li class="item-nav"><a href="#">Fale conosco</a></li>
-                </ul>
-            </div>
-
-            <a href="../html/login.html" class="btn-primario btn-primario-nav">Login</a>
-
-            <button id="btn-mobile" aria-label="Abrir menu de navegação"><i class="fa-solid fa-bars"></i></button>
-        </nav>
-
-        <div class="menu-mobile">
-            <ul class="lista-nav-mobile">
-                <li class="item-nav"><a href="../html/index.html">Home</a></li>
-                <li class="item-nav"><a href="../html/sobrenos.html">Sobre nós</a></li>
-                <li class="item-nav"><a href="#">Unidades</a></li>
-                <li class="item-nav"><a href="#">Serviços</a></li>
-                <li class="item-nav"><a href="../html/contatar.html">Fale conosco</a></li>
-            </ul>
-
-            <a href="../html/login.html" class="btn-primario" style="margin: 15px auto 0 auto;">Login</a>
-        </div>
-    </header>
+    <div id="header-placeholder"></div>
 
     <div class="container">
         <h1>Contato</h1>
-        
-        <p style="text-align: center; font-style: italic; margin-bottom: 40px; color: var(--cor-texto-cinza);">Escolha a unidade mais próxima ou utilize nosso formulário abaixo.</p>
+
+        <p style="text-align: center; font-style: italic; margin-bottom: 40px; color: var(--cor-texto-cinza);">Escolha a
+            unidade mais próxima ou utilize nosso formulário abaixo.</p>
 
         <div class="contato-grid">
-            
             <div class="unidade-card">
                 <h3><i class="fas fa-map-marker-alt"></i> Golden Square Shopping</h3>
                 <p>Av. Kennedy, 700 | Piso 1</p>
@@ -101,35 +70,35 @@
                 E-mail para contato: <a href="mailto:contato@rokuzen.com.br">contato@rokuzen.com.br</a>
             </p>
             <div class="share">
-                <a href="https://www.facebook.com/rokuzen.massagem" target="_blank" class="fab fa-facebook-f" aria-label="Facebook"></a>
-                <a href="https://www.instagram.com/rokuzen.massagem/" target="_blank" class="fab fa-instagram" aria-label="Instagram"></a>
-                <a href="https://www.linkedin.com/company/rokuzen?trk=top_nav_home" target="_blank" class="fab fa-linkedin-in" aria-label="LinkedIn"></a>
-                <a href="mailto:contato@rokuzen.com.br" target="_blank" class="fa-solid fa-envelope" aria-label="E-mail"></a>
+                <a href="https://www.facebook.com/rokuzen.massagem" target="_blank" class="fab fa-facebook-f"
+                    aria-label="Facebook"></a>
+                <a href="https://www.instagram.com/rokuzen.massagem/" target="_blank" class="fab fa-instagram"
+                    aria-label="Instagram"></a>
+                <a href="https://www.linkedin.com/company/rokuzen?trk=top_nav_home" target="_blank"
+                    class="fab fa-linkedin-in" aria-label="LinkedIn"></a>
+                <a href="mailto:contato@rokuzen.com.br" target="_blank" class="fa-solid fa-envelope"
+                    aria-label="E-mail"></a>
             </div>
         </div>
-        
+
         <hr style="border-color: var(--cor-borda); margin: 30px 0;">
 
         <div class="form-container">
             <h2>Fale Conosco</h2>
             <form id="contactForm">
-                
                 <div class="input-grid">
                     <div class="form-group">
                         <label for="nome">Seu nome</label>
                         <input type="text" id="nome" name="nome" required>
                     </div>
-
                     <div class="form-group">
                         <label for="email">Seu e-mail</label>
                         <input type="email" id="email" name="email" required>
                     </div>
-                    
                     <div class="form-group">
                         <label for="celular">Seu celular/WhatsApp</label>
                         <input type="text" id="celular" name="celular" required placeholder="(DDD) xxxx-xxxx">
                     </div>
-
                     <div class="form-group">
                         <label for="assunto">Assunto</label>
                         <input type="text" id="assunto" name="assunto">
@@ -142,21 +111,21 @@
                 </div>
 
                 <button type="submit" class="submit-btn">Enviar mensagem</button>
-
                 <div id="alerta" class="mensagem-alerta"></div>
             </form>
         </div>
 
     </div>
 
+    <script src="/frontend/script/loadHeader.js"></script>
+
     <script>
-        // JS do Formulário
-        document.getElementById('contactForm').addEventListener('submit', function(event) {
-            event.preventDefault(); 
-            
+        document.getElementById('contactForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
             const form = event.target;
             const alerta = document.getElementById('alerta');
-            
+
             const dados = {
                 nome: form.nome.value,
                 email: form.email.value,
@@ -164,38 +133,25 @@
                 assunto: form.assunto.value,
                 mensagem: form.mensagem.value
             };
-            
+
             if (!dados.nome || !dados.email || !dados.celular || !dados.mensagem) {
                 alerta.textContent = 'Por favor, preencha todos os campos obrigatórios.';
                 alerta.className = 'mensagem-alerta erro';
                 alerta.style.display = 'block';
                 return;
             }
-           
-            // SIMULAÇÃO DE SUCESSO
+
             console.log('Dados do formulário enviados (simulado):', dados);
             alerta.textContent = 'Mensagem enviada com sucesso! Em breve entraremos em contato.';
             alerta.className = 'mensagem-alerta sucesso';
             alerta.style.display = 'block';
-            form.reset(); 
+            form.reset();
 
             setTimeout(() => {
                 alerta.style.display = 'none';
-            }, 5000); 
-        });
-
-        // JS do Menu Mobile
-        document.getElementById('btn-mobile').addEventListener('click', function() {
-            const menu = document.querySelector('.menu-mobile');
-            menu.classList.toggle('aberto');
-            // Altera o ícone do botão (opcional)
-            const icon = this.querySelector('i');
-            if (menu.classList.contains('aberto')) {
-                icon.className = 'fa-solid fa-xmark';
-            } else {
-                icon.className = 'fa-solid fa-bars';
-            }
+            }, 5000);
         });
     </script>
 </body>
+
 </html>
