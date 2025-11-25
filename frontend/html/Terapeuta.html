@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel do Terapeuta - Rokuzen</title>
+    <link rel="stylesheet" href="../css/Terapeuta.css">
+</head>
+
+<body>
+
+    <header class="cabecalho">
+        <div class="perfil-terapeuta">
+            <img src="../img/Imagens_QS/primeiro profissional 1.png" alt="Avatar de Midori Arawaka">
+            <span>Midori Arawaka</span>
+        </div>
+        <nav class="barra-navegacao">
+            <ul>
+                <li><a href="../html/Terapeuta.html" class="ativo">Início</a></li>
+                <li><a href="../html/terapeuta_escala.html">Escalas</a></li>
+                <li><a href="../html/terapeuta_agendamentos.html">Agendamentos</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="conteudo-principal">
+        <div class="grade-painel">
+
+            <div class="coluna-painel">
+
+                <section class="modulo">
+                    <h2 class="titulo-modulo">Controle de sessões</h2>
+                    <div class="cartao controle-sessao">
+                        <h3 class="sessao-atual">Sessão Atual: Nenhuma sessão em andamento</h3>
+                        <p class="tempo-sessao-atual">--:--</p>
+
+                        <div class="grupo-botoes">
+                            <button class="btn btn-primario" id="btn-iniciar-sessao" disabled>Iniciar Sessão</button>
+                            <button class="btn btn-inativo" id="btn-encerrar-sessao" disabled>Encerrar Sessão</button>
+                        </div>
+
+                        <ul class="lista-sessao" id="lista-sessao">
+                            <!-- Lista preenchida automaticamente pelo JS -->
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="modulo" style="margin-top: 24px;">
+                    <h2 class="titulo-modulo">Gerenciamento de intervalos</h2>
+                    <div class="cartao gerenciamento-intervalo">
+                        <p>Intervalo padrão de 10 minutos entre sessões é automático.</p>
+                        <p style="margin-bottom: 5px;"><strong>Novo intervalo manual</strong></p>
+
+                        <div style="display: flex; gap: 10px; margin-bottom: 10px; align-items: center;">
+                            <input type="time" id="inicio-intervalo"
+                                style="padding: 5px; border-radius: 4px; border: 1px solid #ccc;" required>
+                            <span>até</span>
+                            <input type="time" id="fim-intervalo"
+                                style="padding: 5px; border-radius: 4px; border: 1px solid #ccc;" required>
+                        </div>
+
+                        <select id="tipo-intervalo"
+                            style="width: 100%; margin-bottom: 10px; padding: 5px; border-radius: 4px; border: 1px solid #ccc;">
+                            <option value="Descanso">Descanso</option>
+                            <option value="Almoço">Almoço</option>
+                            <option value="Café">Café</option>
+                            <option value="Outro">Outro</option>
+                        </select>
+
+                        <button class="btn" id="btn-salvar-intervalo">Salvar Intervalo</button>
+                    </div>
+                </section>
+
+            </div>
+
+            <div class="coluna-painel">
+
+                <section class="modulo">
+                    <h2 class="titulo-modulo">Registro de login e logout</h2>
+                    <div class="cartao registro-entrada-saida">
+                        <div class="grupo-botoes">
+                            <button class="btn btn-primario" id="btn-login">Login</button>
+                            <button class="btn btn-inativo" id="btn-logout" disabled>Logout</button>
+                        </div>
+                        <p class="texto-status" id="status-login">Faça seu check-in clicando no botão de login.
+                        </p>
+                    </div>
+                </section>
+
+                <section class="modulo" style="margin-top: 24px;">
+                    <h2 class="titulo-modulo">Visualização de escalas</h2>
+                    <div class="cartao">
+                        <ul class="lista-escala">
+                            <li>
+                                <span class="hora">09:50</span>
+                                <span class="tag-status disponivel">Disponível</span>
+                            </li>
+                            <li>
+                                <span class="hora">10:30</span>
+                                <span class="tag-status ocupado">Ocupado</span>
+                            </li>
+                            <li>
+                                <span class="hora">11:00</span>
+                                <span class="tag-status intervalo">Intervalo</span>
+                            </li>
+                            <li>
+                                <span class="hora">11:10</span>
+                                <span class="tag-status disponivel">Disponível</span>
+                            </li>
+                            <li>
+                                <span class="hora">12:00</span>
+                                <span class="tag-status intervalo">Intervalo</span>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="modulo" style="margin-top: 24px;">
+                    <h2 class="titulo-modulo">Gerenciamento de intervalos</h2>
+                    <div class="cartao cartao-lista-intervalo">
+                        <ul>
+                            <li>
+                                <span class="tempo-intervalo">10:00 - 10:10</span>
+                                <button class="btn-remover" aria-label="Remover intervalo">X</button>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+            </div>
+
+        </div>
+    </main>
+
+    <script src="../script/Terapeuta.js"></script>
+
+</body>
+
+</html>
+

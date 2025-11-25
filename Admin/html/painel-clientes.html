@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROKUZEN - Painel de Clientes</title>
+    <link rel="stylesheet" href="../css/painel-atendimento.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <div id="dashboard-loader" class="dashboard-loader">
+            <div class="loader-spinner"></div>
+            <span>Carregando...</span>
+        </div>
+
+        <header class="header">
+            <div class="header-left">
+                <div class="logo">
+                    <img src="../../frontend/img/logo.png" alt="ROKUZEN" class="logo-image">
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="user-profile">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+            </div>
+        </header>
+
+        <div class="dashboard-body">
+
+            <nav class="sidebar">
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="dashboard.html">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="painel-atendimento.html">
+                            <i class="fas fa-calendar-check"></i>
+                            <span>Atendimentos</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="painel-procedimentos.html">
+                            <i class="fas fa-spa"></i>
+                            <span>Procedimentos</span>
+                        </a>
+                    </li>
+                    <li class="nav-item active">
+                        <a href="painel-clientes.html">
+                            <i class="fas fa-user-friends"></i>
+                            <span>Clientes</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="./painel-terapeutas.html">
+                            <i class="fas fa-users-cog"></i>
+                            <span>Colaboradores</span>
+                        </a>
+                    </li>
+                </ul>
+                <div class="logout">
+                    <a href="#" id="logout-button">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Sair</span>
+                    </a>
+                </div>
+            </nav>
+
+            <main class="main-content">
+                <div class="content-header">
+                    <h1>Gerenciamento de Clientes</h1>
+                </div>
+
+                <div class="filters-and-actions cartao">
+                    <div class="filter-group">
+                        <label for="search-client">Buscar:</label>
+                        <input type="text" id="search-client" class="form-control" placeholder="Nome ou Email...">
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn btn-primario" id="btn-add-client">
+                            <i class="fas fa-plus"></i> Novo Cliente
+                        </button>
+                        <button class="btn btn-secondary" id="btn-refresh">
+                            <i class="fas fa-sync-alt"></i> Atualizar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="data-table-container cartao">
+                    <table class="table" id="clientes-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nome</th>
+                                <th>Email</th>
+                                <th>Telefone</th>
+                                <th>Tipo de Cadastro</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clientes-body">
+                        </tbody>
+                    </table>
+                    <div id="no-data-message" class="no-data-message" style="display:none;">
+                        Nenhum cliente encontrado.
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <div id="addClientModal" class="modal">
+        <div class="modal-content small cartao">
+            <div class="modal-header">
+                <h3>Novo Cliente</h3>
+                <span class="close-button" onclick="closeModal('addClientModal')">&times;</span>
+            </div>
+            <form id="add-client-form">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Nome Completo:</label>
+                        <input type="text" id="add-nome" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email:</label>
+                        <input type="email" id="add-email" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Telefone/Celular:</label>
+                        <input type="text" id="add-celular" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo de Cadastro:</label>
+                        <select id="add-tipo" class="form-control" required>
+                            <option value="2">Cadastrado na Unidade</option>
+                            <option value="1">Cadastrado no Site</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary"
+                        onclick="closeModal('addClientModal')">Cancelar</button>
+                    <button type="submit" class="btn btn-primario">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="editClientModal" class="modal">
+        <div class="modal-content small cartao">
+            <div class="modal-header">
+                <h3>Editar Cliente #<span id="edit-id-display"></span></h3>
+                <span class="close-button" onclick="closeModal('editClientModal')">&times;</span>
+            </div>
+            <form id="edit-client-form">
+                <input type="hidden" id="edit-id">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Nome Completo:</label>
+                        <input type="text" id="edit-nome" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email:</label>
+                        <input type="email" id="edit-email" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Telefone/Celular:</label>
+                        <input type="text" id="edit-celular" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo de Cadastro:</label>
+                        <select id="edit-tipo" class="form-control" required>
+                            <option value="2">Cadastrado na Unidade</option>
+                            <option value="1">Cadastrado no Site</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary"
+                        onclick="closeModal('editClientModal')">Cancelar</button>
+                    <button type="submit" class="btn btn-primario">Atualizar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="deleteConfirmModal" class="modal">
+        <div class="modal-content small cartao">
+            <div class="modal-header">
+                <h3>Confirmar Exclusão</h3>
+            </div>
+            <div class="modal-body">
+                <p>Tem certeza que deseja excluir este cliente?</p>
+                <p style="font-size: 0.85rem; color: var(--status-cancelado);">
+                    Atenção: Se ele tiver agendamentos, a exclusão pode falhar.
+                </p>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary"
+                    onclick="closeModal('deleteConfirmModal')">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="confirm-delete">Excluir</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../frontend/script/auth.js"></script>
+    <script src="../script/painel-clientes.js"></script>
+</body>
+
+</html>

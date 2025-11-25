@@ -1,0 +1,597 @@
+/* =========================================
+   1. IMPORTS DE FONTES (Padronizado)
+   ========================================= */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+
+/* =========================================
+   2. :ROOT (Paleta de Cores Padronizada)
+   ========================================= */
+:root {
+    /* Fontes (Padronizadas) */
+    --font-heading: 'Cinzel', serif;
+    --font-menu: 'League Spartan', sans-serif;
+    --font-body: 'Montserrat', sans-serif;
+
+    /* Cores Padronizadas (Da versão anterior) */
+    --primary: #9ab946;
+    /* Verde (Disponível) */
+    --text-dark: #694300;
+    /* Marrom (Texto principal) */
+    --bg-page: #fcfbf2;
+    /* Off-white (Fundo da página) */
+    --bg-card: #ffffff;
+    /* Branco (Fundo dos cards) */
+    --black: #000000;
+    /* Preto (Raramente usado) */
+
+    /* Cores de Status (Padronizadas) */
+    --status-sessao: #4A6A8A;
+    /* Azul-ardósia (Ocupado/Sessão) */
+    --status-intervalo: #CB8A02;
+    /* Âmbar/Dourado (Intervalo) */
+    --status-disponivel: #9ab946;
+    /* Verde (Disponível) */
+    --danger: #D9534F;
+    /* Vermelho (Remover) */
+
+    /* Cores Derivadas (Padronizadas) */
+    --text-light: #8a7352;
+    /* Marrom claro (Subtextos) */
+    --border: #EAE5DB;
+    /* Borda (Baseado no Fundo) */
+
+    /* Fundos de caixas de informação (Padronizados) */
+    --bg-sessao-light: #F0F4F7;
+    /* Azul claro (Ocupado) */
+    --bg-intervalo-light: #FFFBF0;
+    /* Dourado claro (Intervalo) */
+    --bg-disponivel-light: #F5F8EF;
+    /* Verde claro (Disponível) */
+    --bg-proximo-light: #F9F7F4;
+    /* Neutro (Próximo) */
+
+    /* Variáveis para "vida" (Gradientes e animações - Adicionadas) */
+    --gradient-primary: linear-gradient(135deg, var(--primary), #7ea83b);
+    --gradient-hover: linear-gradient(135deg, var(--primary), #8bb73a);
+    --shadow-light: 0 4px 12px rgba(105, 67, 0, 0.05);
+    --shadow-hover: 0 8px 24px rgba(105, 67, 0, 0.1);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Mapeamentos adicionais para compatibilidade */
+    --primary-dark: #7ea83b;
+    --secondary-bg: #F9F9F9;
+    --secondary-border: #EAE5DB;
+    --secondary-text: #8a7352;
+    --white: #ffffff;
+    --status-ocupado: #F0F4F7;
+    /* Mapeado para sessão */
+    --dot-concluida: #9ab946;
+    /* Verde concluída */
+    --dot-andamento: #CB8A02;
+    /* Âmbar em andamento */
+    --dot-proxima: #EAE5DB;
+    /* Neutro próxima */
+}
+
+/* =========================================
+   3. RESET E ESTILOS GLOBAIS (Padronizado com vida)
+   ========================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-body);
+    /* Montserrat (Padronizado) */
+    background: var(--bg-page);
+    color: var(--text-dark);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =========================================
+   4. CABEÇALHO (Padronizado com transições)
+   ========================================= */
+.cabecalho {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 32px;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    transition: var(--transition);
+}
+
+.cabecalho:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+
+.perfil-terapeuta {
+    display: flex;
+    align-items: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    font-family: var(--font-menu);
+    /* League Spartan (Padronizado) */
+    color: var(--text-dark);
+    transition: var(--transition);
+}
+
+.perfil-terapeuta:hover {
+    color: var(--primary);
+    transform: scale(1.02);
+}
+
+.perfil-terapeuta img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 12px;
+    transition: var(--transition);
+    box-shadow: var(--shadow-light);
+}
+
+.perfil-terapeuta img:hover {
+    transform: scale(1.1);
+    box-shadow: var(--shadow-hover);
+}
+
+.barra-navegacao ul {
+    display: flex;
+    list-style: none;
+    gap: 24px;
+}
+
+.barra-navegacao a {
+    text-decoration: none;
+    color: var(--text-light);
+    font-weight: 700;
+    /* Padronizado com peso */
+    font-size: 0.95rem;
+    font-family: var(--font-menu);
+    /* League Spartan (Padronizado) */
+    position: relative;
+    transition: var(--transition);
+    padding-bottom: 4px;
+}
+
+.barra-navegacao a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--gradient-primary);
+    transition: var(--transition);
+}
+
+.barra-navegacao a:hover {
+    color: var(--primary);
+    transform: translateY(-1px);
+}
+
+.barra-navegacao a:hover::after {
+    width: 100%;
+}
+
+.barra-navegacao a.ativo {
+    color: var(--text-dark);
+}
+
+/* Sem barra para .ativo — só no hover */
+
+/* =========================================
+   5. CONTEÚDO PRINCIPAL (Padronizado)
+   ========================================= */
+.conteudo-principal {
+    background: var(--bg-disponivel-light);
+    /* Mapeado para verde claro */
+    margin: 24px;
+    padding: 24px;
+    border-radius: 16px;
+    box-shadow: var(--shadow-light);
+    transition: var(--transition);
+}
+
+.conteudo-principal:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+
+.grade-painel {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.titulo-modulo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    font-family: var(--font-heading);
+    /* Cinzel para títulos (Padronizado) */
+    color: var(--text-dark);
+    transition: var(--transition);
+    text-shadow: 0 1px 2px rgba(105, 67, 0, 0.1);
+}
+
+.titulo-modulo:hover {
+    color: var(--primary);
+    text-shadow: 0 2px 4px rgba(154, 185, 70, 0.2);
+}
+
+/* =========================================
+   6. CARTÕES (Padronizado com vida)
+   ========================================= */
+.cartao {
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: var(--shadow-light);
+    height: 100%;
+    transition: var(--transition);
+    border: 1px solid var(--border);
+}
+
+.cartao:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-4px);
+}
+
+/* =========================================
+   7. BOTÕES (Padronizado com vida)
+   ========================================= */
+.btn {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 700;
+    font-family: var(--font-body);
+    /* Montserrat (Padronizado) */
+    cursor: pointer;
+    transition: var(--transition);
+    background: var(--bg-card);
+    color: var(--text-dark);
+}
+
+.btn-grande {
+    width: 100%;
+    padding: 14px;
+}
+
+.btn-primario {
+    border: 1px solid var(--primary);
+    background: var(--gradient-primary);
+    color: var(--bg-card);
+}
+
+.btn-primario:hover {
+    background: var(--gradient-hover);
+    border-color: var(--primary);
+    transform: scale(1.02);
+}
+
+.btn-primario:disabled,
+.btn-inativo {
+    background: var(--bg-card);
+    color: var(--text-light);
+    border: 1px solid var(--border);
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.btn-inativo:hover {
+    background: var(--secondary-bg);
+    transform: none;
+}
+
+.btn-inativo:disabled {
+    opacity: 0.5;
+}
+
+/* =========================================
+   8. CONTROLE DE SESSÃO (Padronizado)
+   ========================================= */
+.controle-sessao .sessao-atual {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+    font-family: var(--font-menu);
+    /* League Spartan (Padronizado) */
+}
+
+.controle-sessao .tempo-sessao-atual {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin-bottom: 16px;
+}
+
+.grupo-botoes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+/* =========================================
+   9. LISTA DE SESSÃO (Padronizado com status)
+   ========================================= */
+.lista-sessao {
+    list-style: none;
+}
+
+.lista-sessao li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    transition: var(--transition);
+}
+
+.lista-sessao li:hover {
+    background: rgba(154, 185, 70, 0.05);
+    transform: translateX(4px);
+}
+
+.lista-sessao li:last-child {
+    border-bottom: none;
+}
+
+.lista-sessao .hora {
+    font-weight: 700;
+    font-family: var(--font-body);
+}
+
+.lista-sessao .status-sessao {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    font-size: 0.9rem;
+    font-family: var(--font-body);
+    transition: var(--transition);
+}
+
+.lista-sessao .status-sessao:hover {
+    transform: scale(1.05);
+}
+
+.lista-sessao .status-sessao::before {
+    content: '';
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 8px;
+    animation: gentlePulse 1.5s infinite ease-in-out;
+}
+
+@keyframes gentlePulse {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.7;
+        transform: scale(1.2);
+    }
+}
+
+.lista-sessao .status-concluida {
+    color: var(--status-disponivel);
+}
+
+.lista-sessao .status-concluida::before {
+    background: var(--status-disponivel);
+}
+
+.lista-sessao .status-andamento {
+    color: var(--status-sessao);
+}
+
+.lista-sessao .status-andamento::before {
+    background: var(--status-sessao);
+}
+
+.lista-sessao .status-proxima {
+    color: var(--status-intervalo);
+}
+
+.lista-sessao .status-proxima::before {
+    background-color: var(--status-intervalo);
+}
+
+/* =========================================
+   10. REGISTRO DE ENTRADA/SAÍDA (Padronizado)
+   ========================================= */
+.registro-entrada-saida .grupo-botoes {
+    margin-bottom: 12px;
+}
+
+.registro-entrada-saida .texto-status {
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--text-light);
+}
+
+/* =========================================
+   11. LISTA DE ESCALA (Padronizado)
+   ========================================= */
+.lista-escala {
+    list-style: none;
+}
+
+.lista-escala li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    transition: var(--transition);
+}
+
+.lista-escala li:hover {
+    transform: translateY(-1px);
+}
+
+.lista-escala .hora {
+    font-weight: 600;
+    color: var(--text-light);
+    font-size: 0.9rem;
+    font-family: var(--font-body);
+}
+
+.tag-status {
+    width: 70%;
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-align: center;
+    transition: var(--transition);
+    font-family: var(--font-menu);
+    /* League Spartan para tags */
+}
+
+.tag-status:hover {
+    transform: scale(1.02);
+}
+
+.tag-status.disponivel {
+    background: var(--bg-disponivel-light);
+    color: var(--primary);
+    border: 1px solid var(--status-disponivel);
+}
+
+.tag-status.ocupado {
+    background: var(--bg-sessao-light);
+    color: var(--status-sessao);
+    border: 1px solid var(--status-sessao);
+}
+
+.tag-status.intervalo {
+    background: var(--bg-intervalo-light);
+    color: var(--status-intervalo);
+    border: 1px solid var(--status-intervalo);
+}
+
+/* =========================================
+   12. GERENCIAMENTO DE INTERVALO (Padronizado)
+   ========================================= */
+.gerenciamento-intervalo p {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin-bottom: 12px;
+    font-family: var(--font-body);
+}
+
+.gerenciamento-intervalo .btn {
+    background: var(--secondary-bg);
+    color: var(--text-dark);
+    border: 1px solid var(--secondary-border);
+    width: 100%;
+    transition: var(--transition);
+}
+
+.gerenciamento-intervalo .btn:hover {
+    background: var(--bg-proximo-light);
+    transform: scale(1.01);
+}
+
+/* =========================================
+   13. CARTÃO LISTA DE INTERVALO (Padronizado)
+   ========================================= */
+.cartao-lista-intervalo ul {
+    list-style: none;
+}
+
+.cartao-lista-intervalo li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: var(--bg-intervalo-light);
+    /* Padronizado */
+    border-radius: 6px;
+    transition: var(--transition);
+    border: 1px solid var(--border);
+}
+
+.cartao-lista-intervalo li:hover {
+    background: linear-gradient(135deg, var(--bg-intervalo-light), #fff8e6);
+    transform: translateX(2px);
+}
+
+.cartao-lista-intervalo .tempo-intervalo {
+    font-weight: 600;
+    font-family: var(--font-body);
+}
+
+.cartao-lista-intervalo .btn-remover {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--bg-card);
+    color: var(--danger);
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: var(--transition);
+}
+
+.cartao-lista-intervalo .btn-remover:hover {
+    background: rgba(217, 83, 79, 0.1);
+    transform: scale(1.2);
+}
+
+/* =========================================
+   14. RESPONSIVIDADE (Padronizado)
+   ========================================= */
+@media (max-width: 900px) {
+    .grade-painel {
+        grid-template-columns: 1fr;
+    }
+
+    .cabecalho {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .barra-navegacao ul {
+        gap: 16px;
+    }
+
+    /* Reduzir animações em mobile para performance */
+    .cartao,
+    .btn,
+    .tag-status,
+    .lista-sessao li {
+        transition: all 0.2s ease;
+    }
+}

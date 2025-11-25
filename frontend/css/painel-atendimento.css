@@ -1,0 +1,649 @@
+/* =========================================
+   1. IMPORTS DE FONTES (da Tela Terapeuta)
+   ========================================= */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+
+/* =========================================
+   2. :ROOT (Paleta de Cores da Tela Terapeuta)
+   ========================================= */
+:root {
+    /* Fontes */
+    --font-heading: 'Cinzel', serif;
+    --font-menu: 'League Spartan', sans-serif;
+    --font-body: 'Montserrat', sans-serif;
+
+    /* Cores Principais (da Terapeuta.css) */
+    --primary: #9ab946;
+    /* Verde */
+    --primary-dark: #7ea83b;
+    --text-dark: #694300;
+    /* Marrom */
+    --text-light: #8a7352;
+    --bg-page: #fcfbf2;
+    /* Off-white */
+    --bg-card: #ffffff;
+    /* Branco */
+    --border: #EAE5DB;
+
+    /* Cores de Status (Mapeadas da Terapeuta.css) */
+    --status-realizado: #9ab946;
+    --bg-realizado: #F5F8EF;
+    --status-agendado: #CB8A02;
+    /* Dourado */
+    --bg-agendado: #FFFBF0;
+    --status-pendente: #4A6A8A;
+    /* Azul-ardósia */
+    --bg-pendente: #F0F4F7;
+    --status-cancelado: #D9534F;
+    /* Vermelho */
+    --bg-cancelado: #fdf5f5;
+
+    /* Cores específicas do Admin (Sidebar) */
+    --admin-sidebar-bg: #2d2d2d;
+    --admin-sidebar-text: #ccc;
+    --admin-sidebar-hover: #444;
+
+    /* Efeitos (da Terapeuta.css) */
+    --shadow-light: 0 4px 12px rgba(105, 67, 0, 0.05);
+    --shadow-hover: 0 8px 24px rgba(105, 67, 0, 0.1);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Layout */
+    --sidebar-width: 260px;
+    --header-height: 70px;
+}
+
+/* =========================================
+   3. RESET E ESTILOS GLOBAIS
+   ========================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--bg-page);
+    color: var(--text-dark);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+a {
+    text-decoration: none;
+    color: var(--primary);
+    transition: var(--transition);
+}
+a:hover {
+    color: var(--primary-dark);
+}
+
+/* =========================================
+   4. ESTRUTURA PRINCIPAL DO DASHBOARD
+   ========================================= */
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100vh;
+}
+
+.header {
+    height: var(--header-height);
+    background-color: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    flex-shrink: 0;
+    box-shadow: var(--shadow-light);
+    z-index: 10;
+}
+
+.header-left .logo-image {
+    height: 40px;
+    width: auto;
+    transition: var(--transition);
+}
+.header-left .logo-image:hover {
+    transform: scale(1.05);
+}
+
+.header-right .user-profile {
+    font-size: 2rem;
+    color: var(--text-light);
+    transition: var(--transition);
+}
+.header-right .user-profile:hover {
+    color: var(--primary);
+    transform: scale(1.1);
+}
+
+/* =========================================
+   5. CORREÇÃO DE LAYOUT (HTML + CSS)
+   ========================================= */
+.dashboard-body {
+    display: flex;
+    flex: 1; /* Ocupa o restante da altura */
+    overflow: hidden; /* Evita scroll duplo */
+}
+
+/* =========================================
+   6. SIDEBAR (Barra Lateral)
+   ========================================= */
+.sidebar {
+    width: var(--sidebar-width);
+    background-color: var(--admin-sidebar-bg);
+    color: var(--admin-sidebar-text);
+    padding: 1.5rem 0;
+    flex-shrink: 0;
+    overflow-y: auto;
+    transition: var(--transition);
+}
+
+.nav-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-item a {
+    display: flex;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    color: var(--admin-sidebar-text);
+    font-weight: 700;
+    font-family: var(--font-menu);
+    transition: var(--transition);
+    border-left: 4px solid transparent;
+}
+
+.nav-item a:hover {
+    background-color: var(--admin-sidebar-hover);
+    color: #fff;
+    border-left-color: var(--primary-dark);
+}
+
+.nav-item a.active {
+    background-color: var(--primary-dark);
+    color: var(--bg-card);
+    font-weight: 700;
+    border-left-color: var(--primary);
+}
+
+.nav-item a i {
+    width: 25px;
+    margin-right: 1rem;
+    text-align: center;
+    font-size: 1rem;
+}
+
+.logout {
+    padding: 1rem 1.5rem;
+    margin-top: 2rem;
+    border-top: 1px solid #444;
+}
+.logout a {
+    color: var(--admin-sidebar-text);
+    font-family: var(--font-menu);
+    font-weight: 700;
+}
+.logout a:hover {
+    color: var(--status-cancelado);
+}
+
+/* =========================================
+   7. ÁREA DE CONTEÚDO PRINCIPAL
+   ========================================= */
+.main-content {
+    flex: 1; /* Ocupa o restante da largura */
+    padding: 2rem;
+    overflow-y: auto; /* Permite scroll apenas no conteúdo */
+    background-color: var(--bg-page);
+}
+
+.content-header h1 {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 2rem;
+    text-shadow: 0 1px 2px rgba(105, 67, 0, 0.1);
+}
+
+/* =========================================
+   8. CARTÃO (Estilo da Terapeuta.css)
+   ========================================= */
+.cartao {
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow-light);
+    transition: var(--transition);
+    border: 1px solid var(--border);
+    margin-bottom: 2rem;
+}
+.cartao:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+
+/* =========================================
+   9. FILTROS E BOTÕES
+   ========================================= */
+.filters-and-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.filter-group label {
+    font-weight: 700;
+    font-family: var(--font-menu);
+    color: var(--text-dark);
+}
+
+/* Estilo para Inputs */
+.form-control {
+    padding: 0.7rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: var(--font-body);
+    color: var(--text-dark);
+    background-color: #fff;
+    transition: var(--transition);
+}
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(154, 185, 70, 0.2);
+}
+
+/* Botões (Estilo da Terapeuta.css) */
+.btn {
+    padding: 0.7rem 1.2rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    font-family: var(--font-menu);
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-primario {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: var(--bg-card);
+    border: 1px solid var(--primary-dark);
+}
+.btn-primario:hover {
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+    transform: scale(1.02);
+    box-shadow: var(--shadow-hover);
+}
+
+.btn-secondary {
+    background: var(--bg-card);
+    color: var(--text-dark);
+    border: 1px solid var(--border);
+}
+.btn-secondary:hover {
+    background: var(--bg-page);
+    border-color: var(--text-light);
+    transform: scale(1.02);
+}
+
+.btn-danger {
+    background: var(--status-cancelado);
+    color: #fff;
+    border: 1px solid var(--status-cancelado);
+}
+.btn-danger:hover {
+    background: #c9302c;
+    transform: scale(1.02);
+}
+
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+    border-radius: 6px;
+}
+.btn-edit {
+    color: var(--status-pendente);
+    background: var(--bg-pendente);
+    border: 1px solid var(--status-pendente);
+}
+.btn-edit:hover {
+    background: var(--status-pendente);
+    color: #fff;
+}
+.btn-delete {
+    color: var(--status-cancelado);
+    background: var(--bg-cancelado);
+    border: 1px solid var(--status-cancelado);
+}
+.btn-delete:hover {
+    background: var(--status-cancelado);
+    color: #fff;
+}
+
+/* =========================================
+   10. TABELA
+   ========================================= */
+.data-table-container {
+    overflow-x: auto; /* Responsividade da tabela */
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th,
+.table td {
+    padding: 1rem 1.2rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap; /* Evita quebra de linha */
+    font-family: var(--font-body);
+}
+
+.table th {
+    background-color: var(--bg-page);
+    font-weight: 700;
+    font-size: 0.85rem;
+    font-family: var(--font-menu);
+    text-transform: uppercase;
+    color: var(--text-light);
+}
+
+.table td {
+    font-size: 0.95rem;
+    color: var(--text-dark);
+}
+
+.table tbody tr:hover {
+    background-color: rgba(154, 185, 70, 0.05); /* Verde bem claro */
+    transform: scale(1.005);
+}
+
+/* =========================================
+   11. STATUS TAGS (Estilo da Terapeuta.css)
+   ========================================= */
+.status-tag {
+    padding: 0.3rem 0.8rem;
+    border-radius: 16px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    font-family: var(--font-menu);
+    text-align: center;
+    border: 1px solid;
+}
+
+.status-completed,
+.status-confirmed {
+    color: var(--status-realizado);
+    background: var(--bg-realizado);
+    border-color: var(--status-realizado);
+}
+
+.status-pending {
+    color: var(--status-agendado);
+    background: var(--bg-agendado);
+    border-color: var(--status-agendado);
+}
+
+.status-cancelled,
+.status-missed {
+    color: var(--status-cancelado);
+    background: var(--bg-cancelado);
+    border-color: var(--status-cancelado);
+}
+
+/* COLE ESTE NOVO BLOCO ABAIXO DOS OUTROS */
+.status-in-progress {
+    color: var(--status-pendente);       /* Cor do texto (Azul) */
+    background: var(--bg-pendente);    /* Fundo (Azul claro) */
+    border-color: var(--status-pendente);  /* Borda (Azul) */
+}
+
+/* =========================================
+   12. MODAIS
+   ========================================= */
+.modal {
+    display: none; /* <-- ESTA É A CORREÇÃO. Deve ser 'none' por padrão */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; 
+    background-color: rgba(0, 0, 0, 0.6);
+
+    /* Propriedades que o JS vai usar quando mudar para 'display: flex' */
+    align-items: center; 
+    justify-content: center;
+    
+    padding: 1rem;
+}
+
+/* O restante do seu CSS para .modal-content, .modal-header, etc. permanece inalterado */
+.modal-content {
+    width: 90%;
+    max-width: 700px; 
+    animation: modalFadeIn 0.3s ease-out;
+    padding: 1.5rem; /* Removi o padding: 0; e usei um padding padrão para o conteúdo */
+}
+.modal-content.small { max-width: 450px; }
+/* ... (o restante do CSS do modal) ... */
+
+@keyframes modalFadeIn {
+    from { opacity: 0; transform: translateY(-30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+}
+.modal-header h3 {
+    font-family: var(--font-heading);
+    color: var(--text-dark);
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+.close-button {
+    font-size: 1.8rem;
+    color: var(--text-light);
+    cursor: pointer;
+    transition: var(--transition);
+}
+.close-button:hover { color: var(--status-cancelado); transform: rotate(90deg); }
+
+.modal-body {
+    padding: 1.5rem 0;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+/* Formulários do Modal */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+}
+.form-group label {
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+    font-size: 0.9rem;
+    font-family: var(--font-menu);
+    color: var(--text-dark);
+}
+.form-group-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+}
+
+/* =========================================
+   13. LOADER
+   ========================================= */
+.dashboard-loader {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(4px);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.loader-spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid var(--border);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+.dashboard-loader span {
+    margin-top: 1rem;
+    font-family: var(--font-menu);
+    font-weight: 700;
+    color: var(--text-dark);
+}
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* =========================================
+   14. RESPONSIVIDADE
+   ========================================= */
+@media (max-width: 992px) {
+    .sidebar {
+        width: 70px; /* Modo ícone */
+    }
+    .sidebar .nav-item a span,
+    .sidebar .logout span {
+        display: none;
+    }
+    .sidebar .nav-item a {
+        justify-content: center;
+        padding: 1.2rem 0;
+    }
+    .sidebar .nav-item a i {
+        margin-right: 0;
+        font-size: 1.2rem;
+    }
+    .logout a {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        overflow: visible; 
+        height: auto;
+    }
+    .dashboard-body {
+        flex-direction: column;
+        overflow: visible;
+    }
+    .header {
+        padding: 1rem;
+    }
+    .sidebar {
+        width: 100%;
+        height: auto;
+        padding: 0;
+    }
+    .nav-menu {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        justify-content: space-around;
+    }
+    .sidebar .nav-item a {
+        flex-direction: column;
+        gap: 0.25rem;
+        padding: 0.8rem 0.5rem;
+        border-left: none;
+        border-bottom: 4px solid transparent;
+    }
+    .sidebar .nav-item a:hover {
+        border-left: none;
+        border-bottom-color: var(--primary-dark);
+    }
+    .sidebar .nav-item a.active {
+        border-left: none;
+        border-bottom-color: var(--primary);
+    }
+     .sidebar .nav-item a span {
+        display: block; /* Mostra o texto de novo */
+        font-size: 0.7rem;
+    }
+    .logout {
+        display: none; /* Esconde logout no mobile por simplicidade */
+    }
+    
+    .main-content {
+        padding: 1rem;
+        overflow-y: visible;
+    }
+    .filters-and-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .form-group-row {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    .modal-content {
+        width: 95%;
+        margin: 1rem 0;
+    }
+}

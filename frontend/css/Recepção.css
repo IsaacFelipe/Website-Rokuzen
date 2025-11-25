@@ -1,0 +1,239 @@
+/* =========================================
+   1. IMPORTS DE FONTES (Padronizado)
+   ========================================= */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+
+/* =========================================
+   2. :ROOT (Paleta de Cores Padronizada)
+   ========================================= */
+:root {
+    /* Fontes (Padronizadas) */
+    --font-heading: 'Cinzel', serif;
+    --font-menu: 'League Spartan', sans-serif;
+    --font-body: 'Montserrat', sans-serif;
+
+    /* Cores Padronizadas */
+    --primary: #9ab946; /* Verde */
+    --text-dark: #694300; /* Marrom */
+    --bg-page: #fcfbf2; /* Off-white */
+    --bg-card: #ffffff; /* Branco */
+    
+    /* Cores de Status */
+    --status-sessao: #4A6A8A; /* Azul-ardósia */
+    --status-intervalo: #CB8A02; /* Âmbar */
+    --status-disponivel: #9ab946; /* Verde */
+    --danger: #D9534F; /* Vermelho */
+
+    /* Cores Derivadas */
+    --text-light: #8a7352; /* Marrom claro */
+    --border: #EAE5DB; /* Borda */
+    --secondary-bg: #F9F9F9;
+
+    /* Efeitos */
+    --gradient-primary: linear-gradient(135deg, var(--primary), #7ea83b);
+    --gradient-hover: linear-gradient(135deg, var(--primary), #8bb73a);
+    --shadow-light: 0 4px 12px rgba(105, 67, 0, 0.05);
+    --shadow-hover: 0 8px 24px rgba(105, 67, 0, 0.1);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* =========================================
+   3. RESET E ESTILOS GLOBAIS
+   ========================================= */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: var(--font-body);
+    background: var(--bg-page);
+    color: var(--text-dark);
+    font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================================
+   4. CABEÇALHO
+   ========================================= */
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background-color: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow-light);
+}
+.header-title {
+    color: var(--primary);
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-family: var(--font-heading);
+}
+.header-info { display: flex; align-items: center; gap: 1.5rem; }
+.info-block { font-size: 0.8rem; font-family: var(--font-body); }
+.user-actions { display: flex; align-items: center; gap: 1.5rem; }
+
+.logout-btn {
+    background: var(--gradient-primary);
+    color: var(--bg-card);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-weight: 700;
+    font-family: var(--font-menu);
+    cursor: pointer;
+    transition: var(--transition);
+}
+.logout-btn:hover { background: var(--gradient-hover); transform: scale(1.05); }
+
+/* =========================================
+   5. NAVEGAÇÃO
+   ========================================= */
+.main-nav {
+    display: flex;
+    gap: 1rem;
+    padding: 0 1.5rem;
+    background-color: #F5F8EF; /* --bg-disponivel-light */
+    border-bottom: 2px solid var(--text-light);
+}
+.nav-tab {
+    padding: 1rem 0.5rem;
+    font-weight: 700;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: var(--font-menu);
+    color: var(--text-light);
+}
+.nav-tab:hover, .nav-tab.active {
+    color: var(--primary);
+}
+.nav-tab.active {
+    border-bottom-color: var(--primary);
+    color: var(--text-dark);
+}
+
+/* =========================================
+   6. LAYOUT PRINCIPAL
+   ========================================= */
+.tab-content { display: none; }
+.tab-content.active { display: block; animation: fadeIn 0.6s ease-out; }
+
+.dashboard-layout { display: flex; padding: 1.5rem; gap: 1.5rem; }
+.main-column { flex: 3; display: flex; flex-direction: column; gap: 1.5rem; }
+.sidebar-column { flex: 1; display: flex; flex-direction: column; gap: 1.5rem; min-width: 300px; }
+
+/* =========================================
+   7. CARDS DE ESTAÇÃO (O CORAÇÃO DO VISUAL)
+   ========================================= */
+.section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+.section-title { font-size: 1.25rem; color: var(--primary); font-family: var(--font-heading); font-weight: 700; }
+
+.legend { display: flex; gap: 1rem; font-size: 0.8rem; }
+.legend-item { display: flex; align-items: center; gap: 0.3rem; }
+.legend-item::before { content: ''; width: 12px; height: 12px; border-radius: 50%; }
+.legend-item.livre::before { background-color: var(--status-disponivel); }
+.legend-item.ocupado::before { background-color: var(--status-sessao); }
+.legend-item.intervalo::before { background-color: var(--status-intervalo); }
+
+.station-group { margin-bottom: 1.5rem; }
+.group-title { font-size: 1rem; font-weight: 600; color: var(--status-sessao); margin-bottom: 0.75rem; font-family: var(--font-menu); }
+
+.station-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.station-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    border-left: 5px solid;
+    position: relative;
+    transition: var(--transition);
+    box-shadow: var(--shadow-light);
+    min-height: 140px; /* Garante altura uniforme */
+}
+.station-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+
+.status-dot {
+    position: absolute;
+    top: 1rem; right: 1rem;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+}
+
+.card-header {
+    font-size: 1rem; font-weight: 700; color: var(--status-sessao);
+    margin-bottom: 0.5rem; font-family: var(--font-menu);
+}
+
+.card-content p {
+    font-size: 0.85rem; line-height: 1.4; margin-bottom: 0.25rem; font-family: var(--font-body);
+}
+
+/* Barra de Progresso dentro do Card */
+.progress-bar {
+    width: 100%; background-color: var(--secondary-bg);
+    border-radius: 4px; height: 6px; margin-top: 0.75rem;
+}
+.progress-bar-inner { height: 100%; border-radius: 4px; }
+
+.status-warning {
+    font-size: 0.8rem; font-weight: 600; margin-top: 0.5rem; color: var(--status-sessao);
+}
+
+/* ESTADOS DOS CARDS */
+/* Livre */
+.station-card.status-livre { border-left-color: var(--status-disponivel); }
+.station-card.status-livre .status-dot { background-color: var(--status-disponivel); }
+.station-card.status-livre .card-header { color: var(--status-disponivel); }
+
+/* Ocupado */
+.station-card.status-ocupado { border-left-color: var(--status-sessao); }
+.station-card.status-ocupado .status-dot { background-color: var(--status-sessao); }
+.station-card.status-ocupado .card-header { color: var(--status-sessao); }
+.station-card.status-ocupado .progress-bar-inner { background-color: var(--status-sessao); }
+.station-card.status-ocupado .status-warning { color: var(--status-sessao); }
+
+/* Atrasado (Customização extra) */
+.station-card.status-atrasado { border-left-color: var(--danger); }
+.station-card.status-atrasado .status-dot { background-color: var(--danger); }
+.station-card.status-atrasado .progress-bar-inner { background-color: var(--danger); }
+.station-card.status-atrasado .status-warning { color: var(--danger); }
+
+/* =========================================
+   8. SIDEBAR
+   ========================================= */
+.sidebar-widget {
+    background-color: var(--bg-card);
+    border-radius: 8px; border: 1px solid var(--border);
+    padding: 1.5rem; margin-bottom: 1.5rem;
+    box-shadow: var(--shadow-light);
+}
+.widget-title { font-size: 1.1rem; font-weight: 700; color: var(--primary); margin-bottom: 1rem; font-family: var(--font-heading); }
+
+.score-card { background-color: #F9F7F4; padding: 1.5rem; text-align: center; border-radius: 6px; }
+.score-title { font-size: 0.9rem; font-weight: 600; color: var(--status-sessao); }
+.score-value { font-size: 2.5rem; font-weight: 700; color: var(--status-sessao); font-family: var(--font-menu); }
+.score-detail { font-size: 0.9rem; font-weight: 500; }
+
+.score-list { margin-top: 1rem; font-size: 0.9rem; }
+.score-list-item { display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px dashed var(--text-light); }
+.warning-box { background-color: var(--bg-card); border-left: 4px solid var(--text-light); padding: 1rem; margin-top: 1rem; font-size: 0.85rem; font-style: italic; }
+
+/* Responsividade */
+@media (max-width: 900px) {
+    .dashboard-layout { flex-direction: column; }
+    .sidebar-column { min-width: auto; }
+}

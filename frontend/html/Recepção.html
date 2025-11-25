@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tela de Controle de Sessões</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/Recepção.css">
+</head>
+
+<body>
+    <div id="loading-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.8); z-index: 9999; align-items: center; justify-content: center; flex-direction: column;">
+        <div style="width: 40px; height: 40px; border: 4px solid #ccc; border-top-color: #9ab946; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+        <span style="margin-top: 10px; font-weight: 600; color: #694300;">Atualizando...</span>
+    </div>
+    <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
+
+    <header class="main-header">
+        <div class="header-title">
+            Portal da Recepção
+            <div style="font-size: 0.9rem; color: var(--c-texto); font-weight: 400;" id="unidade-info">
+                Carregando usuário...
+            </div>
+        </div>
+        <div class="header-info">
+            <div class="info-block">
+                <span>Data: <strong id="data-hoje">--/--</strong></span>
+            </div>
+        </div>
+        <div class="user-actions">
+            <span class="notification-bell">🔔</span>
+            <button class="logout-btn">Logout</button>
+        </div>
+    </header>
+
+    <nav class="main-nav">
+        <div class="nav-tab active" data-tab="visao-geral">Visão Geral</div>
+        <div class="nav-tab" data-tab="agendamentos">Agendamentos</div>
+        <div class="nav-tab" data-tab="vendas">Vendas Realizadas</div>
+        <div class="nav-tab" data-tab="terapeutas">Terapeutas</div>
+    </nav>
+
+    <div id="visao-geral" class="tab-content active">
+        <div class="dashboard-layout">
+            
+            <main class="main-column">
+                <section>
+                    <div class="section-header">
+                        <h2 class="section-title">Ocupação dos Postos - Tempo Real</h2>
+                        <div class="legend">
+                            <span class="legend-item livre">Livre</span>
+                            <span class="legend-item ocupado">Ocupado</span>
+                            <span class="legend-item intervalo">Intervalo</span>
+                            <span class="legend-item manutencao">Manutenção</span>
+                        </div>
+                    </div>
+
+                    <div class="station-group">
+                        <h3 class="group-title">Salas de Maca</h3>
+                        <div class="station-grid" id="container-maca"></div>
+                    </div>
+
+                    <div class="station-group">
+                        <h3 class="group-title">Cadeiras Quick Massage</h3>
+                        <div class="station-grid" id="container-cadeira"></div>
+                    </div>
+
+                    <div class="station-group">
+                        <h3 class="group-title">Poltronas</h3>
+                        <div class="station-grid" id="container-poltrona"></div>
+                    </div>
+
+                </section>
+            </main>
+
+            <aside class="sidebar-column">
+                <section class="sidebar-widget">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <h2 class="widget-title" style="margin-bottom: 0;">Pontuação</h2>
+                        <select id="filtro-pontuacao" style="padding: 5px; border-radius: 6px; border: 1px solid var(--border); font-family: var(--font-body); font-size: 0.85rem; color: var(--text-dark); cursor: pointer; outline: none;">
+                            <option value="dia">Hoje</option>
+                            <option value="mes">Este Mês</option>
+                            <option value="ano">Este Ano</option>
+                        </select>
+                    </div>
+
+                    <div class="score-card">
+                        <h3 class="score-title">Total Pontos</h3>
+                        <div class="score-value" id="display-pontos">0</div>
+                        <div class="score-detail" id="label-pontos">pontos hoje</div>
+                    </div>
+
+                    <div class="warning-box">
+                        <strong>Cálculo:</strong> (Soma dos serviços concluídos) ÷ 52.
+                    </div>
+                </section>
+            </aside>
+        </div>
+    </div>
+
+    <div id="agendamentos" class="tab-content">
+        <div class="dashboard-layout" style="display: block;">
+            <div class="section-header">
+                <h2 class="section-title">Lista de Agendamentos</h2>
+                <button class="logout-btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;" onclick="fetchListaAgendamentos()">Atualizar Lista</button>
+            </div>
+    
+            <div class="table-container" style="background: #fff; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; min-width: 800px;">
+                    <thead>
+                        <tr style="background-color: #F5F8EF; text-align: left; border-bottom: 2px solid #EAE5DB;">
+                            <th style="padding: 1rem; color: #694300; font-family: 'League Spartan', sans-serif;">Data/Hora</th>
+                            <th style="padding: 1rem; color: #694300; font-family: 'League Spartan', sans-serif;">Cliente</th>
+                            <th style="padding: 1rem; color: #694300; font-family: 'League Spartan', sans-serif;">Terapeuta</th>
+                            <th style="padding: 1rem; color: #694300; font-family: 'League Spartan', sans-serif;">Serviço</th>
+                            <th style="padding: 1rem; color: #694300; font-family: 'League Spartan', sans-serif;">Status</th>
+                            <th style="padding: 1rem; color: #694300; font-family: 'League Spartan', sans-serif;">Pagamento</th>
+                            <th style="padding: 1rem; color: #694300; font-family: 'League Spartan', sans-serif;">Valor</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabela-agendamentos-body"></tbody>
+                </table>
+                <div id="msg-sem-agendamentos" style="display: none; padding: 2rem; text-align: center; color: #8a7352;">Nenhum agendamento encontrado.</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="vendas" class="tab-content">
+        <div class="dashboard-layout" style="display: block;">
+            <div class="section-header">
+                <h2 class="section-title">Vendas Realizadas (Concluídas)</h2>
+                <button class="logout-btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;" onclick="fetchListaVendas()">Atualizar Vendas</button>
+            </div>
+    
+            <div class="table-container" style="background: #fff; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; min-width: 600px;">
+                    <thead>
+                        <tr style="background-color: #F5F8EF; text-align: left; border-bottom: 2px solid #EAE5DB;">
+                            <th style="padding: 1rem; color: #694300; font-family: 'League Spartan', sans-serif;">Data da Compra</th>
+                            <th style="padding: 1rem; color: #694300; font-family: 'League Spartan', sans-serif;">Cliente</th>
+                            <th style="padding: 1rem; color: #694300; font-family: 'League Spartan', sans-serif;">Serviço</th>
+                            <th style="padding: 1rem; color: #694300; font-family: 'League Spartan', sans-serif;">Valor (R$)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabela-vendas-body"></tbody>
+                </table>
+                <div id="msg-sem-vendas" style="display: none; padding: 2rem; text-align: center; color: #8a7352;">Nenhuma venda registrada nesta unidade.</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="terapeutas" class="tab-content">
+        <div class="dashboard-layout" style="display: block;">
+            <div class="section-header">
+                <h2 class="section-title">Equipe de Terapeutas</h2>
+                <button class="logout-btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;" onclick="fetchListaTerapeutas()">Atualizar Lista</button>
+            </div>
+    
+            <div class="table-container" style="background: #fff; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; min-width: 600px;">
+                    <thead>
+                        <tr style="background-color: #F5F8EF; text-align: left; border-bottom: 2px solid #EAE5DB;">
+                            <th style="padding: 1rem; color: #694300; font-family: 'League Spartan', sans-serif;">Nome</th>
+                            <th style="padding: 1rem; color: #694300; font-family: 'League Spartan', sans-serif;">Email</th>
+                            <th style="padding: 1rem; color: #694300; font-family: 'League Spartan', sans-serif;">Telefone</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabela-terapeutas-body"></tbody>
+                </table>
+                <div id="msg-sem-terapeutas" style="display: none; padding: 2rem; text-align: center; color: #8a7352;">Nenhum terapeuta encontrado.</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../script/Recepção.js"></script>
+</body>
+</html>

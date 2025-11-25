@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-Digital">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendamento de Terapia - Rokuzen</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/agendamento.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container my-4 my-md-5">
+        <div class="card shadow-sm p-3 p-md-4">
+            <header class="d-flex justify-content-between align-items-center pb-3 mb-4 border-bottom">
+                <a href="index.html">
+                    <img src="../img/logo.png" alt="Logo Rokuzen" class="logo">
+                </a>
+            </header>
+
+            <main>
+                <h1 class="display-6 fw-bold">Agendamento de Terapia</h1>
+                <p class="text-secondary mb-5">Escolha seu serviço, profissional e horário preferido</p>
+
+                <section id="secao-guest-login" class="mb-5">
+                    <div class="card bg-light border-0 p-4">
+                        <h2 class="h5 fw-bold">Para efetuar o agendamento, preencha os dados:</h2>
+                        <form id="guestForm">
+                            <div class="mb-3">
+                                <label for="guestNome" class="form-label">Nome:</label>
+                                <input type="text" class="form-control" id="guestNome" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="guestEmail" class="form-label">Email:</label>
+                                <input type="email" class="form-control" id="guestEmail" required>
+                            </div>
+                            <button type="submit" id="btnGuestEnviar" class="btn btn-rokuzen">Enviar Dados</button>
+                            
+                            <div class="separador-ou my-4">
+                                <span>OU</span>
+                            </div>
+                            
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <a href="login.html" class="btn btn-outline-secondary btn-sm">CADASTRE-SE</a>
+                                </div>
+                                <div>
+                                    <a href="login.html" class="link-login-existente">Já possui cadastro? Faça login aqui</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+                
+                <section id="secao-unidades" class="secao-unidades mb-5 oculto">
+                    <h2>Selecione a unidade:</h2>
+                    <div class="row g-4">
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <div class="card card-selecionavel card-unidade h-100 text-center" data-id="2">
+                                <img src="../img/Mooca Plaza.png" class="card-img-top" alt="Mooca Plaza">
+                                <div class="card-body">
+                                    <h6 class="card-title fw-bold">ROKUZEN</h6>
+                                    <p class="card-text small text-secondary">MOOCA PLAZA SHOPPING</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <div class="card card-selecionavel card-unidade h-100 text-center" data-id="4">
+                                <img src="../img/West plaza.png" class="card-img-top" alt="West Plaza">
+                                <div class="card-body">
+                                    <h6 class="card-title fw-bold">ROKUZEN</h6>
+                                    <p class="card-text small text-secondary">WEST PLAZA SHOPPING</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <div class="card card-selecionavel card-unidade h-100 text-center" data-id="1">
+                                <img src="../img/Golden Square.png" class="card-img-top" alt="Golden Square">
+                                <div class="card-body">
+                                    <h6 class="card-title fw-bold">ROKUZEN</h6>
+                                    <p class="card-text small text-secondary">GOLDEN SQUARE SHOPPING</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <div class="card card-selecionavel card-unidade h-100 text-center" data-id="3">
+                                <img src="../img/Grandplaza.png" class="card-img-top" alt="Grand Plaza">
+                                <div class="card-body">
+                                    <h6 class="card-title fw-bold">ROKUZEN</h6>
+                                    <p class="card-text small text-secondary">GRAND PLAZA SHOPPING</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section id="secao-servicos" class="secao-servicos mb-5 oculto">
+                    <h2>Serviços Disponíveis:</h2>
+                    <div class="list-group">
+                        <a href="#" class="list-group-item list-group-item-action item-servico d-flex justify-content-between align-items-center" data-id="1">
+                            <div>
+                                <h6 class="mb-1 fw-bold">Quick Massage</h6>
+                                <p class="mb-1 small text-secondary">coloque aqui sua descrição</p>
+                            </div>
+                            <div class="text-end small">
+                                <span>15 min - R$ 50,00</span>
+                            </div>
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action item-servico d-flex justify-content-between align-items-center" data-id="2">
+                            <div>
+                                <h6 class="mb-1 fw-bold">Reflexologia Podal</h6>
+                                <p class="mb-1 small text-secondary">coloque aqui sua descrição</p>
+                            </div>
+                            <div class="text-end small">
+                                <span>30 min - R$ 80,00</span>
+                            </div>
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action item-servico d-flex justify-content-between align-items-center" data-id="3">
+                            <div>
+                                <h6 class="mb-1 fw-bold">Massagem Relaxante</h6>
+                                <p class="mb-1 small text-secondary">coloque aqui sua descrição</p>
+                            </div>
+                            <div class="text-end small">
+                                <span>60 min - R$ 120,00</span>
+                            </div>
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action item-servico d-flex justify-content-between align-items-center" data-id="4">
+                            <div>
+                                <h6 class="mb-1 fw-bold">Auriculoterapia</h6>
+                                <p class="mb-1 small text-secondary">coloque aqui sua descrição</p>
+                            </div>
+                            <div class="text-end small">
+                                <span>20 min - R$ 40,00</span>
+                            </div>
+                        </a>
+                    </div>
+                </section>
+
+                <section id="secao-data-horario" class="detalhes-agendamento oculto">
+                    <div class="row g-4">
+                         <div class="col-12 col-lg-5">
+                            <h2>Selecione o Dia:</h2>
+                            <input type="date" id="data-agendamento" class="form-control form-control-lg">
+                        </div>
+                        <div class="col-12 col-lg-7">
+                            <h2>Horários Disponíveis:</h2>
+                            <div class="row g-2"> 
+                                </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section id="secao-profissionais" class="oculto mt-5">
+                    <h2>Selecione o Profissional:</h2>
+                    <div class="row g-4">
+                        </div>
+                </section>
+
+                <section id="secao-pagamento" class="oculto mt-5">
+                    <h2>Forma de Pagamento:</h2>
+                    <div class="row g-4">
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <div class="card card-selecionavel card-pagamento h-100 text-center" data-id="1">
+                                <div class="card-body">
+                                    <h6 class="card-title fw-bold">Cartão de Crédito</h6>
+                                    <p class="card-text small text-secondary">Pagamento online (em breve)</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <div class="card card-selecionavel card-pagamento h-100 text-center" data-id="2">
+                                <div class="card-body">
+                                    <h6 class="card-title fw-bold">Pagamento Presencial</h6>
+                                    <p class="card-text small text-secondary">Pague na recepção</o>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section id="secao-confirmar" class="text-center mt-5 pt-4 border-top oculto">
+                    <button id="btn-agendar" class="btn btn-lg btn-confirmar">Confirmar Agendamento</button>
+                </section>
+
+            </main>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../script/agendamento.js"></script> 
+    
+    <div vw class="enabled">
+        <div vw-access-button class="active"></div>
+        <div vw-plugin-wrapper>
+            <div class="vw-plugin-top-wrapper"></div>
+        </div>
+    </div>
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+    <script>
+        new window.VLibras.Widget('https://vlibras.gov.br/app');
+    </script>
+</body>
+</html>

@@ -1,0 +1,286 @@
+/* 0. CONFIGURAÇÕES GLOBAIS / UTILS */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel&family=League+Spartan:wght@100..900&display=swap');
+
+:root {
+    --cor-primaria: #9AB946;
+    --cor-primaria-escuro: #689F38;
+    --cor-texto-escuro: #333;
+    --cor-texto-claro: #fff;
+    --cor-texto-cinza: #555;
+    --cor-borda: #ddd;
+    --fonte-titulo: "Cinzel", serif;
+    --fonte-corpo: "League Spartan", sans-serif;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--cor-texto-claro);
+    color: var(--cor-texto-escuro);
+    font-family: var(--fonte-corpo);
+    line-height: 1.6;
+}
+
+/* Estilo para Links e Botões */
+.btn-primario {
+    background-color: var(--cor-primaria);
+    color: var(--cor-texto-claro);
+    border: none;
+    padding: 0.2rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.btn-primario:hover {
+    background-color: var(--cor-primaria-escuro);
+}
+
+/* ==================================== */
+/* 1. CABEÇALHO E NAVEGAÇÃO (header)    */
+/* ==================================== */
+
+header {
+    width: 100%;
+    position: relative;
+}
+
+#barra-navegacao {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    position: relative;
+    background-color: var(--cor-texto-claro);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Container da Logo e Links */
+.container-nav {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Centraliza no Desktop */
+    position: relative;
+    max-width: calc(100% - 100px);
+}
+
+.logo {
+    position: absolute;
+    left: 2rem;
+    flex-shrink: 0;
+}
+
+.logo img {
+    height: 40px;
+    width: auto;
+}
+
+.lista-nav {
+    display: flex;
+    list-style: none;
+    gap: 3rem;
+    margin: 0;
+    padding: 0;
+}
+
+.item-nav a {
+    text-decoration: none;
+    color: var(--cor-texto-escuro);
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.item-nav a:hover,
+.pagina-atual a {
+    color: var(--cor-primaria);
+}
+
+/* --- LOGICA DOS BOTOES DE LOGIN --- */
+
+/* Desktop: Mostra container desktop */
+#auth-container-desktop {
+    display: flex;
+    align-items: center;
+    margin-left: 1rem;
+    margin-right: 2rem;
+    flex-shrink: 0;
+}
+
+/* Mobile: Escondido por padrão */
+#auth-container-mobile {
+    display: none;
+}
+
+/* Botão Hamburger */
+#btn-mobile {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    flex-shrink: 0;
+    color: var(--cor-texto-escuro);
+}
+
+.menu-mobile {
+    display: none;
+}
+
+/* --- MEDIA QUERY (MOBILE - Telas < 1170px) --- */
+@media (max-width: 1170px) {
+
+    /* 1. Esconde APENAS os links e o login de desktop */
+    .lista-nav,
+    #auth-container-desktop {
+        display: none !important;
+    }
+
+    /* 2. Mantém a logo visível e ajusta o container */
+    .container-nav {
+        display: block !important;
+        flex: 0;
+        /* Não ocupa espaço extra */
+        width: auto;
+        max-width: none;
+        position: static;
+        /* Remove restrições de posicionamento */
+    }
+
+    /* Ajuste da logo para mobile */
+    .logo {
+        position: static;
+        /* Volta ao fluxo normal */
+        display: block;
+        padding-left: 0;
+    }
+
+    .logo img {
+        vertical-align: middle;
+    }
+
+    /* 3. Mostra o botão Menu */
+    #btn-mobile {
+        display: block;
+        margin-right: 0;
+    }
+
+    /* 4. Ajustes do Pai */
+    #barra-navegacao {
+        justify-content: space-between;
+        padding: 1rem 1.5rem;
+    }
+
+    /* 5. Menu Aberto */
+    .menu-mobile.aberto {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: var(--cor-texto-claro);
+        box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+        z-index: 999;
+        padding: 20px;
+    }
+
+    .lista-nav-mobile {
+        list-style: none;
+        padding: 0;
+        text-align: center;
+    }
+
+    .lista-nav-mobile .item-nav {
+        margin-bottom: 15px;
+    }
+
+    /* Mostra login no menu mobile */
+    #auth-container-mobile {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+        width: 100%;
+        border-top: 1px solid #eee;
+        padding-top: 20px;
+    }
+
+    #auth-container-mobile .btn-primario {
+        width: 80%;
+        text-align: center;
+        margin: 0;
+    }
+
+    /* Centraliza dropdown no mobile */
+    .profile-menu-content {
+        right: auto;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+/* --- DROPDOWN DE PERFIL --- */
+.profile-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.btn-profile {
+    background-color: #A68668;
+    color: white;
+    padding: 8px 12px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-profile:hover {
+    background-color: #8f6e53;
+}
+
+.btn-profile img {
+    width: 24px;
+    height: 24px;
+}
+
+.profile-menu-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    z-index: 100;
+    right: 0;
+}
+
+.profile-menu-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+}
+
+.profile-menu-content a:hover {
+    background-color: #ddd;
+}
+
+.profile-menu-content.show {
+    display: block;
+}
+
+
