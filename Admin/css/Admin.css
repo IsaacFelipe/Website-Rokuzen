@@ -1,0 +1,54 @@
+/* Grid para os 4 cards */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+/* Estilo específico do Card de Estatística */
+.card-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+    /* Variáveis herdadas do painel-atendimento.css */
+    background: var(--bg-card); 
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: var(--shadow-light);
+    transition: var(--transition);
+}
+
+.card-stat:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+}
+
+/* O número grande e roxo */
+.stat-number {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: #8A56AC; /* Roxo destaque */
+    margin-bottom: 0.5rem;
+    font-family: var(--font-menu);
+    line-height: 1;
+}
+
+/* O texto embaixo */
+.stat-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}

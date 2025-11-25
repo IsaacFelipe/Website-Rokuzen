@@ -13,6 +13,7 @@ const atendimentoRotas = require('./atendimentoRotas.js'); // <-- ADICIONE ESTA 
 const adclienteRotas = require('./AdminRotas/AdclienteRotas.js');
 const adprocedimentosRotas = require('./AdminRotas/AdprocedimentosRotas.js');
 const adterapeutaRotas = require('./AdminRotas/AdTerapeutaRotas.js');
+const dashboardRotas = require('./AdminRotas/dashboardRotas.js');
 
 // 2. Configurações Iniciais do Servidor
 const app = express();
@@ -27,6 +28,7 @@ app.use('/', atendimentoRotas); // <-- ADICIONE ESTA LINHA
 app.use('/', adclienteRotas);
 app.use('/', adprocedimentosRotas);
 app.use('/', adterapeutaRotas);
+app.use('/', dashboardRotas);
 
 // 4. Inicia o Servidor
 const PORT = 3001;
