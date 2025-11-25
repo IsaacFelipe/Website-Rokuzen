@@ -27,9 +27,9 @@
     /* Preto (Raramente usado) */
 
     /* Cores de Status (Padronizadas) */
-    --status-sessao: #4A6A8A;
+    --status-sessao: #5b5b5b;
     /* Azul-ardósia (Ocupado/Sessão) */
-    --status-intervalo: #CB8A02;
+    --status-intervalo: #5b5b5b;
     /* Âmbar/Dourado (Intervalo) */
     --status-disponivel: #9ab946;
     /* Verde (Disponível) */
@@ -43,9 +43,9 @@
     /* Borda (Baseado no Fundo) */
 
     /* Fundos de caixas de informação (Padronizados) */
-    --bg-sessao-light: #F0F4F7;
+    --bg-sessao-light: #d6d6d6;
     /* Azul claro (Ocupado) */
-    --bg-intervalo-light: #FFFBF0;
+    --bg-intervalo-light: #d6d6d6;
     /* Dourado claro (Intervalo) */
     --bg-disponivel-light: #F5F8EF;
     /* Verde claro (Disponível) */
@@ -82,7 +82,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
+} 
 
 body {
     font-family: var(--font-body);
