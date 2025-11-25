@@ -1,4 +1,4 @@
-// Arquivo: agendamentoRotas.js (ATUALIZADO PARA PAGAMENTO)
+// Arquivo: agendamentoRotas.js (CORRIGIDO PARA BLOQUEAR PASSADO)
 
 const express = require('express');
 const router = express.Router();
@@ -15,33 +15,31 @@ function formatMySQLDateTime(date) {
 }
 
 // =================================================================
-// ROTA POST /api/agendar (ATUALIZADA)
+// ROTA POST /api/agendar (SEM MUDANÇAS LÓGICAS)
 // =================================================================
 router.post('/api/agendar', (req, res) => {
-    
-    // 1. RECEBEMOS OS DADOS
     const { 
         unidadeId, servicoId, colaboradorId, valor, 
         clienteId, guestNome, guestEmail,
-        data, horario, tipoPagamento // <-- NOVO
+        data, horario, tipoPagamento 
     } = req.body;
 
-    // 2. VALIDAÇÃO ATUALIZADA
-    // (Validação do clienteId foi movida para dentro da lógica)
-    if (!unidadeId || !servicoId || !colaboradorId || !valor || !data || !horario || !tipoPagamento) { // <-- NOVO
+    if (!unidadeId || !servicoId || !colaboradorId || !valor || !data || !horario || !tipoPagamento) {
         return res.status(400).json({ success: false, message: 'Dados incompletos para o agendamento.' });
     }
 
-    // 3. Lógica de usuário (logado vs. convidado)
+    // Validação Extra no Back-end: Impedir agendamento no passado (Segurança)
+    const dataHoraAgendamento = new Date(`${data} ${horario.replace('h', ':')}:00`);
+    const agora = new Date();
+    if (dataHoraAgendamento < agora) {
+        return res.status(400).json({ success: false, message: 'Não é possível agendar em uma data/hora passada.' });
+    }
+
     if (clienteId) {
-        // --- CENÁRIO 1: USUÁRIO LOGADO ---
         console.log(`Iniciando agendamento para cliente LOGADO: ${clienteId}`);
         salvarAgendamento(clienteId, req.body, res);
-
     } else if (guestNome && guestEmail) {
-        // --- CENÁRIO 2: USUÁRIO CONVIDADO ---
         console.log(`Iniciando agendamento para CONVIDADO: ${guestEmail}`);
-        
         const sqlCheckEmail = "SELECT cliente_id, tipo_cliente FROM clientes WHERE email_cliente = ?";
         db.query(sqlCheckEmail, [guestEmail], (err, results) => {
             if (err) {
@@ -56,7 +54,6 @@ router.post('/api/agendar', (req, res) => {
                 console.log(`Convidado ${guestEmail} já existia. Reutilizando ID: ${clienteExistente.cliente_id}`);
                 salvarAgendamento(clienteExistente.cliente_id, req.body, res);
             } else {
-                // Criar novo cliente convidado
                 const sqlInsertCliente = "INSERT INTO clientes (nome_cliente, email_cliente, tipo_cliente) VALUES (?, ?, ?)";
                 db.query(sqlInsertCliente, [guestNome, guestEmail, 2], (err, insertResult) => {
                     if (err) {
@@ -69,24 +66,15 @@ router.post('/api/agendar', (req, res) => {
                 });
             }
         });
-
     } else {
-        // Se não tiver nem clienteId nem dados de convidado
          return res.status(400).json({ success: false, message: 'Usuário não identificado. Faça login ou preencha os dados de convidado.' });
     }
 });
 
 
-/**
- * =================================================================
- * FUNÇÃO HELPER: salvarAgendamento (ATUALIZADA)
- * =================================================================
- */
 function salvarAgendamento(clienteId, body, res) {
-    // Pega todos os dados do body, incluindo o novo
-    const { unidadeId, servicoId, colaboradorId, valor, data, horario, tipoPagamento } = body; // <-- NOVO
+    const { unidadeId, servicoId, colaboradorId, valor, data, horario, tipoPagamento } = body;
 
-    // --- ETAPA 1: Descobrir duração E os tipos de posto permitidos ---
     const sqlGetServico = "SELECT duracao_padrao, tipos_permitidos FROM servicos WHERE servico_id = ?";
     
     db.query(sqlGetServico, [servicoId], (err, servicoResult) => {
@@ -104,7 +92,6 @@ function salvarAgendamento(clienteId, body, res) {
 
         const tiposArray = tiposPermitidosString.split(','); 
 
-        // --- ETAPA 2: Encontrar um posto que corresponda ---
         const sqlFindPosto = `
             SELECT posto_id, tipo_posto FROM postos 
             WHERE 
@@ -127,7 +114,6 @@ function salvarAgendamento(clienteId, body, res) {
             const postoId = postoResult[0].posto_id;
             console.log(`Posto ID ${postoId} (tipo ${postoResult[0].tipo_posto}) alocado para este agendamento.`);
 
-            // --- ETAPA 3: Salvar o agendamento (Query atualizada) ---
             const horaFormatada = horario.replace('h', ':') + ':00';
             const inicio_atendimento = `${data} ${horaFormatada}`;
             const dataInicio = new Date(inicio_atendimento);
@@ -139,15 +125,15 @@ function salvarAgendamento(clienteId, body, res) {
                     unidade_id, cliente_id, servico_id, colaborador_id, posto_id,
                     duracao_real, valor_servico, foi_marcado_online, status,
                     inicio_atendimento, fim_atendimento,
-                    tipo_pagamento -- <-- NOVO
+                    tipo_pagamento
                 ) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) -- <-- NOVO
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             `;
             const valores = [
                 unidadeId, clienteId, servicoId, colaboradorId, postoId,
                 duracao, valor, 1, 'Agendado',
                 inicio_atendimento, fim_atendimento,
-                tipoPagamento // <-- NOVO
+                tipoPagamento
             ];
 
             db.query(sqlInsertAtendimento, valores, (err, result) => {
@@ -165,10 +151,9 @@ function salvarAgendamento(clienteId, body, res) {
 
 
 // =================================================================
-// ROTA GET /api/horarios-disponiveis (NÃO MUDA)
+// ROTA GET /api/horarios-disponiveis (SEM MUDANÇAS LÓGICAS)
 // =================================================================
 router.get('/api/horarios-disponiveis', (req, res) => {
-    
     const { data, unidade_id, servico_id } = req.query;
     if (!data || !unidade_id || !servico_id) {
         return res.status(400).json({ message: 'Dados incompletos (data, unidade, serviço).' });
@@ -246,12 +231,17 @@ router.get('/api/horarios-disponiveis', (req, res) => {
 
 
 /**
- * Função que gera os slots de horário (NÃO MUDA)
+ * =================================================================
+ * FUNÇÃO HELPER: calcularSlots (ATUALIZADA PARA BLOQUEAR PASSADO)
+ * =================================================================
  */
 function calcularSlots(jornadas, ocupados, duracaoServico, data) { 
     const slotsMap = new Map(); 
     const dataAgendamento = data; 
     
+    // --- 1. Obter a data/hora atual ---
+    const agora = new Date();
+
     const slotsOcupados = ocupados.map(o => ({
         id: o.colaborador_id,
         inicio: o.inicio_atendimento ? new Date(o.inicio_atendimento).getTime() : 0,
@@ -273,6 +263,14 @@ function calcularSlots(jornadas, ocupados, duracaoServico, data) {
 
             if (dataFimSlotAtual.getTime() > dataSlotFim.getTime()) {
                 break;
+            }
+
+            // --- 2. VERIFICA SE O SLOT É NO PASSADO ---
+            // Compara o timestamp do slot com o timestamp de agora
+            if (dataSlotAtual.getTime() < agora.getTime()) {
+                // Se o slot já passou, avança para o próximo e continua o loop
+                dataSlotAtual.setTime(dataSlotAtual.getTime() + 30 * 60000); 
+                continue; 
             }
 
             let estaOcupado = false;
