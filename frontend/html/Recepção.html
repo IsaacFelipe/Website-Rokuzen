@@ -16,12 +16,11 @@
     </div>
     <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
 
-
     <header class="main-header">
         <div class="header-title">
             Portal da Recepção
             <div style="font-size: 0.9rem; color: var(--c-texto); font-weight: 400;" id="unidade-info">
-                Carregando...
+                Carregando usuário...
             </div>
         </div>
         <div class="header-info">
@@ -44,6 +43,7 @@
 
     <div id="visao-geral" class="tab-content active">
         <div class="dashboard-layout">
+            
             <main class="main-column">
                 <section>
                     <div class="section-header">
@@ -65,13 +65,13 @@
                     <div class="station-group">
                         <h3 class="group-title">Cadeiras Quick Massage</h3>
                         <div class="station-grid" id="container-cadeira">
-                            </div>
+                             </div>
                     </div>
 
                     <div class="station-group">
                         <h3 class="group-title">Poltronas</h3>
                         <div class="station-grid" id="container-poltrona">
-                            </div>
+                             </div>
                     </div>
 
                 </section>
@@ -79,37 +79,93 @@
 
             <aside class="sidebar-column">
                 <section class="sidebar-widget">
-                    <h2 class="widget-title">Pontuação da Unidade</h2>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <h2 class="widget-title" style="margin-bottom: 0;">Pontuação</h2>
+                        <select id="filtro-pontuacao" style="padding: 5px; border-radius: 6px; border: 1px solid var(--border); font-family: var(--font-body); font-size: 0.85rem; color: var(--text-dark); cursor: pointer; outline: none;">
+                            <option value="dia">Hoje</option>
+                            <option value="mes">Este Mês</option>
+                            <option value="ano">Este Ano</option>
+                        </select>
+                    </div>
+
                     <div class="score-card">
-                        <h3 class="score-title">Pontuação Total</h3>
-                        <div class="score-value">0</div> <div class="score-detail">pontos hoje</div>
+                        <h3 class="score-title">Total Pontos</h3>
+                        <div class="score-value" id="display-pontos">0</div>
+                        <div class="score-detail" id="label-pontos">pontos hoje</div>
                     </div>
-                    <div class="score-list">
-                        <div class="score-list-item">
-                            <span>Sessões Realizadas</span>
-                            <span>0 pts</span>
-                        </div>
-                    </div>
+
                     <div class="warning-box">
-                        <strong>Nota:</strong>
-                        Esta barra lateral é visual. A integração de dados está focada nos Cards de Atendimento (esquerda).
+                        <strong>Cálculo:</strong>
+                        (Soma dos serviços concluídos) ÷ 52.
                     </div>
                 </section>
             </aside>
         </div>
     </div>
 
-    <div id="agendamentos" class="tab-content" style="padding: 2rem;">
-        <h2>Agendamentos</h2>
-        <p>Funcionalidade em desenvolvimento.</p>
+    <div id="agendamentos" class="tab-content">
+        <div class="dashboard-layout" style="display: block;">
+            <div class="section-header">
+                <h2 class="section-title">Lista de Agendamentos</h2>
+                <button class="logout-btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;" onclick="fetchListaAgendamentos()">
+                    Atualizar Lista
+                </button>
+            </div>
+    
+            <div class="table-container" style="background: #fff; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; min-width: 800px;">
+                    <thead>
+                        <tr style="background-color: #F5F8EF; text-align: left; border-bottom: 2px solid #EAE5DB;">
+                            <th style="padding: 1rem; color: #694300; font-family: 'League Spartan', sans-serif;">Data/Hora</th>
+                            <th style="padding: 1rem; color: #694300; font-family: 'League Spartan', sans-serif;">Cliente</th>
+                            <th style="padding: 1rem; color: #694300; font-family: 'League Spartan', sans-serif;">Terapeuta</th>
+                            <th style="padding: 1rem; color: #694300; font-family: 'League Spartan', sans-serif;">Serviço</th>
+                            <th style="padding: 1rem; color: #694300; font-family: 'League Spartan', sans-serif;">Status</th>
+                            <th style="padding: 1rem; color: #694300; font-family: 'League Spartan', sans-serif;">Pagamento</th>
+                            <th style="padding: 1rem; color: #694300; font-family: 'League Spartan', sans-serif;">Valor</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabela-agendamentos-body">
+                        </tbody>
+                </table>
+                <div id="msg-sem-agendamentos" style="display: none; padding: 2rem; text-align: center; color: #8a7352;">
+                    Nenhum agendamento encontrado nesta unidade.
+                </div>
+            </div>
+        </div>
     </div>
+
     <div id="vendas" class="tab-content" style="padding: 2rem;">
         <h2>Vendas</h2>
         <p>Funcionalidade em desenvolvimento.</p>
     </div>
-    <div id="terapeutas" class="tab-content" style="padding: 2rem;">
-        <h2>Terapeutas</h2>
-        <p>Funcionalidade em desenvolvimento.</p>
+
+    <div id="terapeutas" class="tab-content">
+        <div class="dashboard-layout" style="display: block;">
+            <div class="section-header">
+                <h2 class="section-title">Equipe de Terapeutas</h2>
+                <button class="logout-btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;" onclick="fetchListaTerapeutas()">
+                    Atualizar Lista
+                </button>
+            </div>
+    
+            <div class="table-container" style="background: #fff; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; min-width: 600px;">
+                    <thead>
+                        <tr style="background-color: #F5F8EF; text-align: left; border-bottom: 2px solid #EAE5DB;">
+                            <th style="padding: 1rem; color: #694300; font-family: 'League Spartan', sans-serif;">Nome</th>
+                            <th style="padding: 1rem; color: #694300; font-family: 'League Spartan', sans-serif;">Email</th>
+                            <th style="padding: 1rem; color: #694300; font-family: 'League Spartan', sans-serif;">Telefone</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabela-terapeutas-body">
+                        </tbody>
+                </table>
+                <div id="msg-sem-terapeutas" style="display: none; padding: 2rem; text-align: center; color: #8a7352;">
+                    Nenhum terapeuta encontrado nesta unidade.
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="../script/Recepção.js"></script>

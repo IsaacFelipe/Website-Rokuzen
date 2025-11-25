@@ -154,4 +154,152 @@ router.get('/api/recepcao/status-postos', authenticateToken, async (req, res) =>
     }
 });
 
+// =================================================================
+// NOVA ROTA: GET /api/recepcao/pontuacao
+// Calcula a pontuação (Soma Valor / 52) filtrando por Dia, Mês ou Ano
+// =================================================================
+router.get('/api/recepcao/pontuacao', authenticateToken, async (req, res) => {
+    const { unidadeId } = req.colaboradorData;
+    const { filtro } = req.query; // 'dia', 'mes' ou 'ano'
+
+    if (!unidadeId) {
+        return res.status(400).json({ success: false, message: 'Unidade não identificada.' });
+    }
+
+    let dateFilterSql = "";
+    
+    // Define o filtro de data baseado na escolha do usuário
+    switch (filtro) {
+        case 'mes':
+            // Ano e Mês atuais
+            dateFilterSql = "AND YEAR(inicio_atendimento) = YEAR(CURDATE()) AND MONTH(inicio_atendimento) = MONTH(CURDATE())";
+            break;
+        case 'ano':
+            // Apenas Ano atual
+            dateFilterSql = "AND YEAR(inicio_atendimento) = YEAR(CURDATE())";
+            break;
+        case 'dia':
+        default:
+            // Apenas Hoje
+            dateFilterSql = "AND DATE(inicio_atendimento) = CURDATE()";
+            break;
+    }
+
+    // Query: Soma valores onde status = 'Concluído' e unidade = X
+    const sql = `
+        SELECT SUM(valor_servico) as faturamento_total
+        FROM atendimentos 
+        WHERE unidade_id = ? 
+          AND status = 'Concluído'
+          ${dateFilterSql}
+    `;
+
+    try {
+        const [result] = await db.promise().query(sql, [unidadeId]);
+        
+        // Se for null (nenhum atendimento), considera 0
+        const faturamento = result[0].faturamento_total || 0;
+        
+        // Regra de Negócio: Faturamento / 52
+        const pontuacao = faturamento / 52;
+
+        res.json({ 
+            success: true, 
+            pontuacao: pontuacao, // Pode arredondar no front se quiser
+            faturamento: faturamento
+        });
+
+    } catch (error) {
+        console.error('Erro ao calcular pontuação:', error);
+        res.status(500).json({ success: false, message: 'Erro ao calcular pontuação.' });
+    }
+});
+
+// =================================================================
+// NOVA ROTA: GET /api/recepcao/agendamentos
+// Lista completa de agendamentos da unidade (Histórico e Futuros)
+// =================================================================
+router.get('/api/recepcao/agendamentos', authenticateToken, async (req, res) => {
+    const { unidadeId } = req.colaboradorData;
+
+    if (!unidadeId) {
+        return res.status(400).json({ success: false, message: 'Unidade não identificada.' });
+    }
+
+    const sql = `
+        SELECT 
+            A.atendimento_id,
+            A.inicio_atendimento,
+            A.fim_atendimento,
+            A.valor_servico,
+            A.tipo_pagamento,
+            A.status,
+            C.nome_cliente,
+            COL.nome_colaborador AS nome_terapeuta,
+            S.nome_servico
+        FROM atendimentos A
+        LEFT JOIN clientes C ON A.cliente_id = C.cliente_id
+        LEFT JOIN colaboradores COL ON A.colaborador_id = COL.colaborador_id
+        LEFT JOIN servicos S ON A.servico_id = S.servico_id
+        WHERE A.unidade_id = ?
+        ORDER BY A.inicio_atendimento DESC
+    `;
+    
+    try {
+        const [results] = await db.promise().query(sql, [unidadeId]);
+
+        // Formatação básica dos dados para o frontend
+        const processedData = results.map(row => {
+            
+            // Lógica de Pagamento solicitada (1 = Unidade, 2 = Online)
+            let tipoPagamentoTexto = 'Não informado';
+            if (row.tipo_pagamento === 1) tipoPagamentoTexto = 'Na Unidade';
+            else if (row.tipo_pagamento === 2) tipoPagamentoTexto = 'Online';
+
+            return {
+                ...row,
+                tipo_pagamento_texto: tipoPagamentoTexto
+            };
+        });
+
+        res.json({ success: true, data: processedData });
+
+    } catch (error) {
+        console.error('Erro ao buscar lista de agendamentos:', error);
+        res.status(500).json({ success: false, message: 'Erro ao buscar agendamentos.' });
+    }
+});
+
+// =================================================================
+// NOVA ROTA: GET /api/recepcao/terapeutas
+// Lista de Terapeutas da unidade (Nome, Email, Telefone)
+// =================================================================
+router.get('/api/recepcao/terapeutas', authenticateToken, async (req, res) => {
+    const { unidadeId } = req.colaboradorData;
+
+    if (!unidadeId) {
+        return res.status(400).json({ success: false, message: 'Unidade não identificada.' });
+    }
+
+    const sql = `
+        SELECT 
+            nome_colaborador,
+            email_colaborador,
+            telefone_colaborador
+        FROM colaboradores
+        WHERE unidade_id = ?
+          AND tipo_colaborador = 'Terapeuta'
+          AND ativo = 1  -- Boa prática: listar apenas os ativos
+        ORDER BY nome_colaborador ASC
+    `;
+    
+    try {
+        const [results] = await db.promise().query(sql, [unidadeId]);
+        res.json({ success: true, data: results });
+    } catch (error) {
+        console.error('Erro ao buscar lista de terapeutas:', error);
+        res.status(500).json({ success: false, message: 'Erro ao buscar terapeutas.' });
+    }
+});
+
 module.exports = router;
